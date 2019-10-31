@@ -1,4 +1,4 @@
-service: lanista-coach-app
+service: lanista-workout-app
 
 provider:
   name: aws
