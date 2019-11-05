@@ -17,17 +17,15 @@ export const Panel = styled.div`
       border-color: white;
       color: white;
     }
-    .user-name {
+  }
+  .MuiCardActions-root {
+    display: block!important;
+    margin-right: auto!important;
+    margin-left: auto!important;
+    text-align: center!important;
+    button {
       flex: 1;
-      .first {
-        font-weight: 900;
-        font-size: 2em;
-      }
-      .last {
-        font-size: 1.5em;
-        font-weight: 100;
-        line-height: 0.5em;
-      }
+      width: 90%;
     }
   }
   .content {

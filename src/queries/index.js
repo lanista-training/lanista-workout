@@ -229,9 +229,7 @@ export const WORKOUTS = gql`
       name
       description
       duration
-      public
-      plugin
-      studio
+      days
     }
   }
 `
@@ -245,9 +243,6 @@ export const WORKOUT = gql`
       changed_date
       creator_full_name
       creator_image
-      member {
-        id
-      }
       splits {
         id
         name

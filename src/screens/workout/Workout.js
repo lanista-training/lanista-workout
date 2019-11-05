@@ -15,7 +15,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { useTheme } from '@material-ui/core/styles';
 
-export default ({onGoBack, plan, showExercise, memberId}) => {
+export default ({onGoBack, plan, showExercise, memberId, loading, error}) => {
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
@@ -46,11 +46,12 @@ export default ({onGoBack, plan, showExercise, memberId}) => {
       </Typography>
     );
   }
-  const {name} = (plan ? plan : {})
+  const {name, splits} = (plan ? plan : {})
   return (
     <Panel>
       <div className="header">
-        {name}
+        {error && <div>Sorry   :-(</div>}
+        {!error && name}
       </div>
       <div className="content">
         <AppBar position="static" color="default">
@@ -63,7 +64,7 @@ export default ({onGoBack, plan, showExercise, memberId}) => {
             aria-label="full width tabs example"
           >
             {
-              plan && plan.splits.map((split, index) => (
+              splits && splits.map((split, index) => (
                 <Tab label={split.name} {...a11yProps(index)} />
               ))
             }
@@ -75,9 +76,10 @@ export default ({onGoBack, plan, showExercise, memberId}) => {
           onChangeIndex={handleChangeIndex}
         >
           {
-            plan && plan.splits.map((split, index) => (
+            splits && splits.map((split, index) => (
               <TabPanel value={value} index={index} dir={theme.direction}>
-                {split.exercises.map(planExercise => (
+                {error && <div className="error">Das Trainingsplan könnte leider nicht gefunden werden.</div>}
+                {!error && !loading && split.exercises.map(planExercise => (
                   <Card onClick={() => showExercise(planExercise.exercise.id, memberId, planExercise.id)}>
                     <CardActionArea>
                       <CardMedia

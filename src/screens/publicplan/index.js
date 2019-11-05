@@ -1,20 +1,22 @@
 import * as React from "react";
 import { withApollo } from '../../../lib/apollo'
 import { useQuery } from '@apollo/react-hooks'
-import Workout from './Workout';
+import Workout from '../workout/Workout';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
 import { logout } from '../../../lib/auth';
-import { ME } from "../../queries";
+import { WORKOUT } from "../../queries";
 
 const Panel = ({workoutId}) => {
   const goBack = () => Router.back()
-  const { data, error, loading } = useQuery(ME);
-  const me = data ? data.me : {}
-  const {plans} = me;
-  const plan = plans && plans.find(p => p.id == workoutId)
-
+  const { data, error, loading } = useQuery(WORKOUT,
+  {
+    variables: {
+      workoutId: workoutId,
+    }
+  });
+  const workout = data ? data.workout : []
   const showExercise = (exerciseId, memberId, planexerciseId) => {
     Router.push({
       pathname: '/exercise',
@@ -25,13 +27,14 @@ const Panel = ({workoutId}) => {
       }
     });
   }
-
+  console.log(workout)
   return (
     <Workout
       onGoBack={goBack}
-      plan={plan}
+      plan={workout}
       showExercise={showExercise}
-      memberId={data && data.me.id}
+      error={error}
+      loading={loading}
     />
   )
 }

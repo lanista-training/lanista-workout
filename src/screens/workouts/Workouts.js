@@ -1,146 +1,91 @@
 import * as React from "react";
-import styled from 'styled-components';
-import _ from 'lodash';
 import moment from "moment";
+import {Panel, UserAvatar, StyledButton, StyledCard} from './styles';
+import Button from '@material-ui/core/Button';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import TimerOffIcon from '@material-ui/icons/TimerOff';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-const Stage = styled.div`
-  padding-top: 8em;
-  max-width: 85vw;
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-  height: 98vh;
-  ::-webkit-scrollbar {
-    width: 0px!important;
-    background: transparent!important; /* make scrollbar transparent */
-  }
-`;
-const ListWrapper = styled.div`
-  padding-bottom: 8em;
-  width: 100%;
-  height: auto;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: wrap;
-  -ms-flex-flow: wrap;
-  flex-flow: wrap;
-  }
-`;
-const StyledWorkout = styled.div`
-  border-radius: 2px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  position: relative;
-  margin: 0 11px 22px 11px;
-  background: #fff;
-  width: 175px;
-  height: 190px;
-  overflow: hidden;
-  .workout-list-content {
-    height: 155px;
-    overflow: hidden;
-    text-align: left;
-    background-color: ${props => props.studio ? "#3F51B5" : (props.public ? (props.plugin ? "#64A992" : "rgb(155, 201, 61)") : "#03a9f4")};
-    .workout-list-titel {
-      height: 46px;
-      line-height: 16px;
-      font-family: RobotoDraft, Roboto, sans-serif;
-      font-size: 18px;
-      color: white;
-      margin: 10px;
-      margin-top: 20px;
-      width: 155px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .workout-list-description {
-      font-size: 13px;
-      padding-left: 10px;
-      padding-right: 10px;
-      height: 50px;
-      overflow: hidden;
-      display: inline-table;
-      color: white;
-    }
-  }
-  .workout-list-footer {
-    height: 35px;
-    border-radius: 0 0 2px 2px;
-    padding: 7px 8px 8px;
-    border-top: 1px solid #e7e7e7;
-    position: relative;
-    overflow: hidden;
-    background-color: #f2f2f2;
-    .workout-list-duration-icon {
-      color: #999;
-      float: left;
-      ::before {
-        font-family: Lanista;
-        content: "\\e90f";
-        font-size: 1.4em;
-      }
-    }
-    .workout-list-duration {
-      font-family: RobotoDraft, Roboto, sans-serif;
-      color: #848484;
-      padding-left: 5px;
-      font-size: 16px;
-      float: left;
-      letter-spacing: -1px;
-    }
-    .workout-list-privacy-icon {
-      float: right;
-      ::before {
-        font-family: Lanista;
-        content: "${props => (props.public ? "\\e911" : "\\e910")}";
-        font-size: 1.4em;
-        color: ${props => (props.public ? "#F44336" : "#00C853")};
-      }
-    }
-  }
-`;
+export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, onGoBack}) => {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-const Workout = ({workout, onWorkoutSelection}) => (
-  <StyledWorkout
-    public={workout.public}
-    plugin={workout.plugin}
-    studio={workout.studio}
-    onClick={onWorkoutSelection}
-  >
-    <div className="workout-list-content">
-      <div className="workout-list-titel">{workout.name}</div>
-      <div className="workout-list-description">{workout.description}</div>
-    </div>
-    <div className="workout-list-footer">
-      <div className="workout-list-duration-icon"/>
-      <div className="workout-list-duration">{workout.duration} Weeks</div>
-      <div className="workout-list-privacy-icon" public={workout.public}/>
-    </div>
-  </StyledWorkout>
-)
-
-class Workouts extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: null,
-    }
-  }
-
-  render() {
-    const {workouts, openWorkout} = this.props;
-    return(
-      <Stage>
-        <ListWrapper>
-        {workouts && workouts.map((workout) =>
-          <Workout workout={workout} onWorkoutSelection={() => openWorkout(workout.id)}/>
-        )}
-        </ListWrapper>
-      </Stage>
-    );
-  }
+  return (
+    <Panel>
+      <div className="user-info">
+        Trainingspläne
+      </div>
+      <div className="content">
+        {plans && plans.map(plan => (
+          <StyledCard
+            key={plan.id}
+            className={moment(parseInt(plan.expiration_date)).isAfter() ? 'active' : 'expired'}
+            onClick={() => openWorkout(plan.id)}
+          >
+            <CardActionArea>
+              <Card>
+                <CardHeader
+                  title={plan.name}
+                  subheader={
+                    plan.days ? plan.days + (plan.days > 1 ? ' Tage/Woche' : ' Tag / Woche') : 'Keine Plandauer'
+                  }
+                >
+                </CardHeader>
+                <CardContent>
+                  {plan.description}
+                </CardContent>
+                <CardActions>
+                  <Button variant="outlined" color="secondary">
+                    Zu mienen Pläne hinzufügen
+                  </Button>
+                  <Button size="small"></Button>
+                </CardActions>
+              </Card>
+            </CardActionArea>
+          </StyledCard>
+        ))}
+      </div>
+      <StyledButton color="primary" onClick={onGoBack}>
+        <ArrowBackIosIcon style={{marginLeft: "0.4em"}}/>
+      </StyledButton>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"App verlassen"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Möchtest du die Lanista verlassen?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Zurück
+          </Button>
+          <Button onClick={onLogout} color="primary" autoFocus>
+            Abmelden
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Panel>
+  )
 };
-
-export default Workouts;

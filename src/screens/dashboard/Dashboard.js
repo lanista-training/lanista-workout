@@ -7,7 +7,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import TimerOffIcon from '@material-ui/icons/TimerOff';
@@ -15,9 +14,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogTitle from '@material-ui/core/DialogTitle';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout}) => {
+export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, openWorkouts}) => {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,7 +43,14 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout}) =
           <div className="first">{firstName}</div>
           <div className="last">{lastName}</div>
         </div>
-
+        <Button
+          variant="outlined"
+          startIcon={<AddCircleIcon />}
+          size="small"
+          onClick={openWorkouts}
+        >
+          Workouts
+        </Button>
       </div>
       <div className="content">
         {plans && plans.map(plan => (

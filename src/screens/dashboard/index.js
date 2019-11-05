@@ -21,6 +21,12 @@ const Panel = ({client}) => {
     });
   }
 
+  const openWorkouts = () => {
+    Router.push({
+      pathname: '/workouts',
+    });
+  }
+
   const { data, error, loading } = useQuery(ME);
   const me = data ? data.me : {}
   const {first_name, last_name, photoUrl, plans} = me;
@@ -34,6 +40,7 @@ const Panel = ({client}) => {
       plans={plans}
       loading={loading}
       openWorkout={openWorkout}
+      openWorkouts={openWorkouts}
     />
   )
 }

@@ -58,6 +58,9 @@ export const Panel = styled.div`
     background-color: rgb(220,0,78)!important;
     box-shadow: none;
   }
+  .error {
+    padding: 2em;
+  }
 `;
 
 export const StyledButton = styled(Fab)`
