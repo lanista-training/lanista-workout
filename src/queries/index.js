@@ -16,12 +16,12 @@ export const MEMBERS = gql`
   }
 `
 export const FEEDS = gql`
-  query Feeds($pageSize:Int, $after:String, $filter:String, $direction:String) {
-    feeds(pageSize: $pageSize, after: $after, filter: $filter, direction:$direction) {
+  query Feeds($pageSize:Int, $after:String, $filter:String) {
+    feeds(pageSize: $pageSize, after: $after, filter: $filter) {
       cursor,
       hasMore,
-      direction,
       feeds{
+        id
         type
         target_date
         member{
@@ -36,19 +36,140 @@ export const FEEDS = gql`
   }
 `
 
+export const INCOMINGEVENTS = gql`
+  query IncomingEvents($filter:String) {
+    incomingEvents(filter: $filter) {
+      status,
+      data{
+        id
+        type
+        target_date
+        member{
+          id
+          first_name
+          last_name
+          email
+          photoUrl
+        }
+      }
+    }
+  }
+`
+export const MEMBERSCHEKEDIN = gql`
+  query membersInStudio {
+    membersInStudio {
+      status
+      data
+    }
+  }
+`
+
+export const MYMEMBERS = gql`
+query myMembers {
+  myMembers {
+    status
+    data
+  }
+}
+`
+
+export const EXPIREDPLANS = gql`
+query expiredPlans {
+  expiredPlans {
+    status
+    data
+    total
+  }
+}
+`
+
+export const MESSAGES = gql`
+query messages {
+  messages {
+    status
+    data {
+      text
+      creation_date
+      status
+      member {
+        id
+        first_name
+        last_name
+        photoUrl
+      }
+    }
+  }
+}
+`
+
+export const CHAT = gql`
+query chat($memberId:ID!) {
+  chat(memberId: $memberId) {
+    status
+    data {
+      text
+      type
+      photoUrl
+      first_name
+      last_name
+      status
+      creation_date
+      exercise_name
+      exercise_start_image
+      exercise_end_image
+    }
+  }
+}
+`
+
+export const CALENDARENTRIES = gql`
+  query CalenderEntries($day:String) {
+    calendarEntries(day: $day) {
+      status,
+      data{
+        id
+        type
+        target_date
+        start_date
+        duration
+        title
+        member{
+          id
+          first_name
+          last_name
+          email
+          photoUrl
+        }
+      }
+    }
+  }
+`
+
 export const EXERCISE = gql`
-  query Exercise($exerciseId:ID!, $memberId:ID) {
-    exercise(exerciseId: $exerciseId, memberId: $memberId) {
+  query Exercise($exerciseId:ID!, $memberId:ID, $planexerciseId:ID) {
+    exercise(exerciseId: $exerciseId, memberId: $memberId, planexerciseId: $planexerciseId) {
       id
       name
       start_image
       end_image
       coaching_notes
       mistakes
+      muscle
+      videoUrl
       member {
         id
         first_name
         last_name
+      }
+      notes {
+        id
+        text
+        note_date
+        creator {
+          first_name
+          last_name
+          photoUrl
+        }
       }
       workouts {
         id
@@ -60,12 +181,34 @@ export const EXERCISE = gql`
         training_unit
         self_protocolled
       }
+      chats {
+        id
+        text
+        type
+        photoUrl
+        first_name
+        last_name
+        status
+        creation_date
+        exercise_name
+        exercise_start_image
+        exercise_end_image
+      }
+      settings {
+        id
+        indications
+        position
+        weight
+        rounds
+        repetitions
+        training_unit
+      }
     }
   }
 `
 export const EXERCISES = gql`
-  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String) {
-    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter) {
+  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String, $pluginFilters:[String] = []) {
+    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter, pluginFilters: $pluginFilters) {
       cursor
       hasMore
       total
@@ -102,6 +245,9 @@ export const WORKOUT = gql`
       changed_date
       creator_full_name
       creator_image
+      member {
+        id
+      }
       splits {
         id
         name
@@ -149,18 +295,7 @@ export const PLUGINS = gql`
       id
       name
       description
-    }
-  }
-`
-
-export const ME = gql`
-  query CurrentUserForLayout {
-    me {
-      id
-      first_name
-      last_name
-      email
-      bu
+      imageUrl
     }
   }
 `
@@ -175,6 +310,7 @@ export const MEMBER = gql`
       birthday
       gender
       plans {
+        id
         name
         days
         duration
@@ -371,6 +507,64 @@ export const MEMBER_ANANMESE = gql`
         creator_full_name
         rating
         start_date
+      }
+    }
+  }
+`
+
+export const RECOMMENDATION = gql`
+  query RecommendExercise($exerciseId:ID!) {
+    recommendExercise(exerciseId: $exerciseId) {
+      id
+      name
+      start_image
+      end_image
+    }
+  }
+`;
+
+export const EXERCISESFILTER = gql`
+  query ExercisesFilter {
+    filter @client
+  }
+`;
+
+export const ME = gql`
+  query Me {
+    me {
+      id
+      email
+      first_name
+      last_name
+      photoUrl
+      plans {
+        id
+        name
+        description
+        days
+        duration
+        changed_date
+        creator_full_name
+        creator_image
+        expiration_date
+        splits{
+          id
+          name
+          exercises {
+            id
+            indications
+            weight
+            rounds
+            repetitions
+            training_unit
+            exercise {
+              id
+              name
+              start_image
+              end_image
+            }
+          }
+        }
       }
     }
   }

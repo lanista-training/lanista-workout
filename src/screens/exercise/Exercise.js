@@ -1,193 +1,307 @@
-import * as React from "react"
-import styled from 'styled-components'
-import _ from 'lodash'
-import { Tab } from 'semantic-ui-react'
-import moment from "moment"
+import * as React from "react";
+import moment from "moment";
+import _ from 'lodash';
+import {Panel,StyledButton} from './styles';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import AppBar from '@material-ui/core/AppBar';
+import SwipeableViews from 'react-swipeable-views';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import VideocamOffIcon from '@material-ui/icons/VideocamOff';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ReactPlayer from 'react-player'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import DateFnsUtils from '@date-io/date-fns';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import 'date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+import { useTheme } from '@material-ui/core/styles';
 
-const Stage = styled.div`
-  padding: 8em 20px 0;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  margin: 0 auto 30px;
-  max-width: 935px;
-  height: calc(100vh - 60px);
-  ::-webkit-scrollbar {
-    width: 0px!important;
-    background: transparent!important; /* make scrollbar transparent */
+export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll, loading}) => {
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const handleChangeIndex = index => {
+    setValue(index);
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+     setOpen(true);
+   };
+   const handleClose = () => {
+     setOpen(false);
+   };
+
+  const theme = useTheme();
+  const a11yProps = (index) => {
+    return {
+      id: `full-width-tab-${index}`,
+      'aria-controls': `full-width-tabpanel-${index}`,
+    };
   }
-`;
 
-const SyledExercise = styled.div`
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  height: 100%;
-  -webkit-box-align: stretch;
-  -webkit-align-items: stretch;
-  -ms-flex-align: stretch;
-  -webkit-align-items: stretch;
-  -webkit-box-align: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  .image-section {
-    -webkit-flex-basis: 0;
-    -ms-flex-preferred-size: 0;
-    flex-basis: 0;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    margin-right: 30px;
-    -webkit-flex-shrink: 0;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    .image-top {
-      height: 23vw;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-color: #e0e0e0;
-    }
-    .image-bottom {
-      height: 23vw;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-color: #e0e0e0;
+  const [video, setVideo] = React.useState(false);
+  const playVideo = () => {
+    console.log(video)
+    const {videoUrl} = exercise
+    if(videoUrl) {
+      setVideo(!video)
+    } else {
+      setOpen(true)
     }
   }
-  .content-section {
-    -webkit-flex-basis: 30px;
-    -ms-flex-preferred-size: 30px;
-    flex-basis: 30px;
-    -webkit-box-flex: 2;
-    -webkit-flex-grow: 2;
-    -ms-flex-positive: 2;
-    flex-grow: 2;
-    color: #262626;
-    -webkit-flex-shrink: 1;
-    -ms-flex-negative: 1;
-    flex-shrink: 1;
-    min-width: 0;
-  }
-`;
-const SyledTab = styled(Tab)`
-  .menu {
-    flex-flow: row-reverse;
-    border-bottom: none!important;
-  }
-  .tab {
-    border: none!important;
-    background: transparent;
-  }
-  .info-text {
-    font-size: 1.3em;
-    line-height: 1.5em;
-    .info-title{
-      font-weight: 700;
-      font-size: 1.2em;
-      line-height: 2em;
-    }
-  }
-`;
-
-const Workout = ({date, workouts}) => (
-  <div>
-    {moment(parseInt(date)).format("DD-MM-YYYY")}
-    {_.map(workouts, (workout) => (
-      <div className="workout">
-        {workout.weight} Kg. x {workout.repetitions}
-      </div>
-    ))}
-  </div>
-)
-const StyledWorkout = styled(Workout)`
-  width: 100%;
-`;
-
-class Exercise extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: null,
-    }
-  }
-
-  render() {
-    const {exercise, workouts} = this.props;
-    const panes = [
-      { menuItem: 'Info', render: () =>
-        <Tab.Pane>
-          <div className="info-text">
-            <div className="info-title">Ausführung</div>
-            {
-              exercise.coaching_notes && exercise.coaching_notes.map((note) => (
-                <div>{note}</div>
-              ))
-            }
-          </div>
-          <div className="info-text" style={{marginTop: "2em"}}>
-            <div className="info-title">Mögliche Fehler</div>
-            {
-              exercise.mistakes && exercise.mistakes.map((note) => (
-                <div>{note}</div>
-              ))
-            }
-          </div>
-        </Tab.Pane>
-      }
-    ]
-    console.log("workouts")
-    console.log(workouts)
-    if( workouts ) {
-      panes.push({ menuItem: 'Protokolle', render: () =>
-        <Tab.Pane>
-          <div className="info-text">
-            {
-              _.map(workouts, (values, date) => <StyledWorkout date={date} workouts={values}/>)
-            }
-          </div>
-        </Tab.Pane>
-      })
-    }
-    panes.reverse()
-    return(
-      <Stage>
-        <SyledExercise>
-          <div className="image-section">
-            <div className="image-top" style={{backgroundImage: 'url(' + exercise.start_image +')'}}/>
-            <div className="image-bottom" style={{backgroundImage: 'url(' + exercise.end_image +')'}}/>
-          </div>
-          <div className="content-section">
-            <SyledTab  menu={{ color: 'green', secondary: true, pointing: true }} menuPosition='right' panes={panes} />
-          </div>
-        </SyledExercise>
-      </Stage>
+  const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`full-width-tabpanel-${index}`}
+        aria-labelledby={`full-width-tab-${index}`}
+        {...other}
+      >
+        <Box p={3}>{children}</Box>
+      </Typography>
     );
   }
-};
+  const [protocollForm, setProtocollForm] = React.useState(false);
 
-export default Exercise;
+  let days = []
+  _.each(workouts, (day, key) => {
+    let executions = []
+    _.each(day, execution => {
+      executions.push(execution)
+    })
+    days.push({
+      day: key,
+      executions: executions
+    })
+  })
+
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [weight, setWeight] = React.useState(0.0);
+  const [training, setTraining] = React.useState(0);
+  const handleWeightChange = event => {
+    setWeight(event.target.value);
+  };
+  const [selectedExecution, setSelectedExecution] = React.useState(0);
+  return (
+    <Panel>
+      <AppBar className="exercise-header" position="static">
+        <div className="exercise-name">{exercise && exercise.name}</div>
+        <IconButton aria-label="show 4 new mails" color="inherit" onClick={playVideo}>
+          {video && <VideocamOffIcon/>}
+          {!video && <VideocamIcon/>}
+        </IconButton>
+      </AppBar>
+        <div
+          className="exercise-images"
+          style={{
+            backgroundImage: "url(" + (exercise && exercise.start_image) + "), url(" + (exercise && exercise.end_image) + ")"
+          }}
+        >
+          {
+            video && <ReactPlayer url={exercise.videoUrl} width="100%" height="100%" playing controls/>
+          }
+        </div>
+      <div className="content">
+        <AppBar position="static" color="default">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Info" {...a11yProps(0)} />
+            <Tab label="Protokolle" {...a11yProps(1)} />
+            <Tab label="Statistik" {...a11yProps(2)} />
+          </Tabs>
+        </AppBar>
+        <SwipeableViews
+          axis={'x'}
+          index={value}
+          onChangeIndex={handleChangeIndex}
+        >
+          <TabPanel key="tab-1" value={value} index={0} dir={theme.direction}>
+            <div className="exercise-title">Ausführung</div>
+            <div className="exercise-content">
+              {exercise && exercise.coaching_notes.map((coachingNote, index) => (
+                <div key={"coaching-note" + index}>{coachingNote}</div>
+              ))}
+            </div>
+            <div className="exercise-title">Mögliche Fehler</div>
+            <div className="exercise-content">
+              {exercise && exercise.mistakes.map((coachingNote, index) => (
+                <div key={"mistake-" + index}>{coachingNote}>{coachingNote}</div>
+              ))}
+            </div>
+          </TabPanel>
+          <TabPanel key="tab-2" value={value} index={1} dir={theme.direction}>
+            <div className="create-protocoll-button">
+              <IconButton aria-label="create protocoll"  size="large" onClick={() => {
+                setWeight((exercise && exercise.workouts && exercise.workouts.length > 0) ? exercise.workouts[0].weight : 0.0)
+                setTraining((exercise && exercise.workouts && exercise.workouts.length > 0) ? exercise.workouts[0].repetitions : 8)
+                setProtocollForm(!protocollForm)}
+              }>
+                {!protocollForm && <AddCircleOutlineIcon fontSize="inherit" />}
+                {protocollForm && <AddCircleIcon fontSize="inherit" />}
+              </IconButton>
+            </div>
+            <List subheader={<li />}>
+              { loading &&
+                <CircularProgress size={70} color="secondary"/>
+              }
+              { !loading &&
+                days.map( workout => {
+                  return (
+                    <li key={`section-${workout.day}`}>
+                      <ul style={{ padding: 0 }}>
+                        <ListSubheader>{workout.day}</ListSubheader>
+                        {workout.executions.map((execution, index) => (
+                          <ListItem
+                            className={selectedExecution==execution.id ? 'selected' : ''}
+                            key={`item-${workout.day}-${execution.id}`}
+                              onClick={() => {
+                              setSelectedExecution(execution.id == selectedExecution ? 0 : execution.id)
+                            }}
+                          >
+                            { selectedExecution==execution.id &&
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => deleteProtocoll(execution.id)}
+                              >
+                                Delete
+                              </Button>
+                            }
+                            <ListItemText primary={"Satz " + (index+1) + ": " + execution.repetitions + (execution.training_unit == 0 ? ' Wdh' : execution.training_unit == 1 ? ' Min' : ' Sek') + " x " + execution.weight + " Kg"} />
+                          </ListItem>
+                        ))}
+                      </ul>
+                    </li>
+                  )
+              })
+            }
+            </List>
+          </TabPanel>
+          <TabPanel key="tab-3" value={value} index={2} dir={theme.direction}>
+            Statistik
+          </TabPanel>
+        </SwipeableViews>
+      </div>
+      <StyledButton color="primary" onClick={onGoBack}>
+        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+      </StyledButton>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+      <DialogTitle id="alert-dialog-title">{"Wiedergabeproblem"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Es gibt kein Video zu dieser Übung.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={protocollForm}
+        onClose={protocollForm}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+      <DialogTitle id="alert-protocoll-title">{"Protokollieren"}</DialogTitle>
+        <DialogContent>
+          <>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                margin="normal"
+                id="date-picker-dialog"
+                label="Ausführungstag"
+                format="dd/MM/yyyy"
+                value={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                className="protocoll-date"
+                style={{width: "100%"}}
+              />
+            </MuiPickersUtilsProvider>
+            <div className="input-fields">
+              <TextField
+                id="filled-start-adornment"
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">{(exercise && exercise.settings) ? (exercise.settings.training_unit == 0 ? "Wdh" : ((exercise.settings.training_unit == 1) ? "Min" : "Sek")) : "Wdh"}</InputAdornment>,
+                }}
+                variant="outlined"
+                value={training}
+                onChange={(event) => {
+                  setRepetitions(event.target.value)
+                  const { target } = event;
+                  setTimeout(() => {
+                    target.focus();
+                  }, 10);
+                }}
+                style={{width: "100%", marginTop: "1em"}}
+              />
+              <TextField
+                id="filled-start-adornment"
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                }}
+                variant="outlined"
+                value={weight}
+                onChange={(event) => setWeight(event.target.value)}
+                style={{width: "100%", marginTop: "1em"}}
+              />
+            </div>
+          </>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setProtocollForm(false)} color="primary" autoFocus>
+            Zurück
+          </Button>
+          <Button onClick={() => {
+            createProtocoll(selectedDate, training, weight, exercise.settings.training_unit)
+            setProtocollForm(false)
+          }} color="primary" autoFocus>
+            Speichern
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Panel>
+  )
+};

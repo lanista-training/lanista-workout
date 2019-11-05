@@ -10,12 +10,11 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
-          <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet"/>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"/>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <link rel="stylesheet" href="https://lanistacoach.s3.amazonaws.com/static/css/mfb.css"/>
           <link rel="stylesheet" href="https://lanistacoach.s3.amazonaws.com/static/css/glogal-style.css"/>
           <link rel="stylesheet" href="https://lanistacoach.s3.amazonaws.com/static/css/style.css"/>
-          <link rel="stylesheet" href="https://lanistacoach.s3.amazonaws.com/static/css/react-day-picker-style.css"/>
         </Head>
         <body>
           <Main style="height: 100%;" />

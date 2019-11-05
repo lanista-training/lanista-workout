@@ -21,15 +21,9 @@ export default gql`
 `;
 
 export const LOGIN = gql`
-  mutation Login( $email: String!,  $password: String!) {
-     login(email: $email, password: $password) {
-         token
-         user {
-          id
-          email
-          first_name
-          last_name
-        }
+  mutation Login( $email: String!,  $password: String!, $bu: Int) {
+     login(email: $email, password: $password, bu: $bu) {
+       token
      }
   }
 `;
