@@ -54,12 +54,26 @@ export const Panel = styled.div`
       }
     }
   }
+  .header {
+    .workout-name {
+      flex: 1;
+      line-height: 2em;
+    }
+    button {
+      color: white;
+    }
+  }
   header {
     background-color: rgb(220,0,78)!important;
     box-shadow: none;
   }
   .error {
     padding: 2em;
+  }
+  .exercise-list{
+    .MuiBox-root {
+      padding: 24px!important;
+    }
   }
 `;
 

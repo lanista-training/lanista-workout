@@ -20,7 +20,10 @@ const Panel = ({client}) => {
 
   const { data, error, loading } = useQuery(WORKOUTS);
   const workouts = data ? data.workouts : []
-
+  const assignPlan = (planId) => {
+    console.log("ASSIGN PLAN")
+    console.log(planId)
+  }
   return (
     <Workouts
       plans={workouts}
@@ -28,6 +31,7 @@ const Panel = ({client}) => {
       openWorkout={openWorkout}
       onGoBack={goBack}
       error={error}
+      assignPlan={assignPlan}
     />
   )
 }

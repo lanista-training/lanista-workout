@@ -27,7 +27,10 @@ const Panel = ({workoutId}) => {
       }
     });
   }
-  console.log(workout)
+  const assignPlan = (planId) => {
+    console.log("ASSIGN PLAN")
+    console.log(planId)
+  }
   return (
     <Workout
       onGoBack={goBack}
@@ -35,6 +38,8 @@ const Panel = ({workoutId}) => {
       showExercise={showExercise}
       error={error}
       loading={loading}
+      showAssignButton={true}
+      assignPlan={assignPlan}
     />
   )
 }

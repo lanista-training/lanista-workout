@@ -18,7 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, onGoBack}) => {
+export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, onGoBack, assignPlan}) => {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,7 +37,13 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, on
           <StyledCard
             key={plan.id}
             className={moment(parseInt(plan.expiration_date)).isAfter() ? 'active' : 'expired'}
-            onClick={() => openWorkout(plan.id)}
+            onClick={(event) => {
+              if( event.target.parentElement.classList.contains('assign-workout-button') || event.target.classList.contains('assign-workout-button')) {
+                assignPlan(plan.id)
+              } else {
+                openWorkout(plan.id)
+              }
+            }}
           >
             <CardActionArea>
               <Card>
@@ -52,10 +58,9 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, on
                   {plan.description}
                 </CardContent>
                 <CardActions>
-                  <Button variant="outlined" color="secondary">
+                  <Button variant="outlined" color="secondary" className="assign-workout-button">
                     Zu mienen Pläne hinzufügen
                   </Button>
-                  <Button size="small"></Button>
                 </CardActions>
               </Card>
             </CardActionArea>

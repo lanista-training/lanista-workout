@@ -25,7 +25,6 @@ const Panel = ({workoutId}) => {
       }
     });
   }
-
   return (
     <Workout
       onGoBack={goBack}

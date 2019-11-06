@@ -26,6 +26,7 @@ export const Panel = styled.div`
     button {
       flex: 1;
       width: 90%;
+      margin-bottom: 1em;
     }
   }
   .content {

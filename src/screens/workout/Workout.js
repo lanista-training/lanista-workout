@@ -2,6 +2,8 @@ import * as React from "react";
 import moment from "moment";
 import {Panel, StyledButton} from './styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
@@ -15,7 +17,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import { useTheme } from '@material-ui/core/styles';
 
-export default ({onGoBack, plan, showExercise, memberId, loading, error}) => {
+export default ({onGoBack, plan, showExercise, memberId, loading, error, showAssignButton, assignPlan}) => {
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
@@ -51,7 +53,16 @@ export default ({onGoBack, plan, showExercise, memberId, loading, error}) => {
     <Panel>
       <div className="header">
         {error && <div>Sorry   :-(</div>}
-        {!error && name}
+        {!error && <div className="workout-name">{name}</div>}
+        {showAssignButton &&
+          <IconButton
+            color="secondary"
+            aria-label="add an alarm"
+            onClick={() => assignPlan(plan.id)}
+          >
+            <AddIcon />
+          </IconButton>
+        }
       </div>
       <div className="content">
         <AppBar position="static" color="default">
@@ -77,7 +88,7 @@ export default ({onGoBack, plan, showExercise, memberId, loading, error}) => {
         >
           {
             splits && splits.map((split, index) => (
-              <TabPanel value={value} index={index} dir={theme.direction}>
+              <TabPanel value={value} index={index} dir={theme.direction} className="exercise-list">
                 {error && <div className="error">Das Trainingsplan könnte leider nicht gefunden werden.</div>}
                 {!error && !loading && split.exercises.map(planExercise => (
                   <Card onClick={() => showExercise(planExercise.exercise.id, memberId, planExercise.id)}>
