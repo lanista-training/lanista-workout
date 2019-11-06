@@ -2,6 +2,7 @@ import * as React from "react";
 import moment from "moment";
 import {Panel, StyledButton} from './styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import Tabs from '@material-ui/core/Tabs';
@@ -15,9 +16,40 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { useTheme } from '@material-ui/core/styles';
 
-export default ({onGoBack, plan, showExercise, memberId, loading, error, showAssignButton, assignPlan}) => {
+export default ({
+    onGoBack,
+    plan,
+    showExercise,
+    memberId,
+    loading,
+    error,
+    showAssignButton,
+    assignPlan,
+    deletePlan,
+    deletePlanLoading,
+  }) => {
+  const [loadingHasChange, setLoadingHasChange] = React.useState(0);
+  React.useEffect(() => {
+    setLoadingHasChange(loadingHasChange+1)
+    if(loadingHasChange > 1) {
+      onGoBack();
+    }
+  }, [deletePlanLoading])
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+     setOpen(true);
+   };
+   const handleClose = () => {
+     setOpen(false);
+   };
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
@@ -61,6 +93,15 @@ export default ({onGoBack, plan, showExercise, memberId, loading, error, showAss
             onClick={() => assignPlan(plan.id)}
           >
             <AddIcon />
+          </IconButton>
+        }
+        {
+          !showAssignButton &&
+          <IconButton
+            aria-label="delete"
+            onClick={() => handleOpen()}
+           >
+            <DeleteIcon />
           </IconButton>
         }
       </div>
@@ -124,6 +165,32 @@ export default ({onGoBack, plan, showExercise, memberId, loading, error, showAss
       <StyledButton color="primary" onClick={onGoBack}>
         <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
       </StyledButton>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"PLAN LÖSCHEN"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Möchtest du dieser Trainingsplan löschen?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Zurück
+          </Button>
+          <Button onClick={() => {
+            deletePlan(plan.id)
+            handleClose()
+          }} color="primary" autoFocus>
+            Plan löschen
+          </Button>
+        </DialogActions>
+        </DialogActions>
+      </Dialog>
     </Panel>
   )
 };

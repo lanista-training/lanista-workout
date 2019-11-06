@@ -150,3 +150,47 @@ export const REGISTER = gql`
      }
   }
 `;
+
+export const CLONEPLAN = gql`
+  mutation ClonePlan( $planId: ID! ) {
+     clonePlan(planId: $planId) {
+       id
+       name
+       description
+       days
+       duration
+       changed_date
+       creator_full_name
+       creator_image
+       expiration_date
+       splits{
+         id
+         name
+         exercises {
+           id
+           indications
+           weight
+           rounds
+           repetitions
+           training_unit
+           exercise {
+             id
+             name
+             start_image
+             end_image
+           }
+         }
+       }
+     }
+  }
+`;
+
+export const DELETEPLAN = gql`
+  mutation DeletePlan( $planId: ID! ) {
+     deletePlan(planId: $planId) {
+       error
+       message
+       id
+     }
+  }
+`;

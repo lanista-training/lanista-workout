@@ -71,10 +71,6 @@ const useStyles = makeStyles(theme => ({
       console.log("handleLoginErrorChange")
       setOpen(loginError !== undefined)
     }, [loginError])
-   console.log(loginError)
-   console.log("BU")
-   console.log(bu)
-   console.log("BG Image")
    const bgImage = (bu == 'basefit' ? "url(http://lanista-training.com/bus/basefit/logo.png)" : "url(http://lanista-training.com/images/logo_grey_landscape.png)")
    console.log(bgImage)
    return (

@@ -1,14 +1,30 @@
 import * as React from "react";
 import { withApollo } from '../../../lib/apollo'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Workout from '../workout/Workout';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
 import { logout } from '../../../lib/auth';
-import { WORKOUT } from "../../queries";
+import { WORKOUT, ME } from "../../queries";
+import { CLONEPLAN } from "../../mutations";
 
 const Panel = ({workoutId}) => {
+  const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
+    CLONEPLAN,
+    {
+      update(cache,  { data: {clonePlan} }) {
+        let {me} = cache.readQuery({
+          query: ME
+        });
+        me.plans.unshift(clonePlan)
+        cache.writeQuery({
+          query: ME,
+          data: { me: me},
+        });
+      }
+    }
+  );
   const goBack = () => Router.back()
   const { data, error, loading } = useQuery(WORKOUT,
   {
@@ -28,8 +44,9 @@ const Panel = ({workoutId}) => {
     });
   }
   const assignPlan = (planId) => {
-    console.log("ASSIGN PLAN")
-    console.log(planId)
+    clonePlan({variables: {
+      planId: planId
+    }})
   }
   return (
     <Workout
@@ -40,6 +57,8 @@ const Panel = ({workoutId}) => {
       loading={loading}
       showAssignButton={true}
       assignPlan={assignPlan}
+      clonePlanLoding={clonePlanLoading}
+      clonePlanError={clonePlanError}
     />
   )
 }
