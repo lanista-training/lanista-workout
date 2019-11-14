@@ -29,19 +29,21 @@ const Panel = ({client}) => {
 
   const { data, error, loading } = useQuery(ME);
   const me = data ? data.me : {}
-  const {first_name, last_name, photoUrl, plans, banners} = me;
-
+  const {first_name, last_name, photoUrl, plans, banners, email} = me;
+  console.log("email")
+  console.log(email)
   return (
     <Dashboard
       onLogout={onLogout}
       firstName={first_name}
       lastName={last_name}
+      preventLogout={email && email.indexOf('___') > -1}
       photoUrl={photoUrl}
       plans={plans}
       loading={loading}
       openWorkout={openWorkout}
       openWorkouts={openWorkouts}
-      showBanners={true}
+      showBanners={false}
       banners={banners ? banners : []}
     />
   )

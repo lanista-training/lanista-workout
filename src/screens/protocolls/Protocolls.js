@@ -74,6 +74,9 @@ export default ({protocolls, loading, error, onGoBack, showExercise}) => {
         }
       </div>
       <div className="list-wrapper">
+        { !loading && protocolls && protocolls.length == 0 &&
+          <div className="empty-list-text">Keine Übungsprotokolle bis jetzt erstellt.</div>
+        }
         <div>
         {
           !loading &&

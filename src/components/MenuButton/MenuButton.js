@@ -17,7 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default ({onLogout, onGoToProtocolls}) => {
+export default ({onLogout, onGoToProtocolls, preventLogout}) => {
   const [open, setOpen] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const handleVisibility = () => {
@@ -40,15 +40,26 @@ export default ({onLogout, onGoToProtocolls}) => {
   };
 
 
-  const actions = [
-    { icon: <HistoryIcon />, name: 'Protokolle', onClick: () => {
+  const actions = [];
+  actions.push({
+    icon: <HistoryIcon />,
+    name: 'Protokolle',
+    onClick: () => {
       handleClose()
       onGoToProtocolls()
-    }},
-    { icon: <ExitToAppIcon />, name: 'Abmelden', onClick: () => {
-      handleOpenDialog()
-    }},
-  ];
+    }
+  })
+  if(!preventLogout) {
+    actions.push(
+    {
+      icon: <ExitToAppIcon />,
+      name: 'Abmelden',
+      onClick: () => {
+        handleOpenDialog()
+      }
+    })
+  }
+
   return (
     <Menu>
       <Button onClick={handleVisibility}> </Button>

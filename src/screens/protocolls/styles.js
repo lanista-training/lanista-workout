@@ -31,6 +31,14 @@ export const Panel = styled.div`
   .list-wrapper {
     background: whitesmoke;
     padding: 0 2em 2em 2em;
+    .empty-list-text {
+      margin-top: calc(50vh - 140px);
+      line-height: 1.5em;
+      font-size: 1.2em;
+      font-weight: 100;
+      text-align: center;
+      color: grey;
+    }
     .MuiExpansionPanel-root {
       background-color: white;
       border-bottom-style: solid;

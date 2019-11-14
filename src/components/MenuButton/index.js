@@ -4,13 +4,14 @@ import Router from 'next/router';
 import { withApollo } from '../../../lib/apollo';
 import { logout } from '../../../lib/auth';
 
-const Button = ({client}) => {
+const Button = ({client, preventLogout}) => {
   const onLogout = () => {
     logout()
     client.resetStore();
   }
   return (
     <MenuButton
+      preventLogout={preventLogout}
       onLogout={onLogout}
       onGoToProtocolls={() => Router.push({
         pathname: '/protocolls',

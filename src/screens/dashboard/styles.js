@@ -50,8 +50,8 @@ export const Panel = styled.div`
     }
     .banner{
       background: white;
-      height: 20vh;
-      margin: 0 1em;
+      height: 25vh;
+      margin: 0 1.5em;
       border-radius: 15px;
       box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
       overflow: hidden;

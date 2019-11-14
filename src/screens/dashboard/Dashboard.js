@@ -24,7 +24,7 @@ const settings = {
   adaptiveHeight: true
 };
 
-export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, openWorkouts, showBanners, banners}) => {
+export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, openWorkouts, showBanners, banners, preventLogout}) => {
   return (
     <Panel>
       <div className="user-info header">
@@ -91,7 +91,7 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, op
           </StyledCard>
         ))}
       </div>
-      <MenuButton/>
+      <MenuButton preventLogout={preventLogout}/>
     </Panel>
   )
 };

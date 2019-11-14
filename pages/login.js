@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import LoginScreen from "../src/screens/login"
 import CCLoginScreen from "../src/screens/cclogin"
 

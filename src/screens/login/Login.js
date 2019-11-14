@@ -38,7 +38,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
    return (
      <Panel loginImage={loginImage}>
        <div className="logo-wrapper" style={{flex: 1}}>
-         <div className="logo" style={{backgroundImage: loginImage}} />
+         <div className="logo" style={{backgroundImage: "https://lanista-training.com/bus/maccentercom/logo.png"}} />
        </div>
        <form noValidate autoComplete="off">
          <div className="text-fields">
