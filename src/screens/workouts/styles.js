@@ -8,15 +8,14 @@ export const Panel = styled.div`
   display: flex;
   flex-flow: column;
   background: whitesmoke;
-  .user-info {
+  .header {
+    max-height: 50px;
+    align-items: center;
     display: flex;
-    padding: 1em;
     background: rgb(220, 0, 78);
     color: white;
-    button {
-      border-color: white;
-      color: white;
-    }
+    padding: 1em;
+    font-size: 1.3em;
   }
   .MuiCardActions-root {
     display: block!important;
@@ -27,11 +26,13 @@ export const Panel = styled.div`
       flex: 1;
       width: 90%;
       margin-bottom: 1em;
+      border-color: rgb(220,0,78);
+      color: rgb(220,0,78);
     }
   }
   .content {
     flex: 1;
-    padding: 0 1em;
+    padding: 0 1em 5em 1em;
     .MuiCardHeader-title {
       font-weight: 900;
     }

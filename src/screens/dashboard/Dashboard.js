@@ -10,35 +10,24 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import TimerOffIcon from '@material-ui/icons/TimerOff';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import MenuButton from '../../components/MenuButton';
+import Slider from "react-slick";
 
-export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, openWorkouts}) => {
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+const settings = {
+  dots: false,
+  arrows: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  adaptiveHeight: true
+};
 
+export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, openWorkouts, showBanners, banners}) => {
   return (
     <Panel>
-      <div className="user-info">
-        <div className="user-avatar">
-          <UserAvatar>
-            <div
-              className="avatar-photo"
-              style={{
-                backgroundImage: 'url(' + photoUrl + ')',
-              }}
-            />
-          </UserAvatar>
-        </div>
+      <div className="user-info header">
         <div className="user-name">
           <div className="first">{firstName}</div>
           <div className="last">{lastName}</div>
@@ -52,11 +41,31 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, op
           Workouts
         </Button>
       </div>
+      {
+        showBanners && <div className="banners">
+          <Slider {...settings}>
+            {
+              banners.map(banner => (
+                <div className="banner-wrapper">
+                  <div className="banner">
+                    <div className="banner-image" style={{
+                      backgroundImage: 'url(' + banner.imageUrl + ')'
+                    }}/>
+                  </div>
+                </div>
+              ))
+            }
+          </Slider>
+        </div>
+      }
       <div className="content">
+        {plans && plans.length == 0 &&
+          <div className="empty-list-text">Verwende den Knopf oben rechts um neue Trainingspläne zu finden</div>
+        }
         {plans && plans.map(plan => (
           <StyledCard
             key={plan.id}
-            className={moment(parseInt(plan.expiration_date)).isAfter() ? 'active' : 'expired'}
+            className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
             onClick={() => openWorkout(plan.id)}
           >
             <CardActionArea>
@@ -68,8 +77,8 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, op
                   }
                   avatar={
                     <Avatar>
-                      {!moment(new Date(parseInt(plan.expiration_date))).isAfter() && <TimerOffIcon />}
-                      {moment(new Date(parseInt(plan.expiration_date))).isAfter() && <PlayCircleOutlineIcon />}
+                      {!moment(new Date(parseInt(plan.expiration_date))).isAfter() && plan.duration > 0 && <TimerOffIcon />}
+                      {(moment(new Date(parseInt(plan.expiration_date))).isAfter() || !(plan.duration > 0)) && <PlayCircleOutlineIcon />}
                     </Avatar>
                   }
                 >
@@ -82,30 +91,7 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, op
           </StyledCard>
         ))}
       </div>
-      <StyledButton color="primary" onClick={handleClickOpen}>
-        <ExitToAppIcon />
-      </StyledButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"App verlassen"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Möchtest du die Lanista verlassen?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Zurück
-          </Button>
-          <Button onClick={onLogout} color="primary" autoFocus>
-            Abmelden
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <MenuButton/>
     </Panel>
   )
 };

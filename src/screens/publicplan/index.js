@@ -10,6 +10,7 @@ import { WORKOUT, ME } from "../../queries";
 import { CLONEPLAN } from "../../mutations";
 
 const Panel = ({workoutId}) => {
+  const goBack = () => Router.back()
   const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
     CLONEPLAN,
     {
@@ -22,10 +23,11 @@ const Panel = ({workoutId}) => {
           query: ME,
           data: { me: me},
         });
+        goBack();
+        goBack();
       }
     }
   );
-  const goBack = () => Router.back()
   const { data, error, loading } = useQuery(WORKOUT,
   {
     variables: {

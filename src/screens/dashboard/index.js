@@ -29,7 +29,7 @@ const Panel = ({client}) => {
 
   const { data, error, loading } = useQuery(ME);
   const me = data ? data.me : {}
-  const {first_name, last_name, photoUrl, plans} = me;
+  const {first_name, last_name, photoUrl, plans, banners} = me;
 
   return (
     <Dashboard
@@ -41,6 +41,8 @@ const Panel = ({client}) => {
       loading={loading}
       openWorkout={openWorkout}
       openWorkouts={openWorkouts}
+      showBanners={true}
+      banners={banners ? banners : []}
     />
   )
 }

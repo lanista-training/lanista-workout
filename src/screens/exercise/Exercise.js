@@ -23,7 +23,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import TextField from '@material-ui/core/TextField';
@@ -163,7 +163,7 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
           </TabPanel>
           <TabPanel key="tab-2" value={value} index={1} dir={theme.direction}>
             <div className="create-protocoll-button">
-              <IconButton aria-label="create protocoll"  size="large" onClick={() => {
+              <IconButton aria-label="create protocoll"  size="medium" onClick={() => {
                 setWeight((exercise && exercise.workouts && exercise.workouts.length > 0) ? exercise.workouts[0].weight : 0.0)
                 setTraining((exercise && exercise.workouts && exercise.workouts.length > 0) ? exercise.workouts[0].repetitions : 8)
                 setProtocollForm(!protocollForm)}
@@ -200,7 +200,7 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
                                 Delete
                               </Button>
                             }
-                            <ListItemText primary={"Satz " + (index+1) + ": " + execution.repetitions + (execution.training_unit == 0 ? ' Wdh' : execution.training_unit == 1 ? ' Min' : ' Sek') + " x " + execution.weight + " Kg"} />
+                            <ListItemText primary={"Satz " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? ' Wdh' : execution.training_unit == 1 ? ' Min' : ' Sek') + " x " + execution.weight + " Kg"} />
                           </ListItem>
                         ))}
                       </ul>
@@ -238,7 +238,7 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
       </Dialog>
       <Dialog
         open={protocollForm}
-        onClose={protocollForm}
+        onClose={() => setProtocollForm(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -266,10 +266,11 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
                 InputProps={{
                   startAdornment: <InputAdornment position="start">{(exercise && exercise.settings) ? (exercise.settings.training_unit == 0 ? "Wdh" : ((exercise.settings.training_unit == 1) ? "Min" : "Sek")) : "Wdh"}</InputAdornment>,
                 }}
+                type="number"
                 variant="outlined"
                 value={training}
                 onChange={(event) => {
-                  setRepetitions(event.target.value)
+                  setTraining(event.target.value)
                   const { target } = event;
                   setTimeout(() => {
                     target.focus();
@@ -283,6 +284,7 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
                   startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
                 }}
                 variant="outlined"
+                type="number"
                 value={weight}
                 onChange={(event) => setWeight(event.target.value)}
                 style={{width: "100%", marginTop: "1em"}}
@@ -295,7 +297,7 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
             Zurück
           </Button>
           <Button onClick={() => {
-            createProtocoll(selectedDate, training, weight, exercise.settings.training_unit)
+            createProtocoll(selectedDate, training, weight, exercise.settings ? exercise.settings.training_unit : 0)
             setProtocollForm(false)
           }} color="primary" autoFocus>
             Speichern

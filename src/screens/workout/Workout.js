@@ -1,10 +1,6 @@
 import * as React from "react";
 import moment from "moment";
 import {Panel, StyledButton} from './styles';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,6 +18,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import AddIcon from '@material-ui/icons/Add';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Skeleton from '@material-ui/lab/Skeleton';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 import { useTheme } from '@material-ui/core/styles';
 
 export default ({
@@ -36,13 +43,6 @@ export default ({
     deletePlan,
     deletePlanLoading,
   }) => {
-  const [loadingHasChange, setLoadingHasChange] = React.useState(0);
-  React.useEffect(() => {
-    setLoadingHasChange(loadingHasChange+1)
-    if(loadingHasChange > 1) {
-      onGoBack();
-    }
-  }, [deletePlanLoading])
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
      setOpen(true);
@@ -85,24 +85,33 @@ export default ({
     <Panel>
       <div className="header">
         {error && <div>Sorry   :-(</div>}
-        {!error && <div className="workout-name">{name}</div>}
-        {showAssignButton &&
-          <IconButton
-            color="secondary"
-            aria-label="add an alarm"
-            onClick={() => assignPlan(plan.id)}
+        {!error &&
+          <ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
           >
-            <AddIcon />
-          </IconButton>
-        }
-        {
-          !showAssignButton &&
-          <IconButton
-            aria-label="delete"
-            onClick={() => handleOpen()}
-           >
-            <DeleteIcon />
-          </IconButton>
+            {!loading && name}
+            {loading && <Skeleton variant="rect" width={"100%"} height={"2em"} />}
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            {plan && plan.description}
+            {plan && plan.creator_name && <div className="plan-author">Ersteller: <span>{plan.creator_name}</span></div>}
+            {(plan && plan.duration > 0) && (<div className="plan-duration">Plandauer: <span>{plan.duration} {plan.duration > 1 ? 'Wochen' : 'Woche'}</span></div>)}
+            {plan && !showAssignButton &&
+              <Button
+                variant="outlined"
+                color="primary"
+                size="large"
+                onClick={() => handleOpen()}
+                startIcon={<DeleteIcon />}
+              >
+                Plan löschen
+              </Button>
+            }
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
         }
       </div>
       <div className="content">
@@ -117,50 +126,56 @@ export default ({
           >
             {
               splits && splits.map((split, index) => (
-                <Tab label={split.name} {...a11yProps(index)} />
+                <Tab key={"plan-split-" + index} label={split.name} {...a11yProps(index)} />
               ))
             }
           </Tabs>
         </AppBar>
-        <SwipeableViews
-          axis={'x'}
-          index={value}
-          onChangeIndex={handleChangeIndex}
-        >
-          {
-            splits && splits.map((split, index) => (
-              <TabPanel value={value} index={index} dir={theme.direction} className="exercise-list">
-                {error && <div className="error">Das Trainingsplan könnte leider nicht gefunden werden.</div>}
-                {!error && !loading && split.exercises.map(planExercise => (
-                  <Card onClick={() => showExercise(planExercise.exercise.id, memberId, planExercise.id)}>
-                    <CardActionArea>
-                      <CardMedia
-                        className="exercise-images"
-                        title="Contemplative Reptile"
-                      >
-                        <div
-                          className="start-image"
-                          style={{backgroundImage: "url(" + planExercise.exercise.start_image + ")"}}
-                        />
-                        <div
-                          className="end-image"
-                          style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
-                        />
-                      </CardMedia>
-                      <CardContent>
-                        {planExercise.exercise.name}
-                      </CardContent>
-                      <CardActions>
-                        <div><span>{planExercise.rounds}</span> Sätze</div>
-                        <div><span>{planExercise.weight}</span> Kg / <span>{planExercise.repetitions}</span> {planExercise.training_unit == 0 ? "Wdh" : planExercise.training_unit == 0 ? 'Min' : 'Sek'}</div>
-                      </CardActions>
-                    </CardActionArea>
-                  </Card>
-                ))}
-              </TabPanel>
-            ))
-          }
-        </SwipeableViews>
+        {loading &&
+          <LinearProgress style={{top: "-1em"}}/>
+        }
+        {
+          !loading && splits && splits.length > 0 &&
+          <SwipeableViews
+            axis={'x'}
+            index={value}
+            onChangeIndex={handleChangeIndex}
+          >
+            {
+              splits && splits.map((split, index) => (
+                <TabPanel key={"split-panel-" + index} value={value} index={index} dir={theme.direction} className="exercise-list">
+                  {error && <div className="error">Das Trainingsplan könnte leider nicht gefunden werden.</div>}
+                  {!error && !loading && split.exercises.map(planExercise => (
+                    <Card key={'plan-exercise-' + planExercise.exercise.id} onClick={() => showExercise(planExercise.exercise.id, memberId, planExercise.id)}>
+                      <CardActionArea>
+                        <CardMedia
+                          className="exercise-images"
+                          title="Contemplative Reptile"
+                        >
+                          <div
+                            className="start-image"
+                            style={{backgroundImage: "url(" + planExercise.exercise.start_image + ")"}}
+                          />
+                          <div
+                            className="end-image"
+                            style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
+                          />
+                        </CardMedia>
+                        <CardContent>
+                          {planExercise.exercise.name}
+                        </CardContent>
+                        <CardActions>
+                          <div><span>{planExercise.rounds}</span> Sätze</div>
+                          <div><span>{planExercise.weight}</span> Kg / <span>{planExercise.repetitions}</span> {planExercise.training_unit == 0 ? "Wdh" : planExercise.training_unit == 0 ? 'Min' : 'Sek'}</div>
+                        </CardActions>
+                      </CardActionArea>
+                    </Card>
+                  ))}
+                </TabPanel>
+              ))
+            }
+          </SwipeableViews>
+        }
       </div>
       <StyledButton color="primary" onClick={onGoBack}>
         <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>

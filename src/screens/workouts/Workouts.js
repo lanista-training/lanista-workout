@@ -29,14 +29,14 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, on
 
   return (
     <Panel>
-      <div className="user-info">
+      <div className="header">
         Trainingspläne
       </div>
       <div className="content">
         {plans && plans.map(plan => (
           <StyledCard
             key={plan.id}
-            className={moment(parseInt(plan.expiration_date)).isAfter() ? 'active' : 'expired'}
+            className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
             onClick={(event) => {
               if( event.target.parentElement.classList.contains('assign-workout-button') || event.target.classList.contains('assign-workout-button')) {
                 assignPlan(plan.id)
@@ -58,7 +58,11 @@ export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, on
                   {plan.description}
                 </CardContent>
                 <CardActions>
-                  <Button variant="outlined" color="secondary" className="assign-workout-button">
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    color="primary" className="assign-workout-button"
+                  >
                     Zu mienen Pläne hinzufügen
                   </Button>
                 </CardActions>

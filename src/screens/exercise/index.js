@@ -5,7 +5,7 @@ import Exercise from './Exercise';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
-import { EXERCISE } from "../../queries";
+import { EXERCISE, PROTOCOLLS } from "../../queries";
 import { CREATEPROTOCOLL, DELETEPROTOCOLL } from "../../mutations"
 
 const Panel = ({exerciseId, planexerciseId, memberId}) => {
@@ -20,6 +20,9 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
     CREATEPROTOCOLL,
     {
       update(cache,  { data: {createProtocoll} }) {
+        //
+        // UPDATE EXERCISE QUERY
+        //
         let {exercise} = cache.readQuery({
           query: EXERCISE,
           variables: {
@@ -34,8 +37,9 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
           formated_date: moment(new Date(parseInt(createProtocoll.execution_date))).format("YYYY-MM-DD"),
           id: createProtocoll.id,
           repetitions: createProtocoll.repetitions,
+          training: null,
           round: null,
-          self_protocolled: false,
+          self_protocolled: true,
           training_unit: createProtocoll.training_unit,
           weight: createProtocoll.weight,
           __typename: "Workout",
@@ -54,6 +58,45 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
             workouts: workouts,
           }},
         });
+        //
+        // UPDATE PROTOCOLLS QUERY
+        //
+        console.log("UPDATE PROTOCOLL QUERY")
+        try {
+          let protocollsQuery = cache.readQuery({
+            query: PROTOCOLLS
+          });
+          console.log("PROTOCOLLS QUERY")
+          console.log(protocollsQuery)
+          if( protocollsQuery ) {
+            const {protocolls} = protocollsQuery
+            if( protocolls ) {
+              // remove the protocoll
+              protocolls.unshift({
+                execution_date: createProtocoll.execution_date,
+                formated_date: moment(new Date(parseInt(createProtocoll.execution_date))).format("YYYY-MM-DD"),
+                id: createProtocoll.id,
+                repetitions: createProtocoll.repetitions,
+                training: null,
+                round: null,
+                self_protocolled: true,
+                training_unit: createProtocoll.training_unit,
+                weight: createProtocoll.weight,
+                start_image: data.exercise.start_image,
+                end_image: data.exercise.end_image,
+                exercise_id: data.exercise.id,
+                __typename: "Workout",
+              })
+              console.log("WRITING DOWN QUERY")
+              cache.writeQuery({
+                query: PROTOCOLLS,
+                data: { protocolls: protocolls},
+              });
+            }
+          }
+        } catch(e){
+          console.log("Protocolls query not existent for now")
+        }
       }
     }
   );
@@ -87,6 +130,38 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
             workouts: workouts,
           }},
         });
+        //
+        // UPDATE PROTOCOLLS QUERY
+        //
+        console.log("UPDATE PROTOCOLL QUERY")
+        try {
+          let protocollsQuery = cache.readQuery({
+            query: PROTOCOLLS
+          });
+          console.log("PROTOCOLLS QUERY")
+          console.log(protocollsQuery)
+          if( protocollsQuery ) {
+            const {protocolls} = protocollsQuery
+            if( protocolls ) {
+              // remove the protocoll
+              console.log("FIND INDEX OF id")
+              console.log(deleteProtocoll.id)
+              const protocollIndex = protocolls.findIndex(item => item.id == deleteProtocoll.id)
+              console.log("INDEX: ")
+              console.log(protocollIndex)
+              if( protocollIndex > -1 ) {
+                protocolls.splice(protocollIndex, 1)
+                console.log("WRITING DOWN QUERY")
+                cache.writeQuery({
+                  query: PROTOCOLLS,
+                  data: { protocolls: protocolls},
+                });
+              }
+            }
+          }
+        } catch(e){
+          console.log("Protocolls query not existent for now")
+        }
       }
     }
   );
@@ -99,9 +174,9 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
       exerciseId: exerciseId,
       memberId: memberId,
       executionDate: executionDate,
-      training: training,
-      unit: unit,
-      weight: weight,
+      training: parseInt(training),
+      unit: parseInt(unit),
+      weight: parseFloat(weight),
     }})
   }
   const onDeleteProtocoll = (protocollId) => {

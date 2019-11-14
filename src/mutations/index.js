@@ -47,8 +47,8 @@ export const CHANGESPLITORDER = gql`
 `;
 
 export const CREATEPROTOCOLL = gql`
-  mutation CreateProtocoll( $exerciseId: ID!, $memberId: ID!, $executionDate: String!, $training: Int!, $unit: Int!, $weight: Float!) {
-     createProtocoll(exerciseId: $exerciseId, memberId: $memberId, executionDate: $executionDate, training: $training, unit: $unit, weight: $weight) {
+  mutation CreateProtocoll( $exerciseId: ID!, $executionDate: String!, $training: Int!, $unit: Int!, $weight: Float!) {
+     createProtocoll(exerciseId: $exerciseId, executionDate: $executionDate, training: $training, unit: $unit, weight: $weight) {
        id
        execution_date
        weight
@@ -191,6 +191,14 @@ export const DELETEPLAN = gql`
        error
        message
        id
+     }
+  }
+`;
+
+export const CCLOGIN = gql`
+  mutation CcLogin( $token: String!) {
+     cclogin(token: $token) {
+       token
      }
   }
 `;

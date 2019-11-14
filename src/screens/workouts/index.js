@@ -9,6 +9,13 @@ import { WORKOUTS, ME } from "../../queries";
 import { CLONEPLAN } from "../../mutations";
 
 const Panel = ({client}) => {
+  const goBack = () => Router.back()
+  const openWorkout = (workoutId) => {
+    Router.push({
+      pathname: '/publicplan',
+      query: { workout: workoutId }
+    });
+  }
   const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
     CLONEPLAN,
     {
@@ -21,16 +28,11 @@ const Panel = ({client}) => {
           query: ME,
           data: { me: me},
         });
+        goBack();
       }
     }
   );
-  const goBack = () => Router.back()
-  const openWorkout = (workoutId) => {
-    Router.push({
-      pathname: '/publicplan',
-      query: { workout: workoutId }
-    });
-  }
+
 
   const { data, error, loading } = useQuery(WORKOUTS);
   const workouts = data ? data.workouts : []

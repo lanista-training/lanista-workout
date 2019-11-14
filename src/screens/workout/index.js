@@ -20,25 +20,19 @@ const Panel = ({workoutId}) => {
         let {me} = cache.readQuery({
           query: ME
         });
-        console.log("SEARCHING FOR PLAN ID")
-        console.log(deletePlan.id)
-        console.log(me.plans)
         // UPDATE WORKOUTS
         const planIndex = me.plans.findIndex((plan => plan.id == deletePlan.id))
-        console.log("INDEX:")
-        console.log(planIndex)
         me.plans.splice(planIndex, 1)
         cache.writeQuery({
           query: ME,
           data: { me: {...me} },
         });
+        goBack()
       }
     }
   );
   const me = data ? data.me : {}
   const {plans} = me;
-  console.log("PLANS ON ME")
-  console.log(plans)
   const plan = plans && plans.find(p => p.id == workoutId)
   const onDeletePlan = (planId) => {
     deletePlan({
@@ -65,6 +59,8 @@ const Panel = ({workoutId}) => {
       memberId={data && data.me.id}
       deletePlan={onDeletePlan}
       deletePlanLoading={deletePlanLoading}
+      loading={loading}
+      error={error}
     />
   )
 }

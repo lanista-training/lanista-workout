@@ -561,6 +561,29 @@ export const ME = gql`
           }
         }
       }
+      banners {
+        id
+        imageUrl
+        link
+      }
     }
   }
 `
+
+export const PROTOCOLLS = gql`
+  query Protocolls {
+    protocolls {
+      id
+      execution_date
+      formated_date
+      weight
+      repetitions
+      round
+      training_unit
+      start_image
+      end_image
+      self_protocolled
+      exercise_id
+    }
+  }
+`;

@@ -16,6 +16,50 @@ export const Panel = styled.div`
     color: white;
     font-weight: 900;
     font-size: 1.2em;
+    .MuiPaper-root {
+      width: 100%;
+    }
+    .MuiExpansionPanel-root {
+      background: rgb(220,0,78);
+      box-shadow: none;
+      color: white;
+      .MuiButtonBase-root {
+        padding: 0;
+        svg {
+          color: white;
+          margin-right: 0.3em;
+          font-size: 1.5em;
+        }
+      }
+    }
+    .MuiExpansionPanelDetails-root {
+      padding: 0;
+      font-weight: 100;
+      text-align: left;
+      display: flex;
+      flex-flow: column;
+      button {
+        margin-top: 2em;
+        margin-bottom: 2em;
+        border-color: white
+      }
+      .plan-author {
+        line-height: 3em;
+        span {
+          font-size: 1.2em;
+          font-weight: 900;
+          float: right;
+        }
+      }
+      .plan-duration {
+        line-height: 3em;
+        span {
+          font-size: 1.2em;
+          font-weight: 900;
+          float: right;
+        }
+      }
+    }
   }
   .content {
     min-height: 100vh;

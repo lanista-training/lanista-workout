@@ -8,56 +8,21 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Lanista Trainingssoftware © '}
-      {' '}
-      2012
-      {'.'}
-    </Typography>
-  );
-}
-
-const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
-
- export default ({onAuthenticate, loginError, bu}) => {
-   const classes = useStyles();
+ export default ({onAuthenticate, loading, loginError, bu, loginImage}) => {
+   const getLoginMessage = () => {
+     if(bu =='basefit') {
+       return <div className="login-message">Verwende hier deine <span>mybasefit.ch</span> Anmeldedaten - die Nutzung ist gratis</div>
+     } else {
+       return <></>
+     }
+   }
    const[email, setEmail] = useState('')
    const[password, setPassword] = useState('')
    const [open, setOpen] = React.useState(false);
@@ -68,25 +33,16 @@ const useStyles = makeStyles(theme => ({
       setOpen(false);
     };
     useEffect(() => {
-      console.log("handleLoginErrorChange")
       setOpen(loginError !== undefined)
     }, [loginError])
-   const bgImage = (bu == 'basefit' ? "url(http://lanista-training.com/bus/basefit/logo.png)" : "url(http://lanista-training.com/images/logo_grey_landscape.png)")
-   console.log(bgImage)
    return (
-     <Panel>
-       <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <div className={classes.paper} style={{flex: 1}}>
-          <div
-            className="logo"
-            style={{backgroundImage: bgImage}}
-          />
-          <Typography component="h1" variant="h5" className="wellcome-message">
-            Willkommen
-          </Typography>
-          <TextField
-              variant="outlined"
+     <Panel loginImage={loginImage}>
+       <div className="logo-wrapper" style={{flex: 1}}>
+         <div className="logo" style={{backgroundImage: loginImage}} />
+       </div>
+       <form noValidate autoComplete="off">
+         <div className="text-fields">
+           <TextField
               margin="normal"
               required
               fullWidth
@@ -99,7 +55,6 @@ const useStyles = makeStyles(theme => ({
               onChange={(event) => setEmail(event.target.value)}
             />
             <TextField
-              variant="outlined"
               margin="normal"
               required
               fullWidth
@@ -111,27 +66,32 @@ const useStyles = makeStyles(theme => ({
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
+         </div>
+          {
+            getLoginMessage()
+          }
+          <div className="login-button">
             <Button
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              className="login-button"
               onClick={() => onAuthenticate(email, password)}
+              disabled={loading}
             >
               Anmelden
+              {
+                loading && <CircularProgress size={24} style={{position: "absolute", left: "calc((100vw/2) - 24px)", marginTop: "4px"}}/>
+              }
             </Button>
-            <Grid container className="request-password">
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Passwort vergessen?
-                </Link>
-              </Grid>
-            </Grid>
-        </div>
-        <Box mt={8} className="footer-section">
-          <Copyright />
-        </Box>
-      </Container>
+          </div>
+          <Link target="_blank" href={bu=="basefit" ? 'https://mybasefit.ch' : 'http://lanista-training.com/tpmanager/user/requestpasswordreset?client=lanista&lang=DE'} variant="body2">
+            Passwort vergessen?
+          </Link>
+       </form>
+       <div className="copyright">
+        Lanista Trainingssoftware © 2012.
+      </div>
       <Dialog
         open={open}
         onClose={handleClose}
