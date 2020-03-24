@@ -59,6 +59,19 @@ export const CREATEPROTOCOLL = gql`
   }
 `;
 
+export const CREATEPROTOCOLLS = gql`
+  mutation CreateProtocolls( $protocolls: String!) {
+     createProtocolls(protocolls: $protocolls) {
+       id
+       execution_date
+       weight
+       repetitions
+       training_unit
+       exercise_id
+     }
+  }
+`;
+
 export const DELETEPROTOCOLL = gql`
   mutation DeleteProtocoll( $protocollId: ID!) {
      deleteProtocoll(protocollId: $protocollId) {
@@ -141,12 +154,9 @@ export const SENDPASSWORDRESET = gql`
 `;
 
 export const REGISTER = gql`
-  mutation Register( $email: String!,  $password: String!) {
-     register(email: $email, password: $password) {
+  mutation Register( $email: String!, $recaptchaToken: String!, $gym: String, $language: String) {
+     register(email: $email, recaptchaToken: $recaptchaToken, gym: $gym, language: $language) {
          message
-         user {
-          id
-        }
      }
   }
 `;
@@ -199,6 +209,58 @@ export const CCLOGIN = gql`
   mutation CcLogin( $token: String!) {
      cclogin(token: $token) {
        token
+     }
+  }
+`;
+
+export const SAVEWEIGHT = gql`
+  mutation SaveWeight( $weight: Float!, $recordDate: String!) {
+     saveWeight(weight: $weight, recordDate: $recordDate) {
+       id
+       record_date
+       value
+     }
+  }
+`;
+
+export const DELETEWEIGHT = gql`
+  mutation DeleteWeight( $weightId: ID!) {
+     deleteWeight(weightId: $weightId) {
+       id
+       record_date
+       value
+     }
+  }
+`;
+
+export const UPDATEPROFILE = gql`
+  mutation UpdateProfile( $firstName: String, $lastName: String, $email: String, $birthday: String, $gender: Int, $language: String) {
+     updateProfile(firstName: $firstName, lastName: $lastName, email: $email, birthday: $birthday, gender: $gender, language: $language) {
+       id
+       first_name
+       last_name
+       email
+       birthday
+       gender
+       language
+     }
+  }
+`;
+
+export const LINK = gql`
+  mutation Link( $buId: ID!) {
+     link(buId: $buId) {
+       id
+       name
+       imageUrl
+     }
+  }
+`;
+
+export const UNLINK = gql`
+  mutation Unlink( $buId: ID!) {
+     unlink(buId: $buId) {
+       id
      }
   }
 `;

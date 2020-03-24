@@ -161,7 +161,7 @@ class Forgotpassword extends React.Component {
                 <LanistaLogo  style={{}}>
                   <LogoImage width={60} height={60}/>
                   <div style={{
-                    fontFamily: "Abel",
+                    fontFamily: "Roboto",
                     fontSize: "1.75em",
                     marginTop: "1em",
                   }}>
@@ -203,7 +203,7 @@ class Forgotpassword extends React.Component {
             </Grid>
           </Root>
           <Footer style={{}}>
-            <Nav style={{color: 'black', fontFamily: 'Abel'}}>
+            <Nav style={{color: 'black', fontFamily: 'Roboto'}}>
               © Lanista Trainingssoftware 2012
               <a>
                 Impresum

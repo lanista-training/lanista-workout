@@ -146,8 +146,8 @@ export const CALENDARENTRIES = gql`
 `
 
 export const EXERCISE = gql`
-  query Exercise($exerciseId:ID!, $memberId:ID, $planexerciseId:ID) {
-    exercise(exerciseId: $exerciseId, memberId: $memberId, planexerciseId: $planexerciseId) {
+  query Exercise($exerciseId:ID!, $memberId:ID, $planexerciseId:ID, $language:String) {
+    exercise(exerciseId: $exerciseId, memberId: $memberId, planexerciseId: $planexerciseId, language:$language) {
       id
       name
       start_image
@@ -202,40 +202,32 @@ export const EXERCISE = gql`
         rounds
         repetitions
         training_unit
-      }
-    }
-  }
-`
-export const EXERCISES = gql`
-  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String, $pluginFilters:[String] = []) {
-    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter, pluginFilters: $pluginFilters) {
-      cursor
-      hasMore
-      total
-      exercises {
-        id
-        name
-        start_image
-        end_image
+        sets {
+          weight
+          training
+          unit
+        }
       }
     }
   }
 `
 
 export const WORKOUTS = gql`
-  query Workouts($filter:String) {
-    workouts(filter: $filter) {
+  query Workouts($filter:String, $language:String) {
+    workouts(filter: $filter, language: $language) {
       id
       name
       description
       duration
       days
+      imageUrl
+      categories
     }
   }
 `
 export const WORKOUT = gql`
-  query Workout($workoutId:ID!) {
-    workout(workoutId: $workoutId) {
+  query Workout($workoutId:ID!, $language:String) {
+    workout(workoutId: $workoutId, language: $language) {
       id
       name
       description
@@ -532,6 +524,10 @@ export const ME = gql`
       first_name
       last_name
       photoUrl
+      editable
+      birthday
+      gender
+      language
       plans {
         id
         name
@@ -562,9 +558,22 @@ export const ME = gql`
         }
       }
       banners {
+        showBanners
+        banners {
+          id
+          imageUrl
+          link
+        }
+        fallback {
+          id
+          imageUrl
+          link
+        }
+      }
+      gyms {
         id
+        name
         imageUrl
-        link
       }
     }
   }
@@ -584,6 +593,79 @@ export const PROTOCOLLS = gql`
       end_image
       self_protocolled
       exercise_id
+    }
+  }
+`;
+
+export const MEASUREMENTS = gql`
+  query Measurements {
+    measurements {
+      weights {
+        id
+        value
+        record_date
+      }
+      calipers {
+        id
+        trizeps
+        scapula
+        auxiliar
+        chest
+        sprailium
+        abs
+        quads
+        body_fat
+        record_date
+      }
+      valumens {
+        id
+        arm_right
+        arm_left
+        waist
+        umbilical
+        chest
+        spina_ilica_ant
+        wide_hips
+        quads_right
+        quads_left
+        sum
+        record_date
+      }
+      futrex {
+        id
+        value
+        record_date
+      }
+    }
+  }
+`;
+
+export const GYMS = gql`
+  query Gyms($filter:String, $searchType:Boolean) {
+    gyms(filter: $filter, searchType: $searchType) {
+      id
+      name
+      imageUrl
+    }
+  }
+`;
+
+export const BEACON = gql`
+  query Beacon($beaconId:String!) {
+    beacon(beaconId: $beaconId) {
+      link
+      id
+    }
+  }
+`;
+
+export const EXERCISES = gql`
+  query Exercises($exercises:String, $type:Int, $muscle:Int, $addition:Int) {
+    exercises(exercises: $exercises, type: $type, muscle: $muscle, addition: $addition) {
+      id
+      name
+      start_image
+      end_image
     }
   }
 `;

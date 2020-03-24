@@ -1,25 +1,28 @@
 import * as React from "react";
-import { withApollo } from '../../../lib/apollo'
+import { withApollo } from '../../lib/apollo'
+import { useTranslate } from '../../hooks/Translation'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import Exercise from './Exercise';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
 import { EXERCISE, PROTOCOLLS } from "../../queries";
-import { CREATEPROTOCOLL, DELETEPROTOCOLL } from "../../mutations"
+import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL } from "../../mutations"
 
-const Panel = ({exerciseId, planexerciseId, memberId}) => {
+const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
 
-  const goBack = () => Router.back()
-  const { data, error, loading } = useQuery(EXERCISE, {variables: {
+  let {locale} = useTranslate("exercise");
+
+  const { data, error, loading, refetch } = useQuery(EXERCISE, {variables: {
     exerciseId: exerciseId,
-    memberId: memberId,
     planexerciseId: planexerciseId,
+    language: locale ? locale.toUpperCase() : 'EN',
   }});
-  const [createProtocoll, { loading: createProtocollLoading, error: createProtocollError }] = useMutation(
-    CREATEPROTOCOLL,
+
+  const [createProtocolls, { loading: createProtocollsLoading, error: createProtocollsError }] = useMutation(
+    CREATEPROTOCOLLS,
     {
-      update(cache,  { data: {createProtocoll} }) {
+      update(cache,  { data: {createProtocolls} }) {
         //
         // UPDATE EXERCISE QUERY
         //
@@ -27,10 +30,106 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
           query: EXERCISE,
           variables: {
             exerciseId: exerciseId,
-            memberId: memberId,
             planexerciseId: planexerciseId,
+            language: (locale ? locale.toUpperCase() : 'EN'),
           },
         });
+        console.log("createProtocolls");
+        console.log(createProtocolls);
+        let workouts = exercise.workouts.map(item => item);
+        createProtocolls.map(protocoll => workouts.push({
+          execution_date: protocoll.execution_date,
+          formated_date: moment(new Date(parseInt(protocoll.execution_date))).format("YYYY-MM-DD"),
+          id: protocoll.id,
+          repetitions: protocoll.repetitions,
+          training: null,
+          round: null,
+          self_protocolled: true,
+          training_unit: protocoll.training_unit,
+          weight: protocoll.weight,
+          __typename: "Workout",
+        }));
+
+        // Sort the result
+        workouts = _.reverse(_.sortBy(workouts, ["execution_date", "id"]))
+        cache.writeQuery({
+          query: EXERCISE,
+          variables: {
+            exerciseId: exerciseId,
+            memberId: memberId,
+            planexerciseId: planexerciseId,
+            language: (locale ? locale.toUpperCase() : 'EN'),
+          },
+          data: { exercise: {
+            ...exercise,
+            workouts: workouts,
+          }},
+        });
+        //
+        // UPDATE PROTOCOLLS QUERY
+        //
+        console.log("UPDATE PROTOCOLL QUERY")
+        try {
+          let protocollsQuery = cache.readQuery({
+            query: PROTOCOLLS
+          });
+          console.log("PROTOCOLLS QUERY")
+          console.log(protocollsQuery)
+          if( protocollsQuery ) {
+            const {protocolls} = protocollsQuery
+            if( protocolls ) {
+              // remove the protocoll
+              createProtocolls.map((protocoll) => protocolls.unshift({
+                execution_date: protocoll.execution_date,
+                formated_date: moment(new Date(parseInt(protocoll.execution_date))).format("YYYY-MM-DD"),
+                id: protocoll.id,
+                repetitions: protocoll.repetitions,
+                training: null,
+                round: null,
+                self_protocolled: true,
+                training_unit: protocoll.training_unit,
+                weight: protocoll.weight,
+                start_image: data.exercise.start_image,
+                end_image: data.exercise.end_image,
+                exercise_id: data.exercise.id,
+                __typename: "Workout",
+              }));
+              console.log("WRITING DOWN QUERY")
+              cache.writeQuery({
+                query: PROTOCOLLS,
+                data: { protocolls: protocolls},
+              });
+            }
+          }
+        } catch(e){
+          console.log("Protocolls query not existent for now")
+        }
+      }
+    }
+  );
+
+  const [createProtocoll, { loading: createProtocollLoading, error: createProtocollError }] = useMutation(
+    CREATEPROTOCOLL,
+    {
+      update(cache,  { data: {createProtocoll} }) {
+        //
+        // UPDATE EXERCISE QUERY
+        //
+        console.log("update");
+        console.log({
+          exerciseId: exerciseId,
+          planexerciseId: planexerciseId,
+          language: (locale ? locale.toUpperCase() : 'EN'),
+        })
+        let {exercise} = cache.readQuery({
+          query: EXERCISE,
+          variables: {
+            exerciseId: exerciseId,
+            planexerciseId: planexerciseId,
+            language: (locale ? locale.toUpperCase() : 'EN'),
+          },
+        });
+        console.log("update 2");
         let workouts = exercise.workouts.map(item => item)
         workouts.push({
           execution_date: createProtocoll.execution_date,
@@ -45,13 +144,14 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
           __typename: "Workout",
         })
         // Sort the result
-        workouts = _.reverse(_.sortBy(workouts, ["execution_date"]))
+        workouts = _.reverse(_.sortBy(workouts, ["execution_date", "id"]))
         cache.writeQuery({
           query: EXERCISE,
           variables: {
             exerciseId: exerciseId,
             memberId: memberId,
             planexerciseId: planexerciseId,
+            language: (locale ? locale.toUpperCase() : 'EN'),
           },
           data: { exercise: {
             ...exercise,
@@ -108,8 +208,8 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
           query: EXERCISE,
           variables: {
             exerciseId: exerciseId,
-            memberId: memberId,
             planexerciseId: planexerciseId,
+            language: (locale ? locale.toUpperCase() : 'EN'),
           },
         });
         let workouts = []
@@ -122,8 +222,8 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
           query: EXERCISE,
           variables: {
             exerciseId: exerciseId,
-            memberId: memberId,
             planexerciseId: planexerciseId,
+            language: (locale ? locale.toUpperCase() : 'EN'),
           },
           data: { exercise: {
             ...exercise,
@@ -138,20 +238,13 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
           let protocollsQuery = cache.readQuery({
             query: PROTOCOLLS
           });
-          console.log("PROTOCOLLS QUERY")
-          console.log(protocollsQuery)
           if( protocollsQuery ) {
             const {protocolls} = protocollsQuery
             if( protocolls ) {
               // remove the protocoll
-              console.log("FIND INDEX OF id")
-              console.log(deleteProtocoll.id)
               const protocollIndex = protocolls.findIndex(item => item.id == deleteProtocoll.id)
-              console.log("INDEX: ")
-              console.log(protocollIndex)
               if( protocollIndex > -1 ) {
                 protocolls.splice(protocollIndex, 1)
-                console.log("WRITING DOWN QUERY")
                 cache.writeQuery({
                   query: PROTOCOLLS,
                   data: { protocolls: protocolls},
@@ -166,7 +259,7 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
     }
   );
   const groupWorkouts = (workouts) => {
-    var grouped = _.mapValues(_.groupBy(workouts, 'formated_date'), clist => clist.map(workout => _.omit(workout, 'formated_date')));
+    var grouped = _.mapValues(_.groupBy(workouts, 'formated_date'), clist => clist.reverse().map(workout => _.omit(workout, 'formated_date')));
     return grouped
   }
   const onCreateProtocoll = (executionDate, training, weight, unit) => {
@@ -179,19 +272,35 @@ const Panel = ({exerciseId, planexerciseId, memberId}) => {
       weight: parseFloat(weight),
     }})
   }
+
+  const onCreateAllProtocolls = (sets) => {
+    console.log("onCreateAllProtocolls");
+    const executions = sets.map( (set) => ({...set, exerciseId: exerciseId }) );
+    console.log(executions);
+    createProtocolls({
+      variables: {
+        protocolls: JSON.stringify(executions)
+      }
+    })
+  }
+
   const onDeleteProtocoll = (protocollId) => {
     deleteProtocoll({variables: {
       protocollId: protocollId,
     }})
   }
+  console.log("rendering...")
   return (
     <Exercise
       onGoBack={goBack}
       exercise={data ? data.exercise : null}
       workouts={data ? groupWorkouts(data.exercise.workouts) : []}
       createProtocoll={onCreateProtocoll}
+      createAllProtocolls={onCreateAllProtocolls}
       deleteProtocoll={onDeleteProtocoll}
       loading={deleteProtocollLoading || createProtocollLoading}
+      hasNorch={hasNorch}
+      refetch={refetch}
     />
   )
 }

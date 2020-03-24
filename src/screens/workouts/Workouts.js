@@ -1,5 +1,6 @@
 import * as React from "react";
 import moment from "moment";
+import { useTranslate } from '../../hooks/Translation';
 import {Panel, UserAvatar, StyledButton, StyledCard} from './styles';
 import Button from '@material-ui/core/Button';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -16,84 +17,163 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Icon from '@material-ui/core/Icon';
 
-export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, onGoBack, assignPlan}) => {
-  const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
 
+import Pullable from 'react-pullable';
+
+export default ({
+  firstName,
+  lastName,
+  photoUrl,
+  plans,
+  onLogout,
+  openWorkout,
+  onGoBack,
+  assignPlan,
+  onSetFilter,
+  filter,
+  hasNorch,
+  refetch,
+}) => {
+  const [openFilter, setOpenFilter] = React.useState(true);
+  const handleClickOpenFilter = () => {
+    setOpenFilter(true);
+  };
+  const handleCloseFilter = () => {
+    setOpenFilter(false);
+  };
+  let {t} = useTranslate("workouts");
   return (
     <Panel>
-      <div className="header">
-        Trainingspläne
-      </div>
-      <div className="content">
-        {plans && plans.map(plan => (
-          <StyledCard
-            key={plan.id}
-            className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
-            onClick={(event) => {
-              if( event.target.parentElement.classList.contains('assign-workout-button') || event.target.classList.contains('assign-workout-button')) {
-                assignPlan(plan.id)
-              } else {
-                openWorkout(plan.id)
-              }
-            }}
+      <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
+        <div className="header-inner-frame">
+          <div className="header-title">
+            {t('plans')}
+          </div>
+          <Button
+            variant="outlined"
+            startIcon={<Icon>filter_list</Icon>}
+            size="small"
+            onClick={handleClickOpenFilter}
           >
-            <CardActionArea>
-              <Card>
-                <CardHeader
-                  title={plan.name}
-                  subheader={
-                    plan.days ? plan.days + (plan.days > 1 ? ' Tage/Woche' : ' Tag / Woche') : 'Keine Plandauer'
+            {filter}
+          </Button>
+        </div>
+      </div>
+      <div className="content-wrapper" style={hasNorch ? {marginTop: "110px"} : {}}>
+        <div className="content">
+          <Pullable onRefresh={refetch}>
+            {
+              plans && plans.map(plan => (
+                <StyledCard
+                  key={plan.id}
+                  onClick={(event) => {
+                    if( event.target.parentElement.classList.contains('assign-workout-button') || event.target.classList.contains('assign-workout-button')) {
+                      assignPlan(plan.id)
+                    } else {
+                      openWorkout(plan.id)
+                    }
                   }
+                }
                 >
-                </CardHeader>
-                <CardContent>
-                  {plan.description}
-                </CardContent>
-                <CardActions>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    color="primary" className="assign-workout-button"
-                  >
-                    Zu mienen Pläne hinzufügen
-                  </Button>
-                </CardActions>
-              </Card>
-            </CardActionArea>
-          </StyledCard>
-        ))}
+                <CardActionArea>
+                  <Card elevation={0}>
+                    <div className="header-section">
+                      <CardHeader
+                        title={plan.name}
+                        subheader={
+                          plan.days ? plan.days + ' ' + (plan.days > 1 ? t('days_in_the_week') : t('day_in_the_week')) : 'Keine Plandauer'
+                        }
+                      />
+                      <div className="plan-image" style={{backgroundImage: 'url(' + plan.imageUrl + ')'}}/>
+                    </div>
+                    <CardContent>
+                      {plan.description}
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary" className="assign-workout-button"
+                      >
+                        {t('add_to_my_list')}
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </CardActionArea>
+              </StyledCard>
+            ))}
+          </Pullable>
+        </div>
       </div>
       <StyledButton color="primary" onClick={onGoBack}>
         <ArrowBackIosIcon style={{marginLeft: "0.4em"}}/>
       </StyledButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"App verlassen"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Möchtest du die Lanista verlassen?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Zurück
-          </Button>
-          <Button onClick={onLogout} color="primary" autoFocus>
-            Abmelden
-          </Button>
-        </DialogActions>
+      <Dialog onClose={handleCloseFilter} aria-labelledby="simple-dialog-title" open={openFilter}>
+        <DialogTitle id="simple-dialog-title">{t('select_category')}</DialogTitle>
+
+        <List style={{paddingBottom: "2em"}}>
+          <ListItem autoFocus button onClick={() => {
+            onSetFilter("shaping")
+            handleCloseFilter()
+          }}>
+            <ListItemAvatar>
+              <Avatar>
+                <Icon>panorama_vertical</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={t("shaping")} />
+          </ListItem>
+          <ListItem autoFocus button onClick={() => {
+            onSetFilter("gain")
+            handleCloseFilter()
+          }}>
+            <ListItemAvatar>
+              <Avatar>
+                <Icon>fitness_center</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={t("gain")} />
+          </ListItem>
+          <ListItem autoFocus button onClick={() => {
+            onSetFilter("functional")
+            handleCloseFilter()
+          }}>
+            <ListItemAvatar>
+              <Avatar>
+                <Icon>directions_run</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={t("functional")} />
+          </ListItem>
+          <ListItem autoFocus button onClick={() => {
+            onSetFilter("mobilisation")
+            handleCloseFilter()
+          }}>
+            <ListItemAvatar>
+              <Avatar>
+                <Icon>accessibility_new</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={t("mobilization")} />
+          </ListItem>
+          <ListItem autoFocus button onClick={() => {
+            onSetFilter("*")
+            handleCloseFilter()
+          }}>
+            <ListItemAvatar>
+              <Avatar>
+                <Icon>filter_list</Icon>
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={t("all_plans")} />
+          </ListItem>
+        </List>
       </Dialog>
     </Panel>
   )

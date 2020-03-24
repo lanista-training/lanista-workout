@@ -1,6 +1,7 @@
 import React from "react";
-import { withAuthSync } from '../lib/auth'
-import DashboardScreen from "../src/screens/dashboard"
+import Router from 'next/router';
+import { withAuthSync } from '../lib/auth';
+import DashboardScreen from "../src/screens/dashboard";
 import { logout } from '../lib/auth';
 
 function Index(props) {
@@ -11,8 +12,55 @@ function Index(props) {
       logout()
     }
   }
+  const openWorkout = (workoutId) => {
+    Router.push({
+      pathname: '/workout',
+      query: { workout: workoutId }
+    });
+  }
+  const openPublicWorkout = (workoutId) => {
+    Router.push({
+      pathname: '/publicplan',
+      query: { workout: workoutId }
+    });
+  }
+  const openWorkouts = () => {
+    Router.push({
+      pathname: '/workouts',
+    });
+  }
+  const goToSetup = () => {
+      Router.push({
+      pathname: '/setup',
+    });
+  }
+  const goToLogin = () => {
+      Router.push({
+      pathname: '/login',
+    });
+  }
+  const onGoToProtocolls = () => {
+      Router.push({
+      pathname: '/protocolls',
+    });
+  }
+  const onGoToMeasurements = () => {
+      Router.push({
+      pathname: '/measurements',
+    });
+  }
   return (
-    <DashboardScreen/>
+    <DashboardScreen
+      doLogout={logout}
+      goToLogin={goToLogin}
+      openWorkout={openWorkout}
+      openPublicWorkout={openWorkout}
+      openWorkouts={openWorkouts}
+      openPublicWorkout={openPublicWorkout}
+      goToSetup={goToSetup}
+      onGoToProtocolls={onGoToProtocolls}
+      onGoToMeasurements={onGoToMeasurements}
+    />
   );
 }
 

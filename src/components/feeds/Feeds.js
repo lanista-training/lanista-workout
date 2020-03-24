@@ -9,7 +9,7 @@ import { Transition } from 'react-spring'
 import moment from "moment"
 
 const StyledDateLabel = styled.div`
-  font-family: Abel;
+  font-family: Roboto;
   font-size: 1.5em;
   text-align: center;
   margin-bottom: 0.5em;
@@ -98,7 +98,7 @@ const Card = styled.div`
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  font-family: Abel;
+  font-family: Roboto;
   overflow: hidden;
 `;
 const CardContent = styled.div`

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {Panel} from './styles'
-
 import CircularProgress from '@material-ui/core/CircularProgress';
 
  export default ({loading, loginError}) => {

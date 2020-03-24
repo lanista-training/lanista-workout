@@ -1,10 +1,27 @@
 import React from "react";
+import Router from 'next/router';
 import { withAuthSync } from '../lib/auth'
-import Workouts from "../src/screens/workouts"
+import WorkoutsScreen from "../src/screens/workouts"
 
-function Index() {
+function Workouts() {
+  const goBack = () => {
+    Router.back();
+  }
+
+  const openWorkout = (workoutId) => {
+    Router.push({
+      pathname: '/publicplan',
+      query: {
+        workout: workoutId
+      }
+    });
+  }
+
   return (
-    <Workouts/>
+    <WorkoutsScreen
+      goBack={goBack}
+      openWorkout={openWorkout}
+    />
   );
 }
 

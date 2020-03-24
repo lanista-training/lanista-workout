@@ -23,7 +23,7 @@ const Photo = styled.div`
   border-radius: 50%;
 `;
 const HeaderText = styled.div`
-  font-family: Abel;
+  font-family: Roboto;
   font-size: 1.2em;
   padding-left: 0.5em;
 `;

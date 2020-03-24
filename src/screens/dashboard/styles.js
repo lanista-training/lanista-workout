@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Fab from '@material-ui/core/Fab';
 
-export const Panel = styled.div`
+export const StyledPanel = styled.div`
   font-family: Roboto;
   height: 100%;
   min-height: 100vh;
@@ -10,13 +10,30 @@ export const Panel = styled.div`
   flex-flow: column;
   background: rgb(220,0,78);
   overflow: hidden;
+  .modal-blocker {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: #0000009c;
+  }
+  .MuiLinearProgress-root  {
+    z-index: 3;
+  }
   .header {
-    height: 50px;
-    align-items: center;
-    display: flex;
     background: rgb(220, 0, 78);
     color: white;
-    padding: 1em;
+    position: fixed;
+    width: 100vw;
+    top: 10px;
+    left: 0;
+    .header-inner-frame {
+      align-items: center;
+      display: flex;
+      padding: 1em;
+    }
   }
   .user-info {
     font-size: 0.8em;
@@ -29,16 +46,31 @@ export const Panel = styled.div`
       .first {
         font-weight: 900;
         font-size: 2em;
+        .MuiSkeleton-root {
+          font-size: 0.5em;
+          margin: 0.5em;
+        }
       }
       .last {
         font-size: 1.5em;
         font-weight: 100;
         line-height: 1em;
+        .MuiSkeleton-root {
+          font-size: 0.65em!important;
+          margin: 0.5em;
+        }
       }
     }
   }
   .banners {
-    padding: 0px 4em 2em 0em;
+    padding: 0 6em 0em 0em;
+    margin-top: -4px;
+    .MuiSkeleton-root {
+      height: 48vw;
+      margin: 0 1.5em;
+      border-radius: 15px;
+      overflow: hidden;
+    }
     .slick-slider {
       overflow: visible;
       .slick-list {
@@ -50,7 +82,7 @@ export const Panel = styled.div`
     }
     .banner{
       background: white;
-      height: 25vh;
+      height: 48vw;
       margin: 0 1.5em;
       border-radius: 15px;
       box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
@@ -58,16 +90,58 @@ export const Panel = styled.div`
       .banner-image {
         height: 100%;
         background-size: cover;
+        background-position: center;
       }
+      .banner-fallback {
+        position: relative;
+        top: -48vw;
+      }
+    }
+  }
+  .content-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+    width: 100%;
+    ::before
+    {
+      display: table;
+      content: '';
+      width: 100%;
+      height: 1.2em;
+      position: absolute;
+      background: whitesmoke;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
     }
   }
   .content {
     flex: 1;
-    padding: 0 1em 5em 1em;
+    min-height: 100vh;
+    padding: 0.5em 1em 5em 1em;
     background-color: whitesmoke;
     border-top-right-radius: 20px;
     border-top-left-radius: 20px;
     box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
+    .pullable {
+      width: 100%!important;
+      margin-top: -1em!important;
+    }
+    .MuiSkeleton-root {
+      margin: 3em 1em;
+      height: 10em;
+      border-radius: 10px;
+    }
+    .MuiFormControlLabel-root {
+      float: right;
+      margin-bottom: 1em;
+      margin-right: 0em;
+      .MuiFormControlLabel-label {
+        font-size: 0.9em;
+        font-weight: 900;
+      }
+    }
     .empty-list-text {
       margin-top: calc(50vh - 56px - 75px);
       line-height: 1.5em;

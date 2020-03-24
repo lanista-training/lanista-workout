@@ -1,18 +1,27 @@
 import * as React from "react";
-import { withApollo } from '../../../lib/apollo'
-import { useQuery } from '@apollo/react-hooks'
-import { useMutation } from '@apollo/react-hooks'
+import { withApollo } from '../../lib/apollo'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Workout from './Workout';
 import Router from 'next/router';
 import _ from 'lodash';
-import moment from "moment"
-import { logout } from '../../../lib/auth';
-import { ME, WORKOUTS } from "../../queries";
+import moment from "moment";
+import gql from "graphql-tag";
+import { ME } from "../../queries";
 import { DELETEPLAN } from "../../mutations";
 
-const Panel = ({workoutId}) => {
-  const goBack = () => Router.back()
-  const { data, error, loading } = useQuery(ME);
+const CURRENTTAB = gql`
+  {
+    currentTab @client
+  }
+`;
+
+const Panel = ({workoutId, goBack, showExercise, hasNorch}) => {
+  const onGoBack = () => {
+    client.writeData({ data: { currentTab: 0 } })
+    goBack()
+  }
+  const { data, error, loading, refetch } = useQuery(ME);
+  const { data: currentTab, client } = useQuery(CURRENTTAB);
   const [deletePlan, { loading: deletePlanLoading, error: deletePlanError }] = useMutation(
     DELETEPLAN,
     {
@@ -27,13 +36,20 @@ const Panel = ({workoutId}) => {
           query: ME,
           data: { me: {...me} },
         });
-        goBack()
+        setTimeout(function(){
+          goBack();
+        }, 1000);
       }
     }
   );
   const me = data ? data.me : {}
   const {plans} = me;
+
+  console.log("Searching the plan locally....")
   const plan = plans && plans.find(p => p.id == workoutId)
+  console.log("Found plan: ")
+  console.log( plan )
+
   const onDeletePlan = (planId) => {
     deletePlan({
       variables:{
@@ -41,26 +57,21 @@ const Panel = ({workoutId}) => {
       }
     })
   }
-  const showExercise = (exerciseId, memberId, planexerciseId) => {
-    Router.push({
-      pathname: '/exercise',
-      query: {
-        exercise: exerciseId,
-        member: memberId,
-        planexercise: planexerciseId
-      }
-    });
-  }
+
   return (
     <Workout
-      onGoBack={goBack}
-      plan={plan}
+      onGoBack={onGoBack}
+      plan={plan ? plan : {splits: []}}
       showExercise={showExercise}
       memberId={data && data.me.id}
       deletePlan={onDeletePlan}
       deletePlanLoading={deletePlanLoading}
       loading={loading}
       error={error}
+      currentTab={currentTab ? currentTab.currentTab : 0}
+      setCurrentTab={(tabIndex) => client.writeData({ data: { currentTab: tabIndex } })}
+      hasNorch={hasNorch}
+      refetch={refetch}
     />
   )
 }

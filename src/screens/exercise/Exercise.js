@@ -1,13 +1,13 @@
 import * as React from "react";
 import moment from "moment";
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
-import {Panel,StyledButton} from './styles';
+import {Panel,StyledButton, StyledDialog} from './styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
-import SwipeableViews from 'react-swipeable-views';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
@@ -26,26 +26,112 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import ReactPlayer from 'react-player';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import DateFnsUtils from '@date-io/date-fns';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Icon from '@material-ui/core/Icon';
+import Slider from "react-slick";
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import 'date-fns';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 import { useTheme } from '@material-ui/core/styles';
+import Set from './Set';
+import Sets from './Sets';
+import Pullable from 'react-pullable';
 
-export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll, loading}) => {
-  const [value, setValue] = React.useState(0);
+const sliderSettings = {
+  arrows: true,
+  dots: false,
+  infinite: false,
+  fade: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  adaptiveHeight: true,
+  nextArrow: <ArrowForwardIosIcon/>,
+  prevArrow: <ArrowBackIosIcon/>
+};
+
+const CustomizedLabel = ({x, y, stroke, value}) => {
+  return <text x={x} y={y-10} dy={-4} fill="white" fontSize={15} textAnchor="middle">{value}</text>;
+}
+
+const renderTotalVolumenGraph = (records, t) => {
+  const available = records && records.length > 0
+  let sumWeights = 0
+  records.map(record => sumWeights += record.totalWeight)
+  const sortedRecords = records.slice(0).reverse();
+  return(
+    <>
+      {available && sumWeights > 0 ?
+        <ResponsiveContainer>
+          <LineChart
+            data={(sortedRecords.length > 7 ? sortedRecords.slice(sortedRecords.length-7, sortedRecords.length) : sortedRecords).map(record => ({
+              name: record.day,
+              value: record.totalWeight,
+            }))}
+            margin={{
+              top: 50, right: 20, left: 0, bottom: 50,
+            }}
+          >
+            <YAxis domain={['dataMin', 'dataMax']} hide={true}/>
+            <Line type="monotone" dataKey="value" stroke="white" strokeWidth={2} connectNulls label={<CustomizedLabel />}/>
+          </LineChart>
+        </ResponsiveContainer>
+        :
+        (<div className="no-data">{t("missing_data")}</div>)}
+    </>
+  )
+}
+
+const renderOneRepetitionGraph = (records, t) => {
+  const available = records && records.length > 0
+  let sumWeights = 0
+  records.map(record => sumWeights += record.oneRM)
+  const sortedRecords = records.slice(0).reverse();
+  return(
+    <>
+      {available && sumWeights > 0 ?
+        <ResponsiveContainer>
+          <LineChart
+            data={(sortedRecords.length > 7 ? sortedRecords.slice(sortedRecords.length-7, sortedRecords.length) : sortedRecords).map(record => ({
+              name: record.day,
+              value: record.oneRM,
+            }))}
+            margin={{
+              top: 50, right: 20, left: 0, bottom: 50,
+            }}
+          >
+            <YAxis domain={['dataMin', 'dataMax']} hide={true}/>
+            <Line type="monotone" dataKey="value" stroke="white" strokeWidth={2} connectNulls label={<CustomizedLabel />}/>
+          </LineChart>
+        </ResponsiveContainer>
+        :
+        (<div className="no-data">{t("missing_data")}</div>)}
+    </>
+  )
+}
+
+export default ({
+  onGoBack,
+  exercise,
+  workouts,
+  createProtocoll,
+  createAllProtocolls,
+  deleteProtocoll,
+  loading,
+  hasNorch,
+  refetch,
+}) => {
+  const {t, locale} = useTranslate("exercise");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   const handleChangeIndex = index => {
     setValue(index);
   };
-
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
      setOpen(true);
@@ -53,7 +139,6 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
    const handleClose = () => {
      setOpen(false);
    };
-
   const theme = useTheme();
   const a11yProps = (index) => {
     return {
@@ -61,10 +146,8 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
       'aria-controls': `full-width-tabpanel-${index}`,
     };
   }
-
   const [video, setVideo] = React.useState(false);
   const playVideo = () => {
-    console.log(video)
     const {videoUrl} = exercise
     if(videoUrl) {
       setVideo(!video)
@@ -89,44 +172,68 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
   }
   const [protocollForm, setProtocollForm] = React.useState(false);
 
-  let days = []
+  let days = [];
+
   _.each(workouts, (day, key) => {
     let executions = []
-    _.each(day, execution => {
-      executions.push(execution)
-    })
-    days.push({
-      day: key,
-      executions: executions
-    })
+    let totalWeight = 0
+    let oneRM = 0
+    if( key !== moment(new Date()).format("YYYY-MM-DD") ){
+      _.each(day, execution => {
+        totalWeight += (execution.weight * execution.repetitions)
+        oneRM += (execution.weight * execution.repetitions * 0.033) + execution.weight
+        executions.push(execution)
+      })
+      days.push({
+        day: key,
+        executions: executions,
+        totalWeight: totalWeight,
+        oneRM: parseInt(parseFloat(oneRM/day.length).toFixed(2)),
+      })
+    }
+
   })
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [weight, setWeight] = React.useState(0.0);
-  const [training, setTraining] = React.useState(0);
-  const handleWeightChange = event => {
-    setWeight(event.target.value);
-  };
+  React.useEffect(() => {
+    if(workouts && _.size(workouts) > 0) {
+      setValue(1);
+    }
+  }, [workouts]);
+  const [value, setValue] = React.useState(days.length > 0 ? 1 : 0);
+  const [currentImage, setCurrentImage] = React.useState(0);
   const [selectedExecution, setSelectedExecution] = React.useState(0);
+  const {settings} = exercise ? exercise : {};
+  const {sets} = settings ? settings : [];
+  const [savingAll, setSavingAll] = React.useState(false);
+
   return (
     <Panel>
-      <AppBar className="exercise-header" position="static">
-        <div className="exercise-name">{exercise && exercise.name}</div>
+      <AppBar className="exercise-header" position="static" style={hasNorch ? {paddingTop: "30px"} : {}}>
+        <div className="exercise-name">{!video && exercise && exercise.name}</div>
         <IconButton aria-label="show 4 new mails" color="inherit" onClick={playVideo}>
-          {video && <VideocamOffIcon/>}
-          {!video && <VideocamIcon/>}
+          {video && <Icon>videocam_off</Icon>}
+          {!video && <Icon>videocam</Icon>}
         </IconButton>
       </AppBar>
-        <div
-          className="exercise-images"
-          style={{
-            backgroundImage: "url(" + (exercise && exercise.start_image) + "), url(" + (exercise && exercise.end_image) + ")"
+      <div className="exercise-images">
+        {
+          video && <ReactPlayer url={exercise.videoUrl} width="100%" height="100%" playing controls/>
+        }
+        <Slider
+          {...sliderSettings}
+          afterChange={(current, next) => {
+            setCurrentImage(current)
           }}
+          className={currentImage == 0 ? 'start-position' : 'end-position'}
         >
-          {
-            video && <ReactPlayer url={exercise.videoUrl} width="100%" height="100%" playing controls/>
-          }
-        </div>
+          <div key='exercise-image-start' className="exercise-image-wrapper">
+            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.end_image) + ")"}}/>
+          </div>
+          <div key='exercise-end-end' className="exercise-image-wrapper">
+            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.start_image) + ")"}}/>
+          </div>
+        </Slider>
+      </div>
       <div className="content">
         <AppBar position="static" color="default">
           <Tabs
@@ -137,83 +244,121 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab label="Info" {...a11yProps(0)} />
-            <Tab label="Protokolle" {...a11yProps(1)} />
-            <Tab label="Statistik" {...a11yProps(2)} />
+            <Tab label={t("info")} {...a11yProps(0)} />
+            <Tab label={t("protocolls")} {...a11yProps(1)} />
+            <Tab label={t("statistics")} {...a11yProps(2)} />
           </Tabs>
         </AppBar>
-        <SwipeableViews
-          axis={'x'}
-          index={value}
-          onChangeIndex={handleChangeIndex}
-        >
-          <TabPanel key="tab-1" value={value} index={0} dir={theme.direction}>
-            <div className="exercise-title">Ausführung</div>
+        <div>
+          <TabPanel key="tab-1" className="tab-panel" value={value} index={0} dir={theme.direction}>
+          {
+            exercise && exercise.settings && exercise.settings.indications && exercise.settings.indications.length > 0 && (
+              <>
+                <div className="exercise-title">{t("from_trainer")}</div>
+                <div className="exercise-content">
+                  {exercise.settings.indications.split("||").map( (note, index) => (<div key={"trainer-note" + index}>{note.charAt(0).toUpperCase() + note.slice(1)}</div>) )}
+                </div>
+              </>
+            )
+          }
+          <div className="exercise-title">{t("execution")}</div>
             <div className="exercise-content">
               {exercise && exercise.coaching_notes.map((coachingNote, index) => (
                 <div key={"coaching-note" + index}>{coachingNote}</div>
               ))}
             </div>
-            <div className="exercise-title">Mögliche Fehler</div>
+            <div className="exercise-title">{t("errors")}</div>
             <div className="exercise-content">
               {exercise && exercise.mistakes.map((coachingNote, index) => (
-                <div key={"mistake-" + index}>{coachingNote}>{coachingNote}</div>
+                <div key={"mistake-" + index}>{coachingNote}</div>
               ))}
             </div>
           </TabPanel>
-          <TabPanel key="tab-2" value={value} index={1} dir={theme.direction}>
-            <div className="create-protocoll-button">
-              <IconButton aria-label="create protocoll"  size="medium" onClick={() => {
-                setWeight((exercise && exercise.workouts && exercise.workouts.length > 0) ? exercise.workouts[0].weight : 0.0)
-                setTraining((exercise && exercise.workouts && exercise.workouts.length > 0) ? exercise.workouts[0].repetitions : 8)
-                setProtocollForm(!protocollForm)}
-              }>
-                {!protocollForm && <AddCircleOutlineIcon fontSize="inherit" />}
-                {protocollForm && <AddCircleIcon fontSize="inherit" />}
-              </IconButton>
-            </div>
-            <List subheader={<li />}>
-              { loading &&
-                <CircularProgress size={70} color="secondary"/>
-              }
-              { !loading &&
-                days.map( workout => {
-                  return (
-                    <li key={`section-${workout.day}`}>
-                      <ul style={{ padding: 0 }}>
-                        <ListSubheader>{workout.day}</ListSubheader>
-                        {workout.executions.map((execution, index) => (
-                          <ListItem
-                            className={selectedExecution==execution.id ? 'selected' : ''}
-                            key={`item-${workout.day}-${execution.id}`}
+          <TabPanel key="tab-2" className="tab-panel protocolls" value={value} index={1} dir={theme.direction}>
+            <Pullable onRefresh={refetch}>
+
+
+
+              <Sets
+                sets={sets ? sets : []}
+                workouts={workouts}
+                day={new Date()}
+                loading={loading}
+                onCreateProtocoll={createProtocoll}
+                onDeleteProtocoll={deleteProtocoll}
+                onCreateAllProtocolls={createAllProtocolls}
+              />
+
+
+
+
+              <List subheader={<li />}>
+                { loading &&
+                  <CircularProgress size={70} color="secondary"/>
+                }
+                { !loading &&
+                  days.map( workout => {
+                    return (
+                      <li key={`section-${workout.day}`}>
+                        <ul style={{ padding: 0 }}>
+                          <ListSubheader>{moment(new Date(workout.day)).format('dd, D. MMMM YYYY')}</ListSubheader>
+                          {workout.executions.map((execution, index) => (
+                            <ListItem
+                              className={selectedExecution==execution.id ? 'selected' : ''}
+                              key={`item-${workout.day}-${execution.id}`}
                               onClick={() => {
-                              setSelectedExecution(execution.id == selectedExecution ? 0 : execution.id)
-                            }}
-                          >
-                            { selectedExecution==execution.id &&
-                              <Button
-                                variant="contained"
-                                color="secondary"
-                                startIcon={<DeleteIcon />}
-                                onClick={() => deleteProtocoll(execution.id)}
-                              >
-                                Delete
-                              </Button>
-                            }
-                            <ListItemText primary={"Satz " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? ' Wdh' : execution.training_unit == 1 ? ' Min' : ' Sek') + " x " + execution.weight + " Kg"} />
-                          </ListItem>
-                        ))}
-                      </ul>
-                    </li>
-                  )
-              })
-            }
-            </List>
+                                setSelectedExecution(execution.id == selectedExecution ? 0 : execution.id)
+                              }}
+                            >
+                              { selectedExecution==execution.id &&
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  startIcon={<DeleteIcon />}
+                                  onClick={() => deleteProtocoll(execution.id)}
+                                >
+                                  Delete
+                                </Button>
+                              }
+                              <ListItemText primary={"Satz " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? ' Wdh' : execution.training_unit == 1 ? ' Sek' : ' Min') + " x " + execution.weight + " Kg"} />
+                            </ListItem>
+                          ))}
+                        </ul>
+                      </li>
+                    )
+                })
+              }
+              </List>
+
+            </Pullable>
           </TabPanel>
-          <TabPanel key="tab-3" value={value} index={2} dir={theme.direction}>
-            Statistik
+          <TabPanel key="tab-3" className="tab-panel" value={value} index={2} dir={theme.direction}>
+            <div className="graphic graphic-total-weight" onClick={() => {
+              console.log("MARK 3")
+            }}>
+              <div className="graphic-header">
+                <div className="text-section">
+                  <div className="last-value">{days && days.length > 0 ? days[0].totalWeight : 0} Kg</div>
+                  <div className="graphic-title">{t("weight_day_total")}</div>
+                </div>
+                <Icon></Icon>
+              </div>
+              {renderTotalVolumenGraph(days, t)}
+            </div>
+            <div className="graphic graphic-one-repetition" onClick={() => {
+              console.log("MARK 3")
+            }}>
+              <div className="graphic-header">
+                <div className="text-section">
+                  <div className="last-value">{days && days.length > 0 ? days[0].oneRM : 0} Kg</div>
+                  <div className="graphic-title">{t("1rm")}</div>
+                </div>
+                <Icon></Icon>
+              </div>
+              {renderOneRepetitionGraph(days, t)}
+            </div>
           </TabPanel>
-        </SwipeableViews>
+        </div>
       </div>
       <StyledButton color="primary" onClick={onGoBack}>
         <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
@@ -224,86 +369,19 @@ export default ({onGoBack, exercise, workouts, createProtocoll, deleteProtocoll,
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-      <DialogTitle id="alert-dialog-title">{"Wiedergabeproblem"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t("play_problems")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Es gibt kein Video zu dieser Übung.
+            {t("no_video")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" autoFocus>
-            OK
+            {t("ok")}
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={protocollForm}
-        onClose={() => setProtocollForm(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-      <DialogTitle id="alert-protocoll-title">{"Protokollieren"}</DialogTitle>
-        <DialogContent>
-          <>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                margin="normal"
-                id="date-picker-dialog"
-                label="Ausführungstag"
-                format="dd/MM/yyyy"
-                value={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                className="protocoll-date"
-                style={{width: "100%"}}
-              />
-            </MuiPickersUtilsProvider>
-            <div className="input-fields">
-              <TextField
-                id="filled-start-adornment"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">{(exercise && exercise.settings) ? (exercise.settings.training_unit == 0 ? "Wdh" : ((exercise.settings.training_unit == 1) ? "Min" : "Sek")) : "Wdh"}</InputAdornment>,
-                }}
-                type="number"
-                variant="outlined"
-                value={training}
-                onChange={(event) => {
-                  setTraining(event.target.value)
-                  const { target } = event;
-                  setTimeout(() => {
-                    target.focus();
-                  }, 10);
-                }}
-                style={{width: "100%", marginTop: "1em"}}
-              />
-              <TextField
-                id="filled-start-adornment"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                }}
-                variant="outlined"
-                type="number"
-                value={weight}
-                onChange={(event) => setWeight(event.target.value)}
-                style={{width: "100%", marginTop: "1em"}}
-              />
-            </div>
-          </>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setProtocollForm(false)} color="primary" autoFocus>
-            Zurück
-          </Button>
-          <Button onClick={() => {
-            createProtocoll(selectedDate, training, weight, exercise.settings ? exercise.settings.training_unit : 0)
-            setProtocollForm(false)
-          }} color="primary" autoFocus>
-            Speichern
-          </Button>
-        </DialogActions>
-      </Dialog>
+
     </Panel>
   )
 };

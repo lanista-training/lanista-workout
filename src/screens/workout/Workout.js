@@ -1,10 +1,10 @@
 import * as React from "react";
 import moment from "moment";
+import { useTranslate } from '../../hooks/Translation';
 import {Panel, StyledButton} from './styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AppBar from '@material-ui/core/AppBar';
-import SwipeableViews from 'react-swipeable-views';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Card from '@material-ui/core/Card';
@@ -28,11 +28,13 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Skeleton from '@material-ui/lab/Skeleton';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Pullable from 'react-pullable';
 
 import { useTheme } from '@material-ui/core/styles';
 
 export default ({
     onGoBack,
+    signedIn,
     plan,
     showExercise,
     memberId,
@@ -42,7 +44,12 @@ export default ({
     assignPlan,
     deletePlan,
     deletePlanLoading,
+    currentTab,
+    setCurrentTab,
+    hasNorch,
+    refetch,
   }) => {
+  const {t} = useTranslate("workout");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
      setOpen(true);
@@ -50,19 +57,22 @@ export default ({
    const handleClose = () => {
      setOpen(false);
    };
-  const [value, setValue] = React.useState(0);
   const theme = useTheme();
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setCurrentTab(newValue)
   };
   const handleChangeIndex = index => {
-    setValue(index);
+    setCurrentTab(index)
   };
   const a11yProps = (index) => {
     return {
       id: `full-width-tab-${index}`,
       'aria-controls': `full-width-tabpanel-${index}`,
     };
+  }
+  const onRefresh = () => {
+    console.log("ON REFRESH");
+    refetch();
   }
   const TabPanel = (props) => {
     const { children, value, index, ...other } = props;
@@ -83,41 +93,51 @@ export default ({
   const {name, splits} = (plan ? plan : {})
   return (
     <Panel>
-      <div className="header">
+      <div className="header" style={hasNorch ? {paddingTop: "40px"} : {}}>
         {error && <div>Sorry   :-(</div>}
         {!error &&
-          <ExpansionPanel>
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            {!loading && name}
-            {loading && <Skeleton variant="rect" width={"100%"} height={"2em"} />}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            {plan && plan.description}
-            {plan && plan.creator_name && <div className="plan-author">Ersteller: <span>{plan.creator_name}</span></div>}
-            {(plan && plan.duration > 0) && (<div className="plan-duration">Plandauer: <span>{plan.duration} {plan.duration > 1 ? 'Wochen' : 'Woche'}</span></div>)}
-            {plan && !showAssignButton &&
-              <Button
-                variant="outlined"
-                color="primary"
-                size="large"
-                onClick={() => handleOpen()}
-                startIcon={<DeleteIcon />}
-              >
-                Plan löschen
-              </Button>
-            }
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          <ExpansionPanel defaultExpanded={assignPlan !== undefined}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              {!loading && name}
+              {loading && <Skeleton variant="rect" width={"100%"} height={"2em"} />}
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              {plan && plan.description && plan.description.split('||').map( (line, index) => (<div key={"description-line" + index}>{line.charAt(0).toUpperCase() + line.slice(1)}</div>)) }
+              {plan && plan.creator_name && <div className="plan-author">Ersteller: <span>{plan.creator_name}</span></div>}
+              {(plan && plan.duration > 0) && (<div className="plan-duration">Plandauer: <span>{plan.duration} {plan.duration > 1 ? 'Wochen' : 'Woche'}</span></div>)}
+              {plan && !showAssignButton &&
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                  onClick={() => handleOpen()}
+                  startIcon={<DeleteIcon />}
+                >
+                  {t("delete_plan")}
+                </Button>
+              }
+              {plan && showAssignButton &&
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="large"
+                  onClick={() => signedIn ? assignPlan(plan.id) : onGoBack(plan.id)}
+                >
+                  {signedIn ? t("add_plan") : t("login_to_keep_going")}
+                </Button>
+              }
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         }
       </div>
       <div className="content">
         <AppBar position="static" color="default">
           <Tabs
-            value={value}
+            value={currentTab}
             onChange={handleChange}
             indicatorColor="primary"
             textColor="primary"
@@ -136,45 +156,43 @@ export default ({
         }
         {
           !loading && splits && splits.length > 0 &&
-          <SwipeableViews
-            axis={'x'}
-            index={value}
-            onChangeIndex={handleChangeIndex}
-          >
+          <div>
             {
               splits && splits.map((split, index) => (
-                <TabPanel key={"split-panel-" + index} value={value} index={index} dir={theme.direction} className="exercise-list">
-                  {error && <div className="error">Das Trainingsplan könnte leider nicht gefunden werden.</div>}
-                  {!error && !loading && split.exercises.map(planExercise => (
-                    <Card key={'plan-exercise-' + planExercise.exercise.id} onClick={() => showExercise(planExercise.exercise.id, memberId, planExercise.id)}>
-                      <CardActionArea>
-                        <CardMedia
-                          className="exercise-images"
-                          title="Contemplative Reptile"
-                        >
-                          <div
-                            className="start-image"
-                            style={{backgroundImage: "url(" + planExercise.exercise.start_image + ")"}}
-                          />
-                          <div
-                            className="end-image"
-                            style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
-                          />
-                        </CardMedia>
-                        <CardContent>
-                          {planExercise.exercise.name}
-                        </CardContent>
-                        <CardActions>
-                          <div><span>{planExercise.rounds}</span> Sätze</div>
-                          <div><span>{planExercise.weight}</span> Kg / <span>{planExercise.repetitions}</span> {planExercise.training_unit == 0 ? "Wdh" : planExercise.training_unit == 0 ? 'Min' : 'Sek'}</div>
-                        </CardActions>
-                      </CardActionArea>
-                    </Card>
-                  ))}
+                <TabPanel key={"split-panel-" + index} value={currentTab} index={index} dir={theme.direction} className="exercise-list">
+                  <Pullable onRefresh={onRefresh}>
+                    {error && <div className="error">{t("plan_not_found")}</div>}
+                    {!error && !loading && split.exercises.map(planExercise => (
+                      <Card className="plan-exercise" key={'plan-exercise-' + planExercise.exercise.id} onClick={() => showExercise(planExercise.exercise.id, planExercise.id)}>
+                        <CardActionArea>
+                          <CardMedia
+                            className="exercise-images"
+                            title="Contemplative Reptile"
+                          >
+                            <div
+                              className="start-image"
+                              style={{backgroundImage: "url(" + planExercise.exercise.start_image + ")"}}
+                            />
+                            <div
+                              className="end-image"
+                              style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
+                            />
+                          </CardMedia>
+                          <CardContent>
+                            {planExercise.exercise.name}
+                          </CardContent>
+                          <CardActions>
+                            <div><span>{planExercise.rounds}</span> {t("sets")}</div>
+                            <div><span>{planExercise.weight}</span> {t("kg")} / <span>{planExercise.repetitions}</span> {planExercise.training_unit == 0 ? t("rep") : planExercise.training_unit == 1 ? t("sec") : t("min")}</div>
+                          </CardActions>
+                        </CardActionArea>
+                      </Card>
+                    ))}
+                  </Pullable>
                 </TabPanel>
               ))
             }
-          </SwipeableViews>
+          </div>
         }
       </div>
       <StyledButton color="primary" onClick={onGoBack}>
@@ -189,19 +207,19 @@ export default ({
         <DialogTitle id="alert-dialog-title">{"PLAN LÖSCHEN"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Möchtest du dieser Trainingsplan löschen?
+            {t("delete_plan_question")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Zurück
+            {t("back")}
           </Button>
           <Button onClick={() => {
             deletePlan(plan.id)
             handleClose()
           }} color="primary" autoFocus>
-            Plan löschen
+            {t("delete_plan")}
           </Button>
         </DialogActions>
         </DialogActions>

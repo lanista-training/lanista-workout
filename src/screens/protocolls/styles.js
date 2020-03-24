@@ -5,32 +5,62 @@ export const Panel = styled.div`
   font-family: Roboto;
   height: 100%;
   min-height: 100vh;
-  background: white;
   display: flex;
   flex-flow: column;
-  background: whitesmoke;
+  background: rgb(220,0,78);
+  .MuiLinearProgress-root {
+    position: absolute;
+    top: 0em;
+    width: 100%;
+    z-index: 2;
+  }
   .header {
-    align-items: center;
+    align-items: left;
     display: flex;
     flex-flow: column;
     background: rgb(220, 0, 78);
     color: white;
     margin: 0 0 1.5em 0;
-    font-weight: 900;
-    font-size: 1.5em;
-    box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    padding: 1em;
     .title {
       flex: 1;
-      padding: 1em;
-      text-align: right;
+      text-align: left;
+      font-weight: 900;
+      font-size: 2em;
+      padding: 0.5em 0;
     }
-    .MuiLinearProgress-root {
+  }
+  .content-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: scroll;
+    width: 100%;
+    margin-top: 5em;
+    ::before
+    {
+      display: table;
+      content: '';
       width: 100%;
+      height: 1.2em;
+      position: absolute;
+      background: whitesmoke;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
     }
   }
   .list-wrapper {
-    background: whitesmoke;
-    padding: 0 2em 2em 2em;
+    min-height: 100vh;
+    background-color: whitesmoke;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 6px 6px -3px, rgba(0, 0, 0, 0.14) 0px 10px 14px 1px, rgba(0, 0, 0, 0.12) 0px 4px 18px 3px;
+    flex: 1 1 0%;
+    padding: 2.5em 1.5em 1.5em;
     .empty-list-text {
       margin-top: calc(50vh - 140px);
       line-height: 1.5em;

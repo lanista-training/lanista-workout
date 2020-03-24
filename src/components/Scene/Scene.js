@@ -228,7 +228,7 @@ export default ({
               lineHeight: '0.9em',
               paddingTop: '0.4em',
               textAlign: 'left',
-              fontFamily: 'Abel',
+              fontFamily: 'Roboto',
               fontSize: '1.3em',
               fontWeight: 'bold',
               color: 'rgba(0,0,0,.6)'

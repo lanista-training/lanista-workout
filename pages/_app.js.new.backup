@@ -1,0 +1,24 @@
+
+import App from 'next/app'
+import React from 'react'
+import {ThemeProvider } from 'styled-components'
+import defaultTheme from '../themes/default'
+import DataProvider from '../src/components/DataProvider'
+import {TranslatorProvider} from '../src/hooks/Translation'
+
+class MyApp extends App {
+  render () {
+    const { Component, pageProps } = this.props
+    return (
+      <ThemeProvider theme={defaultTheme}>
+        <DataProvider>
+          <TranslatorProvider>
+            <Component {...pageProps} />
+          </TranslatorProvider>
+        </DataProvider>
+      </ThemeProvider>
+    )
+  }
+}
+
+export default MyApp

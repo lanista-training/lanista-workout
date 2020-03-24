@@ -15,7 +15,7 @@ export const Panel = styled.div`
     background: rgb(220, 0, 78);
     color: white;
     font-weight: 900;
-    font-size: 1.2em;
+    font-size: 1.5em;
     .MuiPaper-root {
       width: 100%;
     }
@@ -63,14 +63,39 @@ export const Panel = styled.div`
   }
   .content {
     min-height: 100vh;
-    .MuiPaper-root {
-      margin-bottom: 1em;
+    overflow: hidden;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    position: relative;
+    margin-top: -20px;
+    background-color: whitesmoke;
+    header {
+      overflow: hidden;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
     }
-    .MuiTab-textColorPrimary {
-      color: rgb(255, 195, 216)!important;
+    .plan-exercise {
+      margin-bottom: 2em;
+      border-radius: 10px;
+      .MuiCardActions-root  {
+        padding: 16px;
+      }
     }
-    .MuiTab-textColorPrimary.Mui-selected {
-      color: white!important;
+    .MuiAppBar-root.MuiPaper-root {
+      background: white;
+      box-shadow: none;
+      padding-top: 1em;
+      background-color: whitesmoke;
+    }
+    .MuiTabs-root {
+      padding: 0.5em 1em;
+      background-color: whitesmoke;
+    }
+    .MuiTab-textColorPrimary.Mui-selected {
+      color: rgb(220,0,78);
+    }
+    .MuiTabs-indicator {
+      background-color: rgb(220,0,78);
     }
     .MuiCardContent-root {
       font-family: Roboto;
@@ -99,6 +124,7 @@ export const Panel = styled.div`
     }
   }
   .header {
+    padding-bottom: 1.2;
     .workout-name {
       flex: 1;
       line-height: 2em;
@@ -106,10 +132,6 @@ export const Panel = styled.div`
     button {
       color: white;
     }
-  }
-  header {
-    background-color: rgb(220,0,78)!important;
-    box-shadow: none;
   }
   .error {
     padding: 2em;

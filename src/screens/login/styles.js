@@ -37,6 +37,18 @@ export const Panel = styled.div`
         top: 1px;
       }
     }
+    .registration-button {
+      width: 100%;
+      button {
+        background-color: #eaeaea;
+        color: #dc004e;
+        text-align: center;
+      }
+      .MuiCircularProgress-root {
+        left: calc(50% - 15px)!important;
+        top: 1px;
+      }
+    }
   }
   .logo-wrapper {
     margin-top: 2em;
@@ -47,6 +59,7 @@ export const Panel = styled.div`
   .logo {
     height: 10em;
     width: 10em;
+    margin-top: 3em;
     background-size: contain;
     background-repeat: no-repeat;
   }
@@ -77,5 +90,8 @@ export const Panel = styled.div`
     position: absolute;
     width: 100%;
     bottom: 1em;
+  }
+  .mfb-zoomin {
+    margin-bottom: 2.5em;
   }
 `;

@@ -1,5 +1,6 @@
 import * as React from "react";
-import { withApollo } from '../../../lib/apollo'
+import { useTranslate } from '../../hooks/Translation';
+import { withApollo } from '../../lib/apollo'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import Workouts from './Workouts';
 import Router from 'next/router';
@@ -8,14 +9,7 @@ import moment from "moment"
 import { WORKOUTS, ME } from "../../queries";
 import { CLONEPLAN } from "../../mutations";
 
-const Panel = ({client}) => {
-  const goBack = () => Router.back()
-  const openWorkout = (workoutId) => {
-    Router.push({
-      pathname: '/publicplan',
-      query: { workout: workoutId }
-    });
-  }
+const Panel = ({client, goBack, openWorkout, hasNorch}) => {
   const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
     CLONEPLAN,
     {
@@ -28,22 +22,35 @@ const Panel = ({client}) => {
           query: ME,
           data: { me: me},
         });
-        goBack();
+        setTimeout(function(){
+          goBack();
+        }, 1000);
       }
     }
   );
-
-
-  const { data, error, loading } = useQuery(WORKOUTS);
+  const {locale} = useTranslate("workouts");
+  const { data, error, loading, refetch } = useQuery(WORKOUTS,
+  {
+    variables: {
+      language: locale,
+    }
+  });
   const workouts = data ? data.workouts : []
   const assignPlan = (planId) => {
     clonePlan({variables: {
       planId: planId
     }})
   }
+  const [filter, setFilter] = React.useState('*');
+  const onSetFilter = (text) => {
+    setFilter(text == filter ? '*' : text)
+  }
+  const applyFilter = (plans) => {
+    return plans.filter( plan => plan.categories && plan.categories.indexOf(filter) > -1 )
+  }
   return (
     <Workouts
-      plans={workouts}
+      plans={filter == '*' ? workouts : applyFilter(workouts)}
       loading={loading}
       openWorkout={openWorkout}
       onGoBack={goBack}
@@ -52,6 +59,10 @@ const Panel = ({client}) => {
       assignPlan={assignPlan}
       clonePlanLoding={clonePlanLoading}
       clonePlanError={clonePlanError}
+      onSetFilter={onSetFilter}
+      filter={filter == '*' ? 'FILTER' : filter}
+      hasNorch={hasNorch}
+      refetch={refetch}
     />
   )
 }

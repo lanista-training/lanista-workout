@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {Panel} from './styles'
-
+import { useTranslate } from '../../hooks/Translation';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,8 +14,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Menu, MainButton, ChildButton } from "react-mfb";
 
- export default ({onAuthenticate, loading, loginError, bu, loginImage}) => {
+const effect = 'zoomin', pos = 'br', method = 'hover';
+
+export default ({
+  onAuthenticate,
+  loading,
+  loginError,
+  bu,
+  loginImage,
+  goRegistration,
+}) => {
+   let {t, locale, languages, changeLanguage} = useTranslate("login");
    const getLoginMessage = () => {
      if(bu =='basefit') {
        return <div className="login-message">Verwende hier deine <span>mybasefit.ch</span> Anmeldedaten - die Nutzung ist gratis</div>
@@ -26,6 +37,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
    const[email, setEmail] = useState('')
    const[password, setPassword] = useState('')
    const [open, setOpen] = React.useState(false);
+   const [errorMessage, setErrorMessage] = React.useState("Hast dich verschrieben?");
+   const [errorMessageHeader, setErrorMessageHeader] = React.useState("Email oder Passwort inkorrekt.");
    const handleClickOpen = () => {
       setOpen(true);
     };
@@ -33,12 +46,25 @@ import CircularProgress from '@material-ui/core/CircularProgress';
       setOpen(false);
     };
     useEffect(() => {
+      if( loginError && loginError.message.indexOf("Network error:") > -1 ) {
+        setErrorMessageHeader("Ups ;-(");
+        setErrorMessage(t("connection_error"));
+      } else if(loginError && loginError.message && loginError.message.indexOf("ACCOUNTBLOKED") > -1 ) {
+        setErrorMessageHeader(t("account_blocked_header"));
+        setErrorMessage(t("account_blocked_message"));
+      } else if( loginError && loginError.message.indexOf("USERNOTFOUND") > -1 ) {
+        setErrorMessageHeader(t("login_error_header"));
+        setErrorMessage(t("login_error_message"));
+      } else {
+        setErrorMessageHeader(t("unexpected_error_header"));
+        setErrorMessage(t("Ein unvorherbarer Fehler ist aufgetretten. Bitte, kontaktiere das Lanista-Team."));
+      }
       setOpen(loginError !== undefined)
     }, [loginError])
    return (
      <Panel loginImage={loginImage}>
        <div className="logo-wrapper" style={{flex: 1}}>
-         <div className="logo" style={{backgroundImage: "https://lanista-training.com/bus/maccentercom/logo.png"}} />
+         <div className="logo" style={{backgroundImage: loginImage}} />
        </div>
        <form noValidate autoComplete="off">
          <div className="text-fields">
@@ -47,7 +73,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
               required
               fullWidth
               id="email"
-              label="Email Adresse"
+              label={t("email_address")}
               name="email"
               autoComplete="email"
               autoFocus
@@ -59,7 +85,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
               required
               fullWidth
               name="password"
-              label="Passwort"
+              label={t("password")}
               type="password"
               id="password"
               autoComplete="current-password"
@@ -79,16 +105,45 @@ import CircularProgress from '@material-ui/core/CircularProgress';
               onClick={() => onAuthenticate(email, password)}
               disabled={loading}
             >
-              Anmelden
+              {t("login")}
               {
                 loading && <CircularProgress size={24} style={{position: "absolute", left: "calc((100vw/2) - 24px)", marginTop: "4px"}}/>
               }
             </Button>
           </div>
-          <Link target="_blank" href={bu=="basefit" ? 'https://mybasefit.ch' : 'http://lanista-training.com/tpmanager/user/requestpasswordreset?client=lanista&lang=DE'} variant="body2">
-            Passwort vergessen?
+          <div className="registration-button" >
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className="login-button"
+              onClick={goRegistration}
+              disabled={loading}
+            >
+              {t("signup")}
+            </Button>
+          </div>
+          <Link target="_blank" href='#' variant="body2" onClick={() => {
+              window.open(bu=="basefit" ? 'https://mybasefit.ch' : 'https://lanista-training.com/tpmanager/user/requestpasswordreset?client=lanista&lang=DE', '_blank', 'location=yes');
+          }}>
+            {t("forgot_password")}
           </Link>
        </form>
+       <Menu effect={effect} method={method} position={pos}>
+         <MainButton className={locale + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
+         {
+           languages && languages.filter((language) => language !== locale).map(language => (
+             <ChildButton
+               icon="ion-social-github"
+               label={language}
+               className={language + "-flag"}
+               key={language}
+               onClick={(e) => {
+                 changeLanguage(language);
+               }} />
+           ))
+         }
+       </Menu>
        <div className="copyright">
         Lanista Trainingssoftware © 2012.
       </div>
@@ -98,10 +153,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Hast dich verschrieben?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{errorMessageHeader}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Email oder Passwort inkorrekt.
+          {errorMessage}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

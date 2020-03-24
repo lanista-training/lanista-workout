@@ -1,6 +1,7 @@
 import * as React from "react";
 import moment from "moment";
-import {Panel, UserAvatar, StyledButton, StyledCard} from './styles';
+import { useTranslate } from '../../hooks/Translation';
+import {StyledPanel, UserAvatar, StyledButton, StyledCard} from './styles';
 import Button from '@material-ui/core/Button';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -11,8 +12,18 @@ import Avatar from '@material-ui/core/Avatar';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import TimerOffIcon from '@material-ui/icons/TimerOff';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Skeleton from '@material-ui/lab/Skeleton';
 import MenuButton from '../../components/MenuButton';
 import Slider from "react-slick";
+import ScannerButtons from "../../components/ScannerButtons";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Pullable from 'react-pullable';
 
 const settings = {
   dots: false,
@@ -24,74 +35,182 @@ const settings = {
   adaptiveHeight: true
 };
 
-export default ({firstName, lastName, photoUrl, plans, onLogout, openWorkout, openWorkouts, showBanners, banners, preventLogout}) => {
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+function Panel(props) {
+  const {modal, scanning} = props
   return (
-    <Panel>
-      <div className="user-info header">
-        <div className="user-name">
-          <div className="first">{firstName}</div>
-          <div className="last">{lastName}</div>
-        </div>
-        <Button
-          variant="outlined"
-          startIcon={<AddCircleIcon />}
-          size="small"
-          onClick={openWorkouts}
-        >
-          Workouts
-        </Button>
-      </div>
-      {
-        showBanners && <div className="banners">
-          <Slider {...settings}>
-            {
-              banners.map(banner => (
-                <div className="banner-wrapper">
-                  <div className="banner">
-                    <div className="banner-image" style={{
-                      backgroundImage: 'url(' + banner.imageUrl + ')'
-                    }}/>
-                  </div>
-                </div>
-              ))
-            }
-          </Slider>
-        </div>
-      }
-      <div className="content">
-        {plans && plans.length == 0 &&
-          <div className="empty-list-text">Verwende den Knopf oben rechts um neue Trainingspläne zu finden</div>
-        }
-        {plans && plans.map(plan => (
-          <StyledCard
-            key={plan.id}
-            className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
-            onClick={() => openWorkout(plan.id)}
+    <StyledPanel>
+      { scanning && <LinearProgress /> }
+      { modal && <div className="modal-blocker"/> }
+      {props.children}
+    </StyledPanel>
+  )
+}
+export default ({
+  firstName,
+  lastName,
+  photoUrl,
+  plans,
+  doLogout,
+  openWorkout,
+  openWorkouts,
+  goToSetup,
+  onGoToProtocolls,
+  onGoToMeasurements,
+  showBanners,
+  banners,
+  preventLogout,
+  filter,
+  toggleFilter,
+  loading,
+  editable,
+  hasNorch,
+
+  onScannQr,
+  onScannNfc,
+  onScannBeacon,
+
+  scannNfcDisable,
+  scannQrDisable,
+  scannBeaconDisable,
+
+  snackbar,
+  handleCloseSnackbar,
+  snackbarMessage,
+  modal,
+  scanning,
+  showScannButtons,
+  openBeaconSearch,
+  setOpenBeaconSearch,
+
+  refetch,
+}) => {
+  const {t} = useTranslate("dashboard");
+  const onRefresh = () => {
+    console.log("ON REFRESH");
+    refetch();
+  }
+  return (
+    <Panel modal={modal} scanning={scanning}>
+      <div className="user-info header" style={hasNorch ? {top: "30px"} : {}}>
+        <div className="header-inner-frame">
+          <div className="user-name">
+            <div className="first">{loading ? <Skeleton width="60%" /> : firstName}</div>
+            <div className="last">{loading ? <Skeleton width="50%" /> : lastName}</div>
+          </div>
+          <Button
+            variant="outlined"
+            startIcon={<AddCircleIcon />}
+            size="small"
+            onClick={openWorkouts}
           >
-            <CardActionArea>
-              <Card>
-                <CardHeader
-                  title={plan.name}
-                  subheader={
-                    plan.days ? plan.days + (plan.days > 1 ? ' Tage/Woche' : ' Tag / Woche') : 'Keine Plandauer'
-                  }
-                  avatar={
-                    <Avatar>
-                      {!moment(new Date(parseInt(plan.expiration_date))).isAfter() && plan.duration > 0 && <TimerOffIcon />}
-                      {(moment(new Date(parseInt(plan.expiration_date))).isAfter() || !(plan.duration > 0)) && <PlayCircleOutlineIcon />}
-                    </Avatar>
-                  }
-                >
-                </CardHeader>
-                <CardContent>
-                  {plan.description}
-                </CardContent>
-              </Card>
-            </CardActionArea>
-          </StyledCard>
-        ))}
+            {t('plans')}
+          </Button>
+        </div>
+        {
+          (loading || showBanners) && <div className="banners">
+            {loading && <Skeleton variant="rect" />}
+            {!loading &&
+              <Slider {...settings}>
+              {
+                banners.fallback.map((banner, i) => (
+                  <div key={'banner-' + banner.id} className="banner-wrapper">
+                    <div className="banner" onClick={() => {
+                      let win = window.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank');
+                      win.focus();
+                    }}>
+                      <div className="banner-image" style={{
+                        backgroundImage: 'url(' + banner.imageUrl + ')'
+                      }}/>
+                      <div className="banner-image banner-fallback" style={{
+                        backgroundImage: 'url(' + banners.banners[i].imageUrl + ')'
+                      }}/>
+                    </div>
+                  </div>
+                ))
+              }
+              </Slider>
+            }
+          </div>
+        }
       </div>
-      <MenuButton preventLogout={preventLogout}/>
+      <div className="content-wrapper" style={{marginTop: (loading || showBanners) ? (hasNorch ? "calc(45vw + 135px)" : "calc(45vw + 115px)"): "110px"}}>
+        <div className="content">
+          <FormControlLabel
+            value="active"
+            control={
+              <Switch
+                checked={filter}
+                onChange={toggleFilter}
+                value={filter}
+              />
+            }
+            label={filter ? t('active_plans') : t('all_plans')}
+            labelPlacement="start"
+          />
+          {loading && <Skeleton variant="rect" />}
+          {!loading && plans && plans.length == 0 &&
+            <div className="empty-list-text">{t("plan_list_empty_text")}</div>
+          }
+          <Pullable onRefresh={onRefresh}>
+            {!loading && plans && plans.map(plan => (
+              <StyledCard
+                key={plan.id}
+                className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
+                onClick={() => openWorkout(plan.id)}
+              >
+                <CardActionArea>
+                  <Card>
+                    <CardHeader
+                      title={plan.name}
+                      subheader={
+                        plan.days ? plan.days + (plan.days > 1 ? (' ' + t('days_in_the_week')) : (' ' + t('day_in_the_week'))): t('no_duration')
+                      }
+                      avatar={
+                        <Avatar>
+                          {!moment(new Date(parseInt(plan.expiration_date))).isAfter() && plan.duration > 0 && <TimerOffIcon />}
+                          {(moment(new Date(parseInt(plan.expiration_date))).isAfter() || !(plan.duration > 0)) && <PlayCircleOutlineIcon />}
+                        </Avatar>
+                      }
+                    >
+                    </CardHeader>
+                    <CardContent>
+                      {plan.description}
+                    </CardContent>
+                  </Card>
+                </CardActionArea>
+              </StyledCard>
+            ))}
+          </Pullable>
+        </div>
+      </div>
+      <MenuButton
+        preventLogout={preventLogout}
+        editable={editable}
+        doLogout={doLogout}
+        goToSetup={goToSetup}
+        onGoToProtocolls={onGoToProtocolls}
+        onGoToMeasurements={onGoToMeasurements}
+      />
+      <Backdrop open={openBeaconSearch} onClick={setOpenBeaconSearch} style={{zIndex: 2}}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      {showScannButtons && <ScannerButtons
+        onScannQr={onScannQr}
+        onScannNfc={onScannNfc}
+        onScannBeacon={onScannBeacon}
+        scannNfcDisablen={scannNfcDisable}
+        scannQrDisablen={scannQrDisable}
+        scannBeaconDisablen={scannBeaconDisable}
+      />}
+      <Snackbar open={snackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Panel>
   )
 };

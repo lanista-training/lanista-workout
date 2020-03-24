@@ -2,18 +2,20 @@ import * as React from "react";
 import Login from './Login';
 import Router from 'next/router';
 import { useMutation } from '@apollo/react-hooks'
-import { withApollo } from '../../../lib/apollo'
+import { withApollo } from '../../lib/apollo'
 import { CCLOGIN } from "../../mutations";
 import { ME } from "../../queries";
-import { login } from '../../../lib/auth';
 
-const LoginPanel = () => {
+const LoginPanel = ({doLogin}) => {
   const [authenticateUser, { loading: loginLoading, error: loginError }] = useMutation(
     CCLOGIN,
     {
       update(cache,  {data}) {
+        console.log("update")
+        console.log("doLogin")
+        console.log(doLogin)
         const { token, user } = data.cclogin
-        login({ token })
+        doLogin({ token })
       }
     }
   );

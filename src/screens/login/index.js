@@ -1,13 +1,10 @@
 import * as React from "react";
 import Login from './Login';
-import Router from 'next/router';
 import { useMutation } from '@apollo/react-hooks'
-import { withApollo } from '../../../lib/apollo'
+import { withApollo } from '../../lib/apollo'
 import { LOGIN } from "../../mutations/authenticate";
-import { ME } from "../../queries";
-import { login } from '../../../lib/auth';
 
-const LoginPanel = ({studio}) => {
+const LoginPanel = ({studio, doLogin, goToRegistration}) => {
   const[bu, setBu] = React.useState(null)
   const[loginImage, setLoginImage] = React.useState(null)
   React.useEffect(() => {
@@ -21,8 +18,10 @@ const LoginPanel = ({studio}) => {
         //const host = 'basefit-mobile.lanista-training.com'
         let cleanHost = host.replace("-mobile", "")
         let newBu = cleanHost.split(".")[0]
-        newBu = newBu.indexOf('localhost') > -1 ? 'mobile' : newBu
-        let newLoginImage = (newBu !== "mobile") ? "url(https://lanista-training.com/bus/" + newBu + "/logo.png?_dc" + Math.random() + ")" : "url(https://lanista-training.com/images/logo_grey_landscape.png?_dc" +  Math.random() + ")"
+        newBu = newBu === "" || newBu.indexOf('localhost') > -1 ? 'mobile' : newBu
+        console.log("newBu");
+        console.log(newBu);
+        let newLoginImage = (newBu !== "mobile") ? "url(https://lanista-training.com/bus/" + newBu + "/logo.png)" : (typeof window.cordova === 'undefined') ? "url(https://lanista-training.com/images/lanista-logo-red.png)" : "url(img/lanista-logo.png)"
         setBu(newBu)
         setLoginImage(newLoginImage)
       }
@@ -34,10 +33,11 @@ const LoginPanel = ({studio}) => {
     {
       update(cache,  {data}) {
         const { token, user } = data.login
-        login({ token })
+        doLogin({ token })
       }
     }
   );
+
   const onAuthenticate = (email, password) => {
     authenticateUser({
       variables: {
@@ -47,6 +47,11 @@ const LoginPanel = ({studio}) => {
       }
     })
   }
+
+  const goRegistration = () => {
+    goToRegistration();
+  }
+
   return (
     <Login
       authenticated={false}
@@ -55,6 +60,7 @@ const LoginPanel = ({studio}) => {
       onAuthenticate={onAuthenticate}
       bu={bu}
       loginImage={loginImage}
+      goRegistration={goRegistration}
     />
   )
 }

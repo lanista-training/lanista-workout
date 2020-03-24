@@ -1,23 +1,22 @@
 import * as React from "react";
 import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import Backdrop from '@material-ui/core/Backdrop';
 import {StyledButton, Menu} from "./styles";
-
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import HistoryIcon from '@material-ui/icons/History';
+import { useTranslate } from '../../hooks/Translation';
 import CloseIcon from '@material-ui/icons/Close';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
+import PhonelinkSetup from '@material-ui/icons/PhonelinkSetup';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default ({onLogout, onGoToProtocolls, preventLogout}) => {
+export default ({onLogout, onGoToProtocolls, onGoToMeasurements, preventLogout, onGoToSetup, editable}) => {
   const [open, setOpen] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const handleVisibility = () => {
@@ -30,6 +29,7 @@ export default ({onLogout, onGoToProtocolls, preventLogout}) => {
     setOpen(false);
   };
 
+  let {t} = useTranslate("menu");
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const handleOpenDialog = () => {
@@ -39,21 +39,38 @@ export default ({onLogout, onGoToProtocolls, preventLogout}) => {
     setOpenDialog(false);
   };
 
-
   const actions = [];
   actions.push({
-    icon: <HistoryIcon />,
-    name: 'Protokolle',
+    icon: <Icon>history</Icon>,
+    name: t('protocolls'),
     onClick: () => {
       handleClose()
       onGoToProtocolls()
     }
   })
+  actions.push({
+    icon: <Icon>straighten</Icon>,
+    name: t('measures'),
+    onClick: () => {
+      handleClose()
+      onGoToMeasurements()
+    }
+  })
+  if(editable) {
+    actions.push({
+      icon: <Icon>settings_applications</Icon>,
+      name: t('settings'),
+      onClick: () => {
+        handleClose()
+        onGoToSetup()
+      }
+    })
+  }
   if(!preventLogout) {
     actions.push(
     {
-      icon: <ExitToAppIcon />,
-      name: 'Abmelden',
+      icon: <Icon>exit_to_app</Icon>,
+      name: t('logout'),
       onClick: () => {
         handleOpenDialog()
       }
@@ -65,7 +82,7 @@ export default ({onLogout, onGoToProtocolls, preventLogout}) => {
       <Button onClick={handleVisibility}> </Button>
       <Backdrop open={open} />
       <SpeedDial
-        ariaLabel="Menü"
+        ariaLabel={t("menu")}
         hidden={hidden}
         icon={<SpeedDialIcon openIcon={<CloseIcon />} icon={<MoreVertIcon />}/>}
         onClose={handleClose}
@@ -88,10 +105,10 @@ export default ({onLogout, onGoToProtocolls, preventLogout}) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"App verlassen"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t("leave")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Möchtest du die Lanista verlassen?
+            {t('logout_warning')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -100,10 +117,10 @@ export default ({onLogout, onGoToProtocolls, preventLogout}) => {
               handleCloseDialog()
             }} color="primary"
           >
-            Zurück
+            {t("back")}
           </Button>
           <Button onClick={onLogout} color="primary" autoFocus>
-            Abmelden
+            {t("logout")}
           </Button>
         </DialogActions>
       </Dialog>
