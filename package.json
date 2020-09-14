@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Lanista website",
   "main": "index.js",
-  "homepage": "./",
+  "homepage": "https://github.com/lanista-training/lanista-workout#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lanista-training/lanista-workout.git"
@@ -14,7 +14,10 @@
     "start": "next start",
     "export": "next export",
     "start-web": "react-scripts start",
-    "build-web": "react-scripts build"
+    "build-web": "react-scripts build",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build --dest docs",
+    "docz:serve": "docz build && docz serve"
   },
   "keywords": [
     "lanista",
@@ -28,7 +31,6 @@
   "bugs": {
     "url": "https://github.com/lanista-training/lanista-coach/issues"
   },
-  "homepage": "https://github.com/lanista-training/lanista-workout#readme",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
     "@apollo/react-ssr": "3.0.0",
@@ -104,6 +106,7 @@
   "devDependencies": {
     "@babel/runtime-corejs2": "^7.10.5",
     "babel-plugin-styled-components": "^1.10.7",
+    "docz": "^2.3.1",
     "eslint-plugin-react": "^7.20.3",
     "serverless": "^1.74.1",
     "serverless-nextjs-plugin": "^2.5.1",
