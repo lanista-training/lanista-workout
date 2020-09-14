@@ -57,7 +57,7 @@ const TabPanel = (props) => {
   );
 }
 
-export default ({
+const Filter = ({
   onGoBack,
   hasNorch,
 
@@ -237,3 +237,77 @@ export default ({
     </Panel>
   )
 };
+
+Filter.propTypes = {
+  /**
+   * Function to translate content
+  */
+  firstName: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  muscles: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  onMuscleSelection: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  types: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  onTypeSelection: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  additions: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  onAdditionSelection: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  showExercises: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  total: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  text: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onTextChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  resetText: PropTypes.func,
+}
+
+export default Filter;

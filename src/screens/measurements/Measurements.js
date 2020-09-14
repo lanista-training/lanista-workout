@@ -235,7 +235,7 @@ const renderFutrexList = (records, t) => {
   )
 }
 
-export default ({
+const Measurements = ({
   weights,
   calipers,
   valumens,
@@ -443,3 +443,77 @@ export default ({
     </Panel>
   )
 };
+
+Measurements.propTypes = {
+  /**
+   * Function to translate content
+  */
+  weights: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  calipers: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  valumens: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  futrex: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  saveWeight: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  saveWeightLoading: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  saveWeightError: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteWeight: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteWeightLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  deleteWeightError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+}
+
+export default Measurements;

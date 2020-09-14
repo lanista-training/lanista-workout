@@ -115,7 +115,7 @@ const renderOneRepetitionGraph = (records, t) => {
   )
 }
 
-export default ({
+const Exercise = ({
   onGoBack,
   exercise,
   workouts,
@@ -386,3 +386,57 @@ export default ({
     </Panel>
   )
 };
+
+Exercise.propTypes = {
+  /**
+   * Function to translate content
+  */
+  firstName: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  exercise: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  workouts: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  createProtocoll: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createAllProtocolls: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteProtocoll: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  refetch: PropTypes.func,
+}
+
+export default Exercise;

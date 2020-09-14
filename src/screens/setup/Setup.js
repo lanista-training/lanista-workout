@@ -35,7 +35,7 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-export default ({
+const Setup = ({
   firstName,
   lastName,
   email,
@@ -397,3 +397,107 @@ export default ({
     </Panel>
   )
 };
+
+Setup.propTypes = {
+  /**
+   * Function to translate content
+  */
+  firstName: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  lastName: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  email: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  birthday: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  gender: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  language: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  gyms: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onSaveData: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  linkGym: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  unlinkGym: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToGymsearch: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  connectionRequests: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  acceptRequest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  rejectRequest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  checkForInvitations: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  version: PropTypes.string,
+}
+
+export default Setup;

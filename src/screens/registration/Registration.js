@@ -212,7 +212,7 @@ const getStepContent = (step, filter, onFilterChange, gyms, setSelectedGym, hand
   }
 }
 
-export default ({
+const Registration = ({
   loading,
   onGoBack,
   filter,
@@ -394,3 +394,97 @@ export default ({
     </Panel>
   )
 };
+
+Registration.propTypes = {
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  filter: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onFilterChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  gyms: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  setSelectedGym: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  selectedGym: PropTypes.objec,
+
+  /**
+   * Function to translate content
+  */
+  email: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onEmailChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  finished: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  emailIsValid: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  register: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  registerError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  errorMessage: PropTypes.function,
+
+  /**
+   * Function to translate content
+  */
+  searchType: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  toggleSearchType: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  registering: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+}
+
+export default Registration;

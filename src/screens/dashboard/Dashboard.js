@@ -237,37 +237,82 @@ Dashboard.propTypes = {
   /**
    * Function to translate content
   */
-  t: PropTypes.func,
+  firstName: PropTypes.string,
 
   /**
    * Function to translate content
   */
-  feeds: PropTypes.array,
+  lastName: PropTypes.string,
 
   /**
    * Function to translate content
   */
-  type: PropTypes.number,
+  language: PropTypes.string,
 
   /**
    * Function to translate content
   */
-  currentScrollPosition: PropTypes.number,
+  photoUrl: PropTypes.string,
 
   /**
    * Function to translate content
   */
-  jumpToNow: PropTypes.func,
+  plans: PropTypes.array,
 
   /**
    * Function to translate content
   */
-  jumpToDay: PropTypes.func,
+  doLogout: PropTypes.func,
 
   /**
    * Function to translate content
   */
-  onRequestPage: PropTypes.func,
+  openWorkout: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  openWorkouts: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToSetup: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onGoToProtocolls: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onGoToMeasurements: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  showBanners: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  banners: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  preventLogout: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  filter: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  toggleFilter: PropTypes.func,
 
   /**
    * Function to translate content
@@ -277,77 +322,106 @@ Dashboard.propTypes = {
   /**
    * Function to translate content
   */
-  error: PropTypes.object,
+  editable: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  hasMore: PropTypes.bool,
+  hasNorch: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  hasMoreUp: PropTypes.bool,
+  onScannQr: PropTypes.func,
 
   /**
    * Function to translate content
   */
-  initialLoading: PropTypes.bool,
+  onScannNfc: PropTypes.func,
 
   /**
    * Function to translate content
   */
-  setPageSize: PropTypes.func,
+  onScannBeacon: PropTypes.func,
 
   /**
    * Function to translate content
   */
-  congratulateMember: PropTypes.func,
+  onSearchExercises: PropTypes.func,
+
 
   /**
    * Function to translate content
   */
-  openMember: PropTypes.func,
+  scannNfcDisable: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  openPlan: PropTypes.func,
+  scannQrDisable: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  showModal: PropTypes.func,
+  scannBeaconDisable: PropTypes.bool,
+
 
   /**
    * Function to translate content
   */
-  modalPanel: PropTypes.object,
+  snackbar: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  eventsQuery: PropTypes.string,
+  handleCloseSnackbar: PropTypes.func,
 
   /**
    * Function to translate content
   */
-  accesslevel: PropTypes.number,
+  snackbarMessage: PropTypes.string,
 
   /**
    * Function to translate content
   */
-  bu: PropTypes.number,
+  modal: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  hasInterface: PropTypes.bool,
+  scanning: PropTypes.bool,
 
   /**
    * Function to translate content
   */
-  setFilter: PropTypes.func,
+  showScannButtons: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  openBeaconSearch: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  setOpenBeaconSearch: PropTypes.func,
+
+
+  /**
+   * Function to translate content
+  */
+  beaconScanning: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  nfcScanning: PropTypes.bool,
+
+
+  /**
+   * Function to translate content
+  */
+  refetch: PropTypes.func,
 }
 
 export default Dashboard;

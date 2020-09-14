@@ -19,7 +19,7 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 const effect = 'zoomin', pos = 'br', method = 'hover';
 
-export default ({
+const Login = ({
   onAuthenticate,
   loading,
   loginError,
@@ -188,3 +188,42 @@ export default ({
      </Panel>
   )
 }
+
+Login.propTypes = {
+  /**
+   * Function to translate content
+  */
+  onAuthenticate: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  loginError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  bu: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  loginImage: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  goRegistration: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+}
+
+export default Login;

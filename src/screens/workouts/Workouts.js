@@ -27,7 +27,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import Pullable from 'react-pullable';
 
-export default ({
+const Workouts = ({
   firstName,
   lastName,
   photoUrl,
@@ -179,3 +179,193 @@ export default ({
     </Panel>
   )
 };
+
+Workouts.propTypes = {
+  /**
+   * Function to translate content
+  */
+  firstName: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  lastName: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  language: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  photoUrl: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  plans: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  doLogout: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  openWorkout: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  openWorkouts: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToSetup: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onGoToProtocolls: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onGoToMeasurements: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  showBanners: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  banners: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  preventLogout: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  filter: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  toggleFilter: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  editable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+
+  onScannQr: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onScannNfc: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onScannBeacon: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onSearchExercises: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  scannNfcDisable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  scannQrDisable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  scannBeaconDisable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  snackbar: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  handleCloseSnackbar: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  snackbarMessage: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  modal: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  scanning: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  showScannButtons: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  openBeaconSearch: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  setOpenBeaconSearch: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  beaconScanning: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  nfcScanning: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  refetch: PropTypes.func,
+}
+
+export default Workouts;

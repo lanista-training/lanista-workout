@@ -64,12 +64,13 @@ const ProtocollDay = ({executionDay, showExercise, t}) => {
   )
 }
 
-export default ({
+const Protocolls = ({
   protocolls,
   loading,
   error,
   onGoBack,
-  showExercise, hasNorch
+  showExercise,
+  hasNorch,
 }) => {
   const {t} = useTranslate("protocolls");
   return (
@@ -109,3 +110,37 @@ export default ({
     </Panel>
   )
 };
+
+Protocolls.propTypes = {
+  /**
+   * Function to translate content
+  */
+  protocolls: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  showExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+}
+
+export default Protocolls;

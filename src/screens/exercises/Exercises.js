@@ -21,7 +21,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { FixedSizeList as List } from 'react-window';
 import {useWindowDimensions} from '../../hooks';
 
-export default ({
+const Exercises = ({
   onGoBack,
   hasNorch,
   showExercise,
@@ -210,3 +210,77 @@ export default ({
     </Panel>
   )
 };
+
+Exercises.propTypes = {
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  showExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  exercises: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  total: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  muscles: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  types: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  additions: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  text: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onMuscleSelection: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onTypeSelection: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onAdditionSelection: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  resetText: PropTypes.func,
+}
+
+export default Exercises;

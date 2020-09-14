@@ -17,7 +17,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default ({
+const Gymsearch = ({
   gyms,
   error,
   loading,
@@ -147,3 +147,58 @@ export default ({
     </Panel>
   )
 };
+
+Gymsearch.propTypes = {
+  /**
+   * Function to translate content
+  */
+  gyms: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  filter: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onFilterChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onLinkGym: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  connectedDialogOpen: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  handleConnectedDialogClose: PropTypes.func,
+
+}
+
+export default Gymsearch;

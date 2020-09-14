@@ -40,7 +40,7 @@ const getProgress = (protocolls, sets) => {
   return protocolls && protocolls.length > 0 && <LinearProgress variant="determinate" value={protocolls.length > sets ? 100 : protocolls.length / sets * 100} color="secondary" />;
 }
 
-export default ({
+const Workout = ({
     onGoBack,
     signedIn,
     plan,
@@ -238,3 +238,87 @@ export default ({
     </Panel>
   )
 };
+
+Workout.propTypes = {
+  /**
+   * Function to translate content
+  */
+  onGoBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  signedIn: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  plan: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  showExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  memberId: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  showAssignButton: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  assignPlan: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deletePlan: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deletePlanLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  currentTab: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  setCurrentTab: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasNorch: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  refetch: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  todayExecutions: PropTypes.number,
+}
+
+export default Workout;
