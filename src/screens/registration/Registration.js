@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import { useTranslate } from '../../hooks/Translation';
 import {Panel, StyledButton, GymSearch, EmailInputField, SendEmail, StyledStepper, StyledSwitch} from './styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';

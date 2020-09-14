@@ -1900,15 +1900,6 @@
       ]
     },
     {
-      "key": "src/screens/exercise/Exercise.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/exercise/Set.js",
       "value": [
         {
@@ -1938,15 +1929,6 @@
       ]
     },
     {
-      "key": "src/screens/exercises/Exercises.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/exercises/index.js",
       "value": [
         {
@@ -1958,15 +1940,6 @@
       ]
     },
     {
-      "key": "src/screens/filter/Filter.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/filter/index.js",
       "value": [
         {
@@ -1974,17 +1947,6 @@
           "displayName": "Panel",
           "methods": [],
           "actualName": "Panel"
-        }
-      ]
-    },
-    {
-      "key": "src/screens/forgotpassword/Forgotpassword.js",
-      "value": [
-        {
-          "description": "",
-          "displayName": "Forgotpassword",
-          "methods": [],
-          "actualName": "Forgotpassword"
         }
       ]
     },
@@ -2074,15 +2036,6 @@
       ]
     },
     {
-      "key": "src/screens/gymsearch/Gymsearch.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/gymsearch/index.js",
       "value": [
         {
@@ -2090,15 +2043,6 @@
           "displayName": "Panel",
           "methods": [],
           "actualName": "Panel"
-        }
-      ]
-    },
-    {
-      "key": "src/screens/login/Login.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
         }
       ]
     },
@@ -2114,15 +2058,6 @@
       ]
     },
     {
-      "key": "src/screens/measurements/Measurements.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/measurements/index.js",
       "value": [
         {
@@ -2130,15 +2065,6 @@
           "displayName": "Panel",
           "methods": [],
           "actualName": "Panel"
-        }
-      ]
-    },
-    {
-      "key": "src/screens/protocolls/Protocolls.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
         }
       ]
     },
@@ -2165,15 +2091,6 @@
       ]
     },
     {
-      "key": "src/screens/registration/Registration.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/registration/index.js",
       "value": [
         {
@@ -2181,15 +2098,6 @@
           "displayName": "RegistrationPanel",
           "methods": [],
           "actualName": "RegistrationPanel"
-        }
-      ]
-    },
-    {
-      "key": "src/screens/setup/Setup.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
         }
       ]
     },
@@ -2205,15 +2113,6 @@
       ]
     },
     {
-      "key": "src/screens/workout/Workout.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
-        }
-      ]
-    },
-    {
       "key": "src/screens/workout/index.js",
       "value": [
         {
@@ -2221,15 +2120,6 @@
           "displayName": "Panel",
           "methods": [],
           "actualName": "Panel"
-        }
-      ]
-    },
-    {
-      "key": "src/screens/workouts/Workouts.js",
-      "value": [
-        {
-          "description": "",
-          "methods": []
         }
       ]
     },
@@ -2336,6 +2226,116 @@
     },
     {
       "key": "src/screens/registration/TermsAndConditions/index.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercise/Exercise.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercises/Exercises.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/filter/Filter.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/forgotpassword/Forgotpassword.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Forgotpassword",
+          "methods": [],
+          "actualName": "Forgotpassword"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/gymsearch/Gymsearch.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/login/Login.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/measurements/Measurements.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/protocolls/Protocolls.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/Registration.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/setup/Setup.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/workout/Workout.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/workouts/Workouts.js",
       "value": [
         {
           "description": "",

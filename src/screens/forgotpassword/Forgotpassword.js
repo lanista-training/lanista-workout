@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
 import { Menu, MainButton, ChildButton } from "react-mfb";

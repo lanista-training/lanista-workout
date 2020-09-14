@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types';
 import {Panel, StyledSpeedDial} from './styles'
 import { useTranslate } from '../../hooks/Translation';
 import Avatar from '@material-ui/core/Avatar';
