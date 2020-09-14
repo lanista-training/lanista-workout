@@ -39,7 +39,7 @@ export const Panel = styled.div`
       display: flex;
       flex-flow: column;
       min-height: 100vh;
-      padding: 0.5em 1em 5em 1em;
+      padding: 0.5em 1em 8em 1em;
       background-color: whitesmoke;
       border-top-right-radius: 20px;
       border-top-left-radius: 20px;
@@ -56,9 +56,14 @@ export const Panel = styled.div`
           text-align: left;
         }
       }
-      .gyms-list {
-        .gyms-list-title {
-          margin-top: 2em;
+      .setup-section {
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 15px;
+        border-color: #c7c7c7;
+        margin-top: 4em;
+        padding: 1em;
+        .setup-title {
           margin-bottom: 0.5em;
           color: grey;
         }
@@ -68,7 +73,6 @@ export const Panel = styled.div`
         flex-wrap: wrap;
         justify-content: space-around;
         overflow: hidden;
-        padding-bottom: 2em;
         .MuiGridList-root {
           flex-wrap: nowrap;
           width: 100%;
@@ -108,11 +112,44 @@ export const Panel = styled.div`
         background-color: rgb(220,0,78);
         margin-top: 2em;
         color: white!important;
+        width: 100%;
       }
       .logout-button.Mui-disabled {
         background-color: #c5c3c3;
       }
     }
+  }
+  .invitations-list {
+    .invitations-root {
+      display: flex;
+      border-radius: 10px;
+    }
+    .invitations-details {
+      display: flex;
+      flex-direction: column;
+    }
+    .invitations-content {
+      flex: 1 0 auto;
+    }
+    .invitations-cover {
+      width: 151px;
+      background-size: contain;
+    }
+    .invitations-controls {
+      display: flex;
+      align-items: center;
+      padding-left: 1em;
+      padding-bottom: 1em;
+    }
+    .MuiTypography-subtitle1 {
+      line-height: 1em;
+    }
+  }
+  .version-section {
+    margin-top: 3em;
+    font-size: 0.8em;
+    text-align: center;
+    color: #a0a0a0;
   }
 `;
 

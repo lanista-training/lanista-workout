@@ -6,7 +6,7 @@ import Exercise from './Exercise';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
-import { EXERCISE, PROTOCOLLS } from "../../queries";
+import { EXERCISE, PROTOCOLLS, ME } from "../../queries";
 import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL } from "../../mutations"
 
 const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
@@ -104,6 +104,39 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
         } catch(e){
           console.log("Protocolls query not existent for now")
         }
+        //
+        // UPDATE ME QUERY
+        //
+        console.log("UPDATE ME QUERY")
+        try {
+          let meQuery = cache.readQuery({
+            query: ME
+          });
+          console.log("ME QUERY")
+          console.log(meQuery)
+          if( meQuery ) {
+            const {me} = meQuery;
+            const {todayExecutions} = me;
+            const newTodayExecutions = [...todayExecutions];
+            if( todayExecutions ) {
+              // add the protocoll
+              createProtocolls.map(protocoll => newTodayExecutions.push({
+                exercise_id: protocoll.exercise_id,
+                repetitions: protocoll.repetitions,
+                __typename: "Workout",
+              }));
+              console.log("WRITING DOWN QUERY")
+              console.log( "newTodayExecutions" )
+              console.log( newTodayExecutions )
+              cache.writeQuery({
+                query: ME,
+                data: { me: {...me, todayExecutions: newTodayExecutions}},
+              });
+            }
+          }
+        } catch(e){
+          console.log("Protocolls query not existent for now")
+        }
       }
     }
   );
@@ -115,12 +148,6 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
         //
         // UPDATE EXERCISE QUERY
         //
-        console.log("update");
-        console.log({
-          exerciseId: exerciseId,
-          planexerciseId: planexerciseId,
-          language: (locale ? locale.toUpperCase() : 'EN'),
-        })
         let {exercise} = cache.readQuery({
           query: EXERCISE,
           variables: {
@@ -129,7 +156,6 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
             language: (locale ? locale.toUpperCase() : 'EN'),
           },
         });
-        console.log("update 2");
         let workouts = exercise.workouts.map(item => item)
         workouts.push({
           execution_date: createProtocoll.execution_date,
@@ -161,13 +187,10 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
         //
         // UPDATE PROTOCOLLS QUERY
         //
-        console.log("UPDATE PROTOCOLL QUERY")
         try {
           let protocollsQuery = cache.readQuery({
             query: PROTOCOLLS
           });
-          console.log("PROTOCOLLS QUERY")
-          console.log(protocollsQuery)
           if( protocollsQuery ) {
             const {protocolls} = protocollsQuery
             if( protocolls ) {
@@ -187,10 +210,36 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
                 exercise_id: data.exercise.id,
                 __typename: "Workout",
               })
-              console.log("WRITING DOWN QUERY")
               cache.writeQuery({
                 query: PROTOCOLLS,
                 data: { protocolls: protocolls},
+              });
+            }
+          }
+        } catch(e){
+          console.log("Protocolls query not existent for now")
+        }
+        //
+        // UPDATE ME QUERY
+        //
+        try {
+          let meQuery = cache.readQuery({
+            query: ME
+          });
+          if( meQuery ) {
+            const {me} = meQuery;
+            const {todayExecutions} = me;
+            const newTodayExecutions = [...todayExecutions];
+            if( todayExecutions ) {
+              // add the protocoll
+              newTodayExecutions.push({
+                exercise_id: createProtocoll.exercise_id,
+                repetitions: createProtocoll.repetitions,
+                __typename: "Workout",
+              });
+              cache.writeQuery({
+                query: ME,
+                data: { me: {...me, todayExecutions: newTodayExecutions}},
               });
             }
           }
@@ -248,6 +297,36 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
                 cache.writeQuery({
                   query: PROTOCOLLS,
                   data: { protocolls: protocolls},
+                });
+              }
+            }
+          }
+        } catch(e){
+          console.log("Protocolls query not existent for now")
+        }
+        //
+        // UPDATE ME QUERY
+        //
+        try {
+          let meQuery = cache.readQuery({
+            query: ME
+          });
+          if( meQuery ) {
+            const {me} = meQuery;
+            const {todayExecutions} = me;
+            const newTodayExecutions = [...todayExecutions];
+            if( todayExecutions ) {
+              // remove the protocoll
+              const protocollIndex = todayExecutions.findIndex(item => item.id == deleteProtocoll.id)
+              console.log("protocollIndex")
+              console.log(protocollIndex)
+              if( protocollIndex > -1 ) {
+                newTodayExecutions.splice(protocollIndex, 1);
+                console.log("newTodayExecutions")
+                console.log(newTodayExecutions)
+                cache.writeQuery({
+                  query: ME,
+                  data: { me: {...me, todayExecutions: newTodayExecutions}},
                 });
               }
             }

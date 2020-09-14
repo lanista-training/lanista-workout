@@ -4,6 +4,7 @@ import { withAuthSync } from '../lib/auth'
 import ExerciseScreen from "../src/screens/exercise"
 
 function Exercise(props) {
+
   const showExercise = (exerciseId, planexerciseId) => {
     Router.push({
       pathname: '/exercise',
@@ -12,9 +13,12 @@ function Exercise(props) {
         planexercise: planexerciseId
       }
     });
-  }
-  const goBack = () => Router.back()
-  const {exerciseId, memberId, planexerciseId} = props
+  };
+
+  const goBack = () => Router.back();
+
+  const {exerciseId, memberId, planexerciseId} = props;
+  
   return (
     <ExerciseScreen
       exerciseId={exerciseId}

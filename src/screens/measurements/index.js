@@ -58,8 +58,6 @@ const Panel = ({client, goBack, hasNorch}) => {
     })
   }
   const onDeleteWeight = (recordId) => {
-    console.log("DELETE WEIGHT")
-    console.log(recordId)
     deleteWeight({
       variables: {
         weightId: recordId

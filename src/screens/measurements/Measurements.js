@@ -165,7 +165,7 @@ const renderWeightList = (records, showForm, onSelection, selectedRecordId, dele
               startIcon={<DeleteIcon />}
               onClick={() => deleteWeight(record.id)}
             >
-              Delete
+              {t("delete")}
             </Button>
           }
           <div className="record-date">{moment(record.record_date).format("DD/MM/YYYY")}</div>

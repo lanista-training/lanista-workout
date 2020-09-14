@@ -528,6 +528,23 @@ export const ME = gql`
       birthday
       gender
       language
+      beaconScanning
+      nfcScanning
+      todayExecutions {
+        id
+        exercise_id
+        repetitions
+      }
+      connectionRequests {
+        id
+        requestDate
+        from {
+          id
+          first_name
+          last_name
+          photoUrl
+        }
+      }
       plans {
         id
         name
@@ -660,12 +677,17 @@ export const BEACON = gql`
 `;
 
 export const EXERCISES = gql`
-  query Exercises($exercises:String, $type:Int, $muscle:Int, $addition:Int) {
-    exercises(exercises: $exercises, type: $type, muscle: $muscle, addition: $addition) {
-      id
-      name
-      start_image
-      end_image
+  query Exercises($exercises:String, $types:[String] = [], $muscles:[String] = [], $additions:[String] = [], $text:String, $language: String) {
+    exercises(exercises: $exercises, types: $types, muscles: $muscles, additions: $additions, text: $text, language: $language) {
+      cursor
+      hasMore
+      total
+      exercises {
+        id
+        name
+        start_image
+        end_image
+      }
     }
   }
 `;

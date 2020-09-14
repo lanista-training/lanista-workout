@@ -21,8 +21,90 @@ import ProtocollsPanel from './screens/protocolls';
 import PublicplanPanel from './screens/publicplan';
 import SetupPanel from './screens/setup';
 import WorkoutsPanel from './screens/workouts';
+import FilterPanel from './screens/filter';
 
 const hasNorch = true;
+
+const getMusclesNames = (filters) => {
+  return filters.map((filter) => {
+    switch (parseInt(filter)) {
+      case 1:
+        return 'chest';
+      case 2:
+        return 'upperback';
+      case 3:
+        return 'shoulder';
+      case 4:
+        return 'frontfemoral';
+      case 5:
+        return 'lowerback';
+      case 6:
+        return 'hip';
+      case 7:
+        return 'abs';
+      case 8:
+        return 'biceps';
+      case 9:
+        return 'triceps';
+      case 10:
+        return 'forearm';
+      case 11:
+        return 'lowerleg';
+      case 14:
+        return 'backfemoral';
+    }
+  })
+}
+
+const getTypesNames = (filters) => {
+  return filters.map((filter) => {
+    switch (parseInt(filter)) {
+      case 1:
+        return 'machine';
+      case 2:
+        return 'freeweights';
+      case 3:
+        return 'cable';
+      case 4:
+        return 'bodyweight';
+      case 5:
+        return 'stretch';
+      case 6:
+        return 'specials';
+      case 7:
+        return 'cardio';
+    }
+  })
+}
+
+const getToolsNames = (filters) => {
+  return filters.map((filter) => {
+    switch (parseInt(filter)) {
+      case 1:
+        return 'dumbbels';
+      case 2:
+        return 'kettlebells';
+      case 3:
+        return 'barbell';
+      case 4:
+        return 'bank';
+      case 5:
+        return 'others';
+      case 6:
+        return 'ball';
+      case 7:
+        return 'blast';
+      case 8:
+        return 'jumber';
+      case 9:
+        return 'foam';
+      case 11:
+        return 'miniband';
+      default:
+        return null;
+    }
+  })
+}
 
 const Login = () => {
   let history = useHistory();
@@ -62,8 +144,11 @@ const Dashboard = () => {
       history.push('/exercise/' + exerciseId );
     }}
     goToExercises={(params) => {
+      console.log("goToExercises");
+      console.log(params);
       history.push('/exercises/' + params );
     }}
+    onGoToFilter={() => history.push('/filter')}
   />
 }
 
@@ -72,6 +157,17 @@ const Registration = () => {
   return <RegistrationPanel
     hasNorch={hasNorch}
     goBack={() => history.push("/login")}
+  />
+}
+
+const Filter = () => {
+  let history = useHistory();
+  return <FilterPanel
+    hasNorch={hasNorch}
+    goBack={() => history.goBack()}
+    showExercise={(exerciseId) => {
+      history.push('/exercise/' + exerciseId);
+    }}
   />
 }
 
@@ -120,12 +216,29 @@ const Exercise = () => {
 const Exercises = () => {
   let history = useHistory();
   let { muscle, type, addition, exercises } = useParams();
+    console.log("Exercises")
+
+    console.log(muscle)
+    console.log(type)
+    console.log(addition)
+    console.log(exercises)
+
+    console.log((muscle + '').split(',').filter(i => i > 0))
+    console.log((type + '').split(',').filter(i => i >0))
+    console.log((addition+ '').split(',').filter(i => i >0))
+
+    console.log(getMusclesNames((muscle + '').split(',').filter(i => i > 0)))
+    console.log(getTypesNames((type + '').split(',').filter(i => i > 0)))
+    console.log(getToolsNames((addition+ '').split(',').filter(i => i > 0)))
+
   return <ExercisesPanel
     hasNorch={hasNorch}
-    exercises={exercises}
-    type={type}
-    muscle={muscle}
-    addition={addition}
+    exercises={exercises == "0" ? null : exercises}
+
+    types={ getTypesNames((type + '').split(',').filter(i => i > 0)) }
+    muscles={getMusclesNames((muscle + '').split(',').filter(i => i > 0))}
+    additions={getToolsNames((addition + '').split(',').filter(i => i > 0))}
+
     showExercise={(exerciseId) => {
       history.push('/exercise/' + exerciseId);
     }}
@@ -203,6 +316,9 @@ function App() {
         </Route>
         <Route path="/publicplan/:workoutId">
           <Publicplan />
+        </Route>
+        <Route path="/filter">
+          <Filter />
         </Route>
         <PrivateRoute exact path="/">
           <Dashboard />

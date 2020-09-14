@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "./static/css/main.5ecd60fb.chunk.css",
-    "main.js": "./static/js/main.3dce2772.chunk.js",
-    "main.js.map": "./static/js/main.3dce2772.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.e8324123.js",
-    "runtime-main.js.map": "./static/js/runtime-main.e8324123.js.map",
-    "static/js/2.8eb27c28.chunk.js": "./static/js/2.8eb27c28.chunk.js",
-    "static/js/2.8eb27c28.chunk.js.map": "./static/js/2.8eb27c28.chunk.js.map",
-    "index.html": "./index.html",
-    "precache-manifest.39235ae4a31d8825405c2255f0549f06.js": "./precache-manifest.39235ae4a31d8825405c2255f0549f06.js",
-    "service-worker.js": "./service-worker.js",
-    "static/css/main.5ecd60fb.chunk.css.map": "./static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.8eb27c28.chunk.js.LICENSE.txt": "./static/js/2.8eb27c28.chunk.js.LICENSE.txt"
+    "main.css": "/lanista-training/lanista-workoutstatic/css/main.2b4ff009.chunk.css",
+    "main.js": "/lanista-training/lanista-workoutstatic/js/main.7b152a11.chunk.js",
+    "main.js.map": "/lanista-training/lanista-workoutstatic/js/main.7b152a11.chunk.js.map",
+    "runtime-main.js": "/lanista-training/lanista-workoutstatic/js/runtime-main.0ddf506f.js",
+    "runtime-main.js.map": "/lanista-training/lanista-workoutstatic/js/runtime-main.0ddf506f.js.map",
+    "static/js/2.d111ecc9.chunk.js": "/lanista-training/lanista-workoutstatic/js/2.d111ecc9.chunk.js",
+    "static/js/2.d111ecc9.chunk.js.map": "/lanista-training/lanista-workoutstatic/js/2.d111ecc9.chunk.js.map",
+    "index.html": "/lanista-training/lanista-workoutindex.html",
+    "precache-manifest.00a51ad92522411c6cb9020b5bf92a5b.js": "/lanista-training/lanista-workoutprecache-manifest.00a51ad92522411c6cb9020b5bf92a5b.js",
+    "service-worker.js": "/lanista-training/lanista-workoutservice-worker.js",
+    "static/css/main.2b4ff009.chunk.css.map": "/lanista-training/lanista-workoutstatic/css/main.2b4ff009.chunk.css.map",
+    "static/js/2.d111ecc9.chunk.js.LICENSE.txt": "/lanista-training/lanista-workoutstatic/js/2.d111ecc9.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.e8324123.js",
-    "static/js/2.8eb27c28.chunk.js",
-    "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.3dce2772.chunk.js"
+    "static/js/runtime-main.0ddf506f.js",
+    "static/js/2.d111ecc9.chunk.js",
+    "static/css/main.2b4ff009.chunk.css",
+    "static/js/main.7b152a11.chunk.js"
   ]
 }

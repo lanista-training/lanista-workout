@@ -227,10 +227,10 @@ export default ({
           className={currentImage == 0 ? 'start-position' : 'end-position'}
         >
           <div key='exercise-image-start' className="exercise-image-wrapper">
-            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.end_image) + ")"}}/>
+            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.start_image) + ")"}}/>
           </div>
           <div key='exercise-end-end' className="exercise-image-wrapper">
-            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.start_image) + ")"}}/>
+            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.end_image) + ")"}}/>
           </div>
         </Slider>
       </div>
@@ -320,7 +320,7 @@ export default ({
                                   Delete
                                 </Button>
                               }
-                              <ListItemText primary={"Satz " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? ' Wdh' : execution.training_unit == 1 ? ' Sek' : ' Min') + " x " + execution.weight + " Kg"} />
+                              <ListItemText primary={t("set") + " " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? (' ' + t("rep")) : execution.training_unit == 1 ? (' ' + t("sec")) : (' ' + t("min"))) + " x " + execution.weight + " Kg"} />
                             </ListItem>
                           ))}
                         </ul>

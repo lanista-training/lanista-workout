@@ -9,7 +9,7 @@ import validator from 'validator';
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 const RegistrationPanel = ({studio, goBack, hasNorch}) => {
-  const {locale} = useTranslate("registration");
+  const {locale, t} = useTranslate("registration");
   const[recaptchaToken, setRecaptchaToken] = React.useState(null)
   const[filter, setFilter] = React.useState('')
   const[email, setEmail] = React.useState('')
@@ -38,7 +38,7 @@ const RegistrationPanel = ({studio, goBack, hasNorch}) => {
   );
   React.useEffect(() => {
     if( registerError ) {
-      setErrorMessage('Registrierungsproblem. Bitte, kontaktiere dein Studio oder das Lanista-Team')
+      setErrorMessage(t("registration_problem"));
     }
   }, [registerError]);
   const onEmailChange = (e) => {

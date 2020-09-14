@@ -49,6 +49,11 @@ function Index(props) {
       pathname: '/measurements',
     });
   }
+  const onGoToFilter = () => {
+      Router.push({
+      pathname: '/filter',
+    });
+  }
   return (
     <DashboardScreen
       doLogout={logout}
@@ -60,6 +65,7 @@ function Index(props) {
       goToSetup={goToSetup}
       onGoToProtocolls={onGoToProtocolls}
       onGoToMeasurements={onGoToMeasurements}
+      onGoToFilter={onGoToFilter}
     />
   );
 }

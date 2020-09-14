@@ -43,7 +43,7 @@ const Panel = ({workoutId, goBack, showExercise, hasNorch}) => {
     }
   );
   const me = data ? data.me : {}
-  const {plans} = me;
+  const {plans, todayExecutions} = me;
 
   console.log("Searching the plan locally....")
   const plan = plans && plans.find(p => p.id == workoutId)
@@ -72,6 +72,7 @@ const Panel = ({workoutId, goBack, showExercise, hasNorch}) => {
       setCurrentTab={(tabIndex) => client.writeData({ data: { currentTab: tabIndex } })}
       hasNorch={hasNorch}
       refetch={refetch}
+      todayExecutions={todayExecutions}
     />
   )
 }

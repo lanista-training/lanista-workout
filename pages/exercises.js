@@ -1,10 +1,10 @@
 import React from "react";
 import Router from 'next/router';
-import { withAuthSync } from '../lib/auth'
-import ExercisesScreen from "../src/screens/exercises"
+import { withAuthSync } from '../lib/auth';
+import ExercisesScreen from "../src/screens/exercises";
 
 function Exercises(props) {
-  console.log("pages.exercises")
+
   const goBack = () => {
     Router.back();
   }
@@ -13,15 +13,19 @@ function Exercises(props) {
     Router.push({
       pathname: '/exercise',
       query: {
-        exercise: exerciseId
+        exercise: exerciseId,
       }
     });
   }
 
-  const {exercises} = props
+  const {exercises, muscles, types, additions} = props;
+
   return (
     <ExercisesScreen
       exercises={exercises}
+      muscles={muscles}
+      types={types}
+      additions={additions}
       goBack={goBack}
       showExercise={showExercise}
     />
@@ -30,7 +34,10 @@ function Exercises(props) {
 
 Exercises.getInitialProps = context => {
   return ({
-    exercises: context.query.exercises
+    exercises: context.query.exercises,
+    muscles: context.query.muscles,
+    types: context.query.types,
+    additions: context.query.additions,
   })
 };
 

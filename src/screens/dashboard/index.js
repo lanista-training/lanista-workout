@@ -13,6 +13,7 @@ const Panel = ({
   goToSetup,
   onGoToMeasurements,
   onGoToProtocolls,
+  onGoToFilter,
   openWorkouts,
   openPublicWorkout,
   goToLogin,
@@ -57,7 +58,7 @@ const Panel = ({
     setModal(true)
     setSnackbar(true)
   }
-  
+
   const [snackbarMessage, setSnackbarMesssage] = React.useState('')
   const [isBeaconReceiverOn, setIsBeaconReceiverOn] = React.useState(false)
   const [modal, setModal] = React.useState(false)
@@ -82,7 +83,9 @@ const Panel = ({
     banners,
     email,
     editable,
-    language
+    language,
+    beaconScanning,
+    nfcScanning,
   } = me;
 
   const[beaconId, setBeaconId] = React.useState(undefined)
@@ -95,6 +98,35 @@ const Panel = ({
       beaconId: beaconId
     }
   });
+
+  const curateBanners = () => {
+    if( banners ) {
+      if(banners.banners[0].imageUrl == '') {
+        return banners;
+      } else {
+        const returnBanners = [];
+        const returnFallback = [];
+        banners.banners.map((banner, index) => {
+          if( index == 0 || banner.imageUrl != '' ) {
+            returnBanners.push(banner);
+            returnFallback.push(banners.fallback[index]);
+          }
+        });
+        return {
+          ...banners,
+          banners: returnBanners,
+          fallback: returnFallback,
+        }
+      }
+    } else {
+      return {
+        showBanners: true,
+        banners: [],
+        fallback: [],
+      };
+    }
+  }
+
   React.useEffect(() => {
     console.log("NEW LINK ARRIVED");
     console.log(beaconLink)
@@ -113,6 +145,9 @@ const Panel = ({
       changeLanguage(language.toLowerCase())
     }
   }
+  React.useEffect(() => {
+    language && changeLanguage(language.toLowerCase());
+  }, [language]);
 
   const filterPlans = () => {
     if(plans) {
@@ -150,8 +185,6 @@ const Panel = ({
       openPublicWorkout(planId);
     } else if ( link.indexOf("openExercises") > -1 || link.indexOf("onSearchExercises") > -1 ) {
       var params = link.substring(link.indexOf("Exercises/") + 10);
-      console.log("params")
-      console.log(params)
       goToExercises(params)
     } else if (link.indexOf("https://") > -1) {
         window.open(link, '_blank', 'location=yes');
@@ -170,6 +203,7 @@ const Panel = ({
       setModal(true)
       setScanning(true)
       setActiveScanner('qr')
+
       window.cordova.plugins.barcodeScanner.scan(function(result) {
         console.log("barcodeScanner...")
         console.log("result")
@@ -272,6 +306,11 @@ const Panel = ({
     }
   }
 
+  const onSearchExercises = () => {
+    console.log("onSearchExercises");
+    onGoToFilter();
+  }
+
   const initBeacon = () => {
     console.log("Initializing estimotes library...");
     window.estimote.beacons.startRangingBeaconsInRegion({}, onBeaconsReceived, function(error) {
@@ -313,6 +352,7 @@ const Panel = ({
       doLogout={onLogout}
       firstName={first_name}
       lastName={last_name}
+      language={language}
       preventLogout={email && email.indexOf('___') > -1}
       photoUrl={photoUrl}
       plans={filterPlans(plans)}
@@ -323,7 +363,7 @@ const Panel = ({
       onGoToMeasurements={onGoToMeasurements}
       onGoToProtocolls={onGoToProtocolls}
       showBanners={banners ? banners.showBanners : false}
-      banners={banners ? banners : {banners: [], fallback: []}}
+      banners={curateBanners()}
       toggleFilter={() => setFilter(!filter)}
       filter={filter}
       editable={editable}
@@ -332,10 +372,14 @@ const Panel = ({
       onScannNfc={onScannNfc}
       onScannQr={onScannQr}
       onScannBeacon={onScannBeacon}
+      onSearchExercises={onSearchExercises}
 
       scannNfcDisable={activeScanner !== '' && activeScanner !== 'nfc'}
       scannQrDisable={activeScanner !== '' && activeScanner !== 'qr'}
       scannBeaconDisable={activeScanner !== '' && activeScanner !== 'beacon'}
+
+      beaconScanning={beaconScanning}
+      nfcScanning={nfcScanning}
 
       snackbar={snackbar}
       snackbarMessage={snackbarMessage}

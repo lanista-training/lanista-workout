@@ -7,14 +7,25 @@ import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment";
 import { ME } from "../../queries";
-import { UPDATEPROFILE, LINK, UNLINK } from "../../mutations"
+import { UPDATEPROFILE, LINK, UNLINK, ACCEPTREQUEST, DECLINEREQUEST } from "../../mutations"
 
 const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
   let {changeLanguage, languages, locale} = useTranslate("setup");
   const[filter, setFilter] = React.useState(true)
   const { data, error, loading, refetch } = useQuery(ME);
   const me = data ? data.me : {}
-  const {first_name, last_name, photoUrl, email, birthday, gender, gyms, language} = me;
+  const {
+    first_name,
+    last_name,
+    photoUrl,
+    email,
+    birthday,
+    gender,
+    gyms,
+    language,
+    connectionRequests
+  } = me;
+
   const [updateProfile, { loading: updateProfileLoading, error: updateProfileError }] = useMutation(
     UPDATEPROFILE,
     {
@@ -41,6 +52,7 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
       }
     }
   );
+
   const [unlink, { loading: unlinkLoading, error: unlinkError }] = useMutation(
     UNLINK,
     {
@@ -62,6 +74,51 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
       }
     }
   );
+
+  const [acceptRequest, { loading: acceptRequestLoading, error: acceptRequestError }] = useMutation(
+    ACCEPTREQUEST,
+    {
+      update(cache,  { data: {acceptRequest} }) {
+        let {me} = cache.readQuery({
+          query: ME,
+        });
+        const {connectionRequests} = me
+        const requestIndex = connectionRequests.findIndex(i => i.id == acceptRequest.id)
+        connectionRequests.splice(requestIndex, 1)
+        cache.writeQuery({
+          query: ME,
+          data: { me: {
+            ...me,
+            connectionRequests: connectionRequests
+          }},
+        });
+        refetch();
+      }
+    }
+  );
+
+  const [declineRequest, { loading: declineRequestLoading, error: declineRequestError }] = useMutation(
+    DECLINEREQUEST,
+    {
+      update(cache,  { data: {declineRequest} }) {
+        let {me} = cache.readQuery({
+          query: ME,
+        });
+        const {connectionRequests} = me
+        const requestIndex = connectionRequests.findIndex(i => i.id == declineRequest.id)
+        connectionRequests.splice(requestIndex, 1)
+        cache.writeQuery({
+          query: ME,
+          data: { me: {
+            ...me,
+            connectionRequests: connectionRequests
+          }},
+        });
+        refetch();
+      }
+    }
+  );
+
   const onSaveData = (firstName, lastName, email, birthday, gender, language) => {
     updateProfile({variables: {
       firstName: firstName,
@@ -72,11 +129,35 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
       language: language,
     }})
   }
+
   const unlinkGym = (id) => {
     unlink({variables: {
       buId: id
     }})
   }
+
+  const onAcceptRequest = (id) => {
+    console.log("acceptRequest");
+    acceptRequest({
+      variables: {
+        requestId: id,
+      }
+    });
+  }
+
+  const onRejectRequest = (id) => {
+    console.log("rejectRequest");
+    declineRequest({
+      variables: {
+        requestId: id,
+      }
+    });
+  }
+
+  const checkForInvitations = () => {
+    refetch();
+  }
+
   return (
     <Setup
       firstName={first_name}
@@ -93,6 +174,11 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
       unlinkGym={unlinkGym}
       goToGymsearch={goToGymsearch}
       hasNorch={hasNorch}
+      connectionRequests={connectionRequests}
+      acceptRequest={onAcceptRequest}
+      rejectRequest={onRejectRequest}
+      checkForInvitations={checkForInvitations}
+      version={3537}
     />
   )
 }

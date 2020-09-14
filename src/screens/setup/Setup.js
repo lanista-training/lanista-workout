@@ -22,6 +22,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import SyncIcon from '@material-ui/icons/Sync';
+
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -44,6 +50,11 @@ export default ({
   unlinkGym,
   goToGymsearch,
   hasNorch,
+  connectionRequests,
+  acceptRequest,
+  rejectRequest,
+  checkForInvitations,
+  version,
 }) => {
 
   const [firstNameInput, setFirstNameInput] = React.useState(firstName);
@@ -57,7 +68,21 @@ export default ({
   const [labelWidth, setLabelWidth] = React.useState(0);
   const [dataChanged, setDataChanged] = React.useState(false);
   const {t} = useTranslate("settings");
-  const goToSupoort = () => window.open('https://lanista-training.com/customer-support.html', '_blank', 'location=yes');
+  const goToSupoort = () => {
+    if( typeof window.cordova !== 'undefined' ) {
+      let win = window.cordova.InAppBrowser.open('https://lanista-training.com/customer-support.html', '_blank', 'location=yes');
+      win.focus();
+    } else {
+      let win = window.open('https://lanista-training.com/customer-support.html', '_blank', 'location=yes');
+      win.focus();
+    }
+  };
+
+  const [connectedDialogOpen, setConnectedDialogOpen] = React.useState(false);
+  const [selectedRequest, setSelectedRequest] = React.useState(null);
+  const handleConnectedDialogClose = () => {
+    setConnectedDialogOpen(false);
+  };
 
   React.useEffect(() => {
     setFirstNameInput(firstName)
@@ -172,6 +197,9 @@ export default ({
                 <MenuItem value={'DE'}>{"Deutsch"}</MenuItem>
                 <MenuItem value={'EN'}>{"English"}</MenuItem>
                 <MenuItem value={'ES'}>{"Español"}</MenuItem>
+                <MenuItem value={'FR'}>{"Français"}</MenuItem>
+                <MenuItem value={'PT'}>{"Português"}</MenuItem>
+                <MenuItem value={'RU'}>{"Pусский"}</MenuItem>
               </Select>
             </FormControl>
             <Button
@@ -187,46 +215,114 @@ export default ({
               {t('save')}
             </Button>
           </div>
-          <div className="gyms-list">
-            <div className="gyms-list-title">
+
+
+          <div className="setup-section">
+            <div className="setup-title">
               {t('your_gym_trainer')}
             </div>
+            <div className="gyms-list-wrapper">
+              <GridList>
+                {gyms && gyms.map(gym => (
+                  <div className="gym-item" key={gym.name}>
+                    <GridListTile>
+                      <div className="gym-image" style={{backgroundImage: "url(" + gym.imageUrl + ")"}}/>
+                      <div className="gym-name">{gym.name}</div>
+                      <Button variant="contained" color="primary" onClick={() => {
+                        setSelectedGym(gym.id)
+                        setDialogOpen(true)
+                      }}>
+                        {t('disconnect')}
+                      </Button>
+                    </GridListTile>
+                  </div>
+                ))}
+              </GridList>
+              <Button
+                className="logout-button"
+                variant="contained"
+                color="secondary"
+                endIcon={<Icon>search</Icon>}
+                onClick={goToGymsearch}
+              >
+                {t('search')}
+              </Button>
+            </div>
           </div>
-          <div className="gyms-list-wrapper">
-            <GridList>
-              {gyms && gyms.map(gym => (
-                <div className="gym-item" key={gym.name}>
-                  <GridListTile>
-                    <div className="gym-image" style={{backgroundImage: "url(" + gym.imageUrl + ")"}}/>
-                    <div className="gym-name">{gym.name}</div>
-                    <Button variant="contained" color="primary" onClick={() => {
-                      setSelectedGym(gym.id)
-                      setDialogOpen(true)
-                    }}>
-                      {t('disconnect')}
-                    </Button>
-                  </GridListTile>
-                </div>
+
+
+          <div className="setup-section">
+            <div className="setup-title">
+              {t('invitations')}
+            </div>
+            <div className="invitations-list">
+              {connectionRequests && connectionRequests.map(request => (
+                <Card className="invitations-root">
+                  <div className="invitations-details">
+                    <CardContent className="invitations-content">
+                      <Typography component="h6" variant="h6">
+                        {request.from.first_name + ' ' + request.from.last_name}
+                      </Typography>
+                      <Typography variant="subtitle1" color="textSecondary">
+                        {t("invitation_message")}
+                      </Typography>
+                    </CardContent>
+                    <div className="invitations-controls">
+                      <Button
+                        variant="contained"
+                        size="small"
+                        disableElevation
+                        onClick={() => {
+                          setSelectedRequest(request.id);
+                          setConnectedDialogOpen(true);
+                        }}
+                      >
+                        {t("invitation_connect")}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        disableElevation
+                        style={{ marginLeft: "2em" }}
+                        onClick={() => rejectRequest(request.id)}
+                      >
+                        {t("invitation_refuse")}
+                      </Button>
+                    </div>
+                  </div>
+                  <CardMedia
+                    className="invitations-cover"
+                    image={request.from.photoUrl}
+                    title={request.from.first_name + ' ' + request.from.last_name}
+                  />
+                </Card>
               ))}
-            </GridList>
+            </div>
             <Button
               className="logout-button"
               variant="contained"
               color="secondary"
-              startIcon={<Icon>search</Icon>}
-              onClick={goToGymsearch}
+              endIcon={<SyncIcon/>}
+              onClick={checkForInvitations}
             >
-              {t('search')}
+              {t('check_for_invitations')}
             </Button>
-            <Button
-              className="logout-button"
-              variant="contained"
-              color="secondary"
-              startIcon={<ContactSupportIcon/>}
-              onClick={goToSupoort}
-            >
-              {t('support')}
-            </Button>
+          </div>
+
+
+          <Button
+            className="logout-button"
+            variant="contained"
+            color="secondary"
+            endIcon={<ContactSupportIcon/>}
+            onClick={goToSupoort}
+            style={{marginTop: "4em"}}
+          >
+            {t('support')}
+          </Button>
+
+          <div className="version-section">
+            Version {version}
           </div>
         </div>
       </div>
@@ -237,33 +333,66 @@ export default ({
           </div>
         </div>
       </div>
-      <Dialog
-        open={dialogOpen}
-        onClose={handleDialogClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{t("cut_connection")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {t("cut_connection_text")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="primary" autoFocus>
-            {t("back")}
-          </Button>
-          <Button onClick={() => {
-            unlinkGym(selectedGym)
-            handleDialogClose()
-          }} color="primary" autoFocus>
-            {t("disconnect")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+
+      {connectedDialogOpen &&
+        <Dialog
+          open={connectedDialogOpen}
+          onClose={handleConnectedDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Verbinden</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t('connect_hint')}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleConnectedDialogClose} color="primary" autoFocus>
+              {t('back')}
+            </Button>
+            <Button onClick={() => {
+              acceptRequest(selectedRequest);
+              handleConnectedDialogClose();
+              setSelectedRequest(null);
+            }} color="primary" autoFocus>
+              {t("connect")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      }
+
+      {dialogOpen &&
+        <Dialog
+          open={dialogOpen}
+          onClose={handleDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("cut_connection")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("cut_connection_text")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose} color="primary" autoFocus>
+              {t("back")}
+            </Button>
+            <Button onClick={() => {
+              unlinkGym(selectedGym);
+              handleDialogClose();
+            }} color="primary" autoFocus>
+              {t("disconnect")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      }
+
       <StyledButton color="primary" onClick={onGoBack}>
         <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
       </StyledButton>
+
     </Panel>
   )
 };

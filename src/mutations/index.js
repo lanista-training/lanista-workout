@@ -264,3 +264,19 @@ export const UNLINK = gql`
      }
   }
 `;
+
+export const ACCEPTREQUEST = gql`
+  mutation AcceptRequest( $requestId: ID!) {
+     acceptRequest(requestId: $requestId) {
+       id
+     }
+  }
+`;
+
+export const DECLINEREQUEST = gql`
+  mutation DeclineRequest( $requestId: ID!) {
+     declineRequest(requestId: $requestId) {
+       id
+     }
+  }
+`;

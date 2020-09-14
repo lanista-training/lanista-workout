@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {Panel} from './styles'
+import {Panel, StyledSpeedDial} from './styles'
 import { useTranslate } from '../../hooks/Translation';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,7 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Menu, MainButton, ChildButton } from "react-mfb";
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 const effect = 'zoomin', pos = 'br', method = 'hover';
 
@@ -25,44 +25,49 @@ export default ({
   bu,
   loginImage,
   goRegistration,
+  hasNorch,
 }) => {
-   let {t, locale, languages, changeLanguage} = useTranslate("login");
-   const getLoginMessage = () => {
-     if(bu =='basefit') {
-       return <div className="login-message">Verwende hier deine <span>mybasefit.ch</span> Anmeldedaten - die Nutzung ist gratis</div>
-     } else {
-       return <></>
-     }
+ let {t, locale, languages, changeLanguage} = useTranslate("login");
+ const getLoginMessage = () => {
+   if(bu =='basefit') {
+     return <div className="login-message">Verwende hier deine <span>mybasefit.ch</span> Anmeldedaten - die Nutzung ist gratis</div>
+   } else {
+     return <></>
    }
-   const[email, setEmail] = useState('')
-   const[password, setPassword] = useState('')
-   const [open, setOpen] = React.useState(false);
-   const [errorMessage, setErrorMessage] = React.useState("Hast dich verschrieben?");
-   const [errorMessageHeader, setErrorMessageHeader] = React.useState("Email oder Passwort inkorrekt.");
-   const handleClickOpen = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
-      setOpen(false);
-    };
-    useEffect(() => {
-      if( loginError && loginError.message.indexOf("Network error:") > -1 ) {
-        setErrorMessageHeader("Ups ;-(");
-        setErrorMessage(t("connection_error"));
-      } else if(loginError && loginError.message && loginError.message.indexOf("ACCOUNTBLOKED") > -1 ) {
-        setErrorMessageHeader(t("account_blocked_header"));
-        setErrorMessage(t("account_blocked_message"));
-      } else if( loginError && loginError.message.indexOf("USERNOTFOUND") > -1 ) {
-        setErrorMessageHeader(t("login_error_header"));
-        setErrorMessage(t("login_error_message"));
-      } else {
-        setErrorMessageHeader(t("unexpected_error_header"));
-        setErrorMessage(t("Ein unvorherbarer Fehler ist aufgetretten. Bitte, kontaktiere das Lanista-Team."));
-      }
-      setOpen(loginError !== undefined)
-    }, [loginError])
+ }
+ const [languageSelectorOpen, setLanguageSelectorOpen] = useState(false);
+ const toggleLanguageSelector = () => setLanguageSelectorOpen(!languageSelectorOpen);
+
+ const[email, setEmail] = useState('')
+ const[password, setPassword] = useState('')
+ const [open, setOpen] = React.useState(false);
+ const [errorMessage, setErrorMessage] = React.useState("Hast dich verschrieben?");
+ const [errorMessageHeader, setErrorMessageHeader] = React.useState("Email oder Passwort inkorrekt.");
+ const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  useEffect(() => {
+    if( loginError && loginError.message.indexOf("Network error:") > -1 ) {
+      setErrorMessageHeader("Ups ;-(");
+      setErrorMessage(t("connection_error"));
+    } else if(loginError && loginError.message && loginError.message.indexOf("ACCOUNTBLOKED") > -1 ) {
+      setErrorMessageHeader(t("account_blocked_header"));
+      setErrorMessage(t("account_blocked_message"));
+    } else if( loginError && loginError.message.indexOf("USERNOTFOUND") > -1 ) {
+      setErrorMessageHeader(t("login_error_header"));
+      setErrorMessage(t("login_error_message"));
+    } else {
+      setErrorMessageHeader(t("unexpected_error_header"));
+      setErrorMessage(t("Ein unvorherbarer Fehler ist aufgetretten. Bitte, kontaktiere das Lanista-Team."));
+    }
+    setOpen(loginError !== undefined)
+  }, [loginError]);
+
    return (
-     <Panel loginImage={loginImage}>
+     <Panel loginImage={loginImage} style={hasNorch ? {paddingTop: "30px"} : {}}>
        <div className="logo-wrapper" style={{flex: 1}}>
          <div className="logo" style={{backgroundImage: loginImage}} />
        </div>
@@ -124,26 +129,40 @@ export default ({
             </Button>
           </div>
           <Link target="_blank" href='#' variant="body2" onClick={() => {
-              window.open(bu=="basefit" ? 'https://mybasefit.ch' : 'https://lanista-training.com/tpmanager/user/requestpasswordreset?client=lanista&lang=DE', '_blank', 'location=yes');
+            if( typeof window.cordova !== 'undefined' ) {
+              let win = window.cordova.InAppBrowser.open(bu=="basefit" ? 'https://mybasefit.ch' : 'https://lanista-training.com/tpmanager/user/requestpasswordreset?client=lanista&lang=DE', '_blank', 'location=yes');
+              win.focus();
+            } else {
+              let win = window.open(bu=="basefit" ? 'https://mybasefit.ch' : 'https://lanista-training.com/tpmanager/user/requestpasswordreset?client=lanista&lang=DE', '_blank', 'location=yes');
+              win.focus();
+            }
           }}>
             {t("forgot_password")}
           </Link>
        </form>
-       <Menu effect={effect} method={method} position={pos}>
-         <MainButton className={locale + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
-         {
-           languages && languages.filter((language) => language !== locale).map(language => (
-             <ChildButton
-               icon="ion-social-github"
-               label={language}
-               className={language + "-flag"}
-               key={language}
-               onClick={(e) => {
-                 changeLanguage(language);
-               }} />
-           ))
-         }
-       </Menu>
+
+       <StyledSpeedDial
+          ariaLabel="Language selector"
+          onClose={toggleLanguageSelector}
+          onOpen={toggleLanguageSelector}
+          open={languageSelectorOpen}
+          direction='up'
+          FabProps={{className: 'language-' + locale}}
+        >
+          {languages && languages.filter((language) => language !== locale).map((language) => (
+            <SpeedDialAction
+              key={language}
+              tooltipTitle={language}
+              className={'language-' + language}
+              onClick={(e) => {
+                changeLanguage(language);
+                toggleLanguageSelector();
+              }}
+            />
+          ))}
+        </StyledSpeedDial>
+
+
        <div className="copyright">
         Lanista Trainingssoftware © 2012.
       </div>
@@ -161,7 +180,7 @@ export default ({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary" autoFocus>
-            OK
+            {t("login_error_check")}
           </Button>
         </DialogActions>
       </Dialog>

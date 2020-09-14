@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import SpeedDial from '@material-ui/lab/SpeedDial';
 
 export const Panel = styled.div`
   background: white;
@@ -57,7 +58,7 @@ export const Panel = styled.div`
     align-items: center;
   }
   .logo {
-    height: 10em;
+    height: 8em;
     width: 10em;
     margin-top: 3em;
     background-size: contain;
@@ -93,5 +94,36 @@ export const Panel = styled.div`
   }
   .mfb-zoomin {
     margin-bottom: 2.5em;
+  }
+`;
+
+export const StyledSpeedDial = styled(SpeedDial)`
+  position: fixed!important;
+  bottom: 1em;
+  right: 1em;
+  background-color: transparent;
+  .language-en {
+    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/en.png);
+    background-size: contain;
+  }
+  .language-de {
+    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/de.png);
+    background-size: contain;
+  }
+  .language-es {
+    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/es.png);
+    background-size: contain;
+  }
+  .language-pt {
+    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/br.png);
+    background-size: contain;
+  }
+  .language-fr {
+    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/fr.png);
+    background-size: contain;
+  }
+  .language-ru {
+    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/ru.png);
+    background-size: contain;
   }
 `;

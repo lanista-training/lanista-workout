@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { withApollo } from '../../lib/apollo'
 import { LOGIN } from "../../mutations/authenticate";
 
-const LoginPanel = ({studio, doLogin, goToRegistration}) => {
+const LoginPanel = ({studio, doLogin, goToRegistration, hasNorch}) => {
   const[bu, setBu] = React.useState(null)
   const[loginImage, setLoginImage] = React.useState(null)
   React.useEffect(() => {
@@ -61,6 +61,7 @@ const LoginPanel = ({studio, doLogin, goToRegistration}) => {
       bu={bu}
       loginImage={loginImage}
       goRegistration={goRegistration}
+      hasNorch={hasNorch}
     />
   )
 }

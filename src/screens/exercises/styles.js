@@ -26,20 +26,46 @@ export const Panel = styled.div`
     width: 100vw;
     top: 0;
     left: 0;
-    padding: 1em;
+    position: absolute;
     .title {
       flex: 1;
       text-align: left;
       font-weight: 900;
       font-size: 2em;
-      padding: 0.5em 0;
+      padding: 1em 0 0.5em 0.5em;
+      .total {
+        border-color: white;
+        color: white;
+        float: right;
+        margin-right: 1em;
+        margin-top: 0px;
+        font-weight: 200;
+        letter-spacing: -1px;
+      }
+    }
+    .current-filters {
+      height: 3em;
+      overflow-x: scroll;
+      width: calc(100vw - 1em);
+      display: flex;
+      position: relative;
+      z-index: 2;
+      padding-left: 1em;
+    }
+    .MuiChip-root {
+      color: white;
+      border-color: white;
+      margin-right: 1em;
+      background: rgb(220,0,78);
+      svg {
+        color: white;
+      }
     }
   }
   .content-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    overflow: scroll;
     width: 100%;
     margin-top: 5em;
     ::before
@@ -62,17 +88,29 @@ export const Panel = styled.div`
     box-shadow: rgba(0, 0, 0, 0.2) 0px 6px 6px -3px, rgba(0, 0, 0, 0.14) 0px 10px 14px 1px, rgba(0, 0, 0, 0.12) 0px 4px 18px 3px;
     flex: 1 1 0%;
     padding: 2.5em 1.5em 1.5em;
-    .empty-list-text {
-      margin-top: calc(50vh - 140px);
-      line-height: 1.5em;
-      font-size: 1.2em;
-      font-weight: 100;
-      text-align: center;
-      color: grey;
-    }
+  }
+  .empty-list-text {
+    height: 100vh;
+    background: whitesmoke;
+    padding: 2em;
+    margin-top: 1em;
+    text-align: center;
   }
   .plan-exercise {
-    margin-bottom: 2em;
+    width: calc(100vw - 48px);
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 18px;
+    box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
+  }
+  .exercise-wrapper {
+    background-color: whitesmoke;
+  }
+  .MuiAppBar-root.MuiPaper-root {
+    background: white;
+    box-shadow: none;
+    padding-top: 1em;
+    background-color: whitesmoke;
   }
   .MuiAppBar-root.MuiPaper-root {
     background: white;
@@ -93,7 +131,8 @@ export const Panel = styled.div`
   .MuiCardContent-root {
     font-family: Roboto;
     font-size: 1.3em;
-    color: #adadad;
+    color: #929090;
+    font-weight: 100;
   }
   .MuiCardActions-root {
     display: flex;
@@ -113,6 +152,39 @@ export const Panel = styled.div`
       height: calc((100vw - 48px)/2);
       width: calc((100vw - 48px)/2);
       background-size: contain;
+    }
+  }
+  .virtual-list-wrapper {
+    ::before
+    {
+      display: table;
+      content: '';
+      width: 100%;
+      height: 2em;
+      position: absolute;
+      background: whitesmoke;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      top: ${props => (props.paddingTop - 32) || "initial"}px;
+    }
+  }
+  .exercise-wrapper {
+    ::before
+    {
+      height: 0!important;
+      content: '';
+    }
+  }
+  .exercise-wrapper:last-child {
+    ::after
+    {
+      display: table;
+      content: '';
+      width: 100%;
+      height: 100vh;
+      position: absolute;
+      background: whitesmoke;
+      top: 100%;
     }
   }
 `;

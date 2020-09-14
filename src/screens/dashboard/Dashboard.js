@@ -52,6 +52,7 @@ function Panel(props) {
 export default ({
   firstName,
   lastName,
+  language,
   photoUrl,
   plans,
   doLogout,
@@ -72,6 +73,7 @@ export default ({
   onScannQr,
   onScannNfc,
   onScannBeacon,
+  onSearchExercises,
 
   scannNfcDisable,
   scannQrDisable,
@@ -86,13 +88,16 @@ export default ({
   openBeaconSearch,
   setOpenBeaconSearch,
 
+  beaconScanning,
+  nfcScanning,
+
   refetch,
 }) => {
   const {t} = useTranslate("dashboard");
   const onRefresh = () => {
-    console.log("ON REFRESH");
     refetch();
   }
+
   return (
     <Panel modal={modal} scanning={scanning}>
       <div className="user-info header" style={hasNorch ? {top: "30px"} : {}}>
@@ -117,10 +122,15 @@ export default ({
               <Slider {...settings}>
               {
                 banners.fallback.map((banner, i) => (
-                  <div key={'banner-' + banner.id} className="banner-wrapper">
+                  <div key={'banner-' + banner.id} className={ banners && banners.banners.length == 1 ? "one-banner banner-wrapper" : "banner-wrapper" }>
                     <div className="banner" onClick={() => {
-                      let win = window.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank');
-                      win.focus();
+                      if( typeof window.cordova !== 'undefined' ) {
+                        let win = window.cordova.InAppBrowser.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank', 'location=yes');
+                        win.focus();
+                      } else {
+                        let win = window.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank');
+                        win.focus();
+                      }
                     }}>
                       <div className="banner-image" style={{
                         backgroundImage: 'url(' + banner.imageUrl + ')'
@@ -194,18 +204,24 @@ export default ({
         goToSetup={goToSetup}
         onGoToProtocolls={onGoToProtocolls}
         onGoToMeasurements={onGoToMeasurements}
+        language={language}
       />
       <Backdrop open={openBeaconSearch} onClick={setOpenBeaconSearch} style={{zIndex: 2}}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      {showScannButtons && <ScannerButtons
+      <ScannerButtons
         onScannQr={onScannQr}
         onScannNfc={onScannNfc}
         onScannBeacon={onScannBeacon}
+        onSearchExercises={onSearchExercises}
         scannNfcDisablen={scannNfcDisable}
         scannQrDisablen={scannQrDisable}
         scannBeaconDisablen={scannBeaconDisable}
-      />}
+        showScannButtons={showScannButtons}
+
+        beaconScanning={beaconScanning}
+        nfcScanning={nfcScanning}
+      />
       <Snackbar open={snackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity="success">
           {snackbarMessage}

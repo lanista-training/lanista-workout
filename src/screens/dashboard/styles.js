@@ -40,6 +40,7 @@ export const StyledPanel = styled.div`
     button {
       border-color: white;
       color: white;
+      border-radius: 15px;
     }
     .user-name {
       flex: 1;
@@ -76,6 +77,9 @@ export const StyledPanel = styled.div`
       .slick-list {
         overflow: visible;
       }
+    }
+    .one-banner.banner-wrapper {
+      width: calc(100vw - 2.5em)!important;
     }
     .banner-wrapper {
       padding: 0 1em;

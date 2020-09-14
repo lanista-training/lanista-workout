@@ -16,7 +16,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default ({onLogout, onGoToProtocolls, onGoToMeasurements, preventLogout, onGoToSetup, editable}) => {
+export default ({onLogout, onGoToProtocolls, onGoToMeasurements, preventLogout, onGoToSetup, editable, language}) => {
   const [open, setOpen] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const handleVisibility = () => {
@@ -29,7 +29,10 @@ export default ({onLogout, onGoToProtocolls, onGoToMeasurements, preventLogout, 
     setOpen(false);
   };
 
-  let {t} = useTranslate("menu");
+  let {t, changeLanguage} = useTranslate("menu");
+  console.log('CHANGING LANGUAGE TO')
+  console.log(language)
+  language && changeLanguage(language.toLowerCase());
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const handleOpenDialog = () => {

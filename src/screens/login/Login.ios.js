@@ -145,6 +145,7 @@ export default class Login extends PureComponent {
       case 'es': return require('../../images/es.png');
       case 'fr': return require('../../images/fr.png');
       case 'br': return require('../../images/br.png');
+      case 'ru': return require('../../images/ru.png');
     }
   }
 

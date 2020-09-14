@@ -42,3 +42,12 @@
   background-color: initial;
   bottom: -25px;
 }
+
+.ru-flag{
+  background-image: url('../img/ru.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}

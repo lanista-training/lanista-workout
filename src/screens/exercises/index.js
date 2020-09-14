@@ -5,15 +5,16 @@ import { useQuery } from '@apollo/react-hooks';
 import Exercises from './Exercises';
 import { EXERCISES } from "../../queries"
 
-const Panel = ({goBack, hasNorch, showExercise, exercises, type, muscle, addition}) => {
+const Panel = ({goBack, hasNorch, showExercise, exercises, types, muscles, text, additions}) => {
 
   const {locale} = useTranslate("exercises");
   const { data, error, loading } = useQuery(EXERCISES, {
     variables: {
       exercises: exercises,
-      type: parseInt(type),
-      muscle: parseInt(muscle),
-      addition: parseInt(addition),
+      types: types && types.length > 0 ? types : null,
+      muscles: muscles && muscles.length > 0 ? muscles : null,
+      additions: additions && additions.length > 0 ? additions : null,
+      text: text,
       language: locale,
     }
   });
@@ -23,12 +24,14 @@ const Panel = ({goBack, hasNorch, showExercise, exercises, type, muscle, additio
       onGoBack={goBack}
       hasNorch={hasNorch}
       showExercise={showExercise}
-      exercises={data ? data.exercises : []}
-      type={type}
-      muscle={muscle}
-      addition={addition}
+      exercises={data ? data.exercises.exercises : []}
+      total={data ? data.exercises.total : 0}
       loading={loading}
       error={error}
+
+      muscles={muscles}
+      types={types}
+      additions={additions}
     />
   )
 }

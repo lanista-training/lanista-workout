@@ -20,6 +20,7 @@ export const Panel = styled.div`
       text-shadow: 0px 0px 10px rgb(0, 0, 0);
       font-size: 1.2em;
       padding: 1em 0;
+      font-weight: 100;
     }
     button {
       text-shadow: 0px 0px 10px rgb(0, 0, 0);
@@ -440,6 +441,16 @@ export const Sets = styled.div`
 export const StyledInputNumber = styled(InputNumber)`
   display: flex;
   height: 100%;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  input {
+    -moz-user-select: none!important;
+    -webkit-user-select: none!important;
+    -ms-user-select: none!important;
+    user-select: none!important;
+  }
   .rc-input-number {
     margin: 0;
     padding: 0;
@@ -451,10 +462,18 @@ export const StyledInputNumber = styled(InputNumber)`
     border: 1px solid #D9D9D9;
     border-radius: 4px;
     transition: all .3s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-focused {
     border-color: #1890ff;
     box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler {
     text-align: center;
@@ -465,9 +484,17 @@ export const StyledInputNumber = styled(InputNumber)`
     width: 100%;
     -ms-touch-action: none;
         touch-action: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-active {
     background: #ddd;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-up-inner,
   .rc-input-number-handler-down-inner {
@@ -479,22 +506,42 @@ export const StyledInputNumber = styled(InputNumber)`
   }
   .rc-input-number:hover {
     border-color: #1890ff;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number:hover .rc-input-number-handler-up,
   .rc-input-number:hover .rc-input-number-handler-wrap {
     border-color: #1890ff;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-disabled:hover {
     border-color: #d9d9d9;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-disabled:hover .rc-input-number-handler-up,
   .rc-input-number-disabled:hover .rc-input-number-handler-wrap {
     border-color: #d9d9d9;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-input-wrap {
     overflow: hidden;
     height: 100%;
     width: 33.3%;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-input {
     width: 100%;
@@ -511,6 +558,10 @@ export const StyledInputNumber = styled(InputNumber)`
     background-color: rgb(206,41,51);
     color: white!important;
     font-size: 0.85em;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-wrap {
     float: right;
@@ -521,25 +572,45 @@ export const StyledInputNumber = styled(InputNumber)`
     display: flex;
     align-items: center;
     justify-content: center;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-up {
     padding-top: 1px;
     transition: all .3s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-up-inner:after {
     content: 'keyboard_arrow_up';
     font-size: 35px;
     color: white;
     line-height: 1em;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-down {
     transition: all .3s;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-down-inner:after {
     content: 'keyboard_arrow_down';
     font-size: 35px;
     color: white;
     line-height: 1em;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
   .rc-input-number-handler-down-disabled,
   .rc-input-number-handler-up-disabled {

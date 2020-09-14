@@ -11,6 +11,7 @@ const Button = ({
   goToSetup,
   onGoToProtocolls,
   onGoToMeasurements,
+  language,
 }) => {
   const onLogout = () => {
     if( doLogout() ) {
@@ -25,6 +26,7 @@ const Button = ({
       onGoToMeasurements={onGoToMeasurements}
       onGoToSetup={goToSetup}
       editable={editable}
+      language={language}
     />
   )
 }

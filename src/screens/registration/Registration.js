@@ -25,7 +25,7 @@ import Switch from '@material-ui/core/Switch';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 function getSteps(t) {
-  return [t("GYM_TRAINER_SEARCH"), t("ENTER_EMAIL"), t("CONFIRM_EMAIL")];
+  return [t("gym_trainer_search"), t("enter_email"), t("confirm_email")];
 }
 
 const renderEmailInputField = (
@@ -110,7 +110,7 @@ const renderGymSearch = (filter, onFilterChange, gyms, setSelectedGym, handleNex
           onClick={handleNext}
           className="search-skip-button"
         >
-          {t("skeep_search")}
+          {t("skip_search")}
         </Button>
         </div>
         <div className="gyms-list">

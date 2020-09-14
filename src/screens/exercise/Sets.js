@@ -54,6 +54,57 @@ const units = (language) => {
         }
       ]
     )
+  else if( language == 'fr' )
+    return (
+      [
+        {
+          value: 0,
+          label: 'Rép',
+        },
+        {
+          value: 1,
+          label: 'Sec',
+        },
+        {
+          value: 2,
+          label: 'Min',
+        }
+      ]
+    )
+  else if( language == 'pt' )
+    return (
+      [
+        {
+          value: 0,
+          label: 'Rep',
+        },
+        {
+          value: 1,
+          label: 'Seg',
+        },
+        {
+          value: 2,
+          label: 'Min',
+        }
+      ]
+    )
+  else if( language == 'ru' )
+    return (
+      [
+        {
+          value: 0,
+          label: 'Повт',
+        },
+        {
+          value: 1,
+          label: 'Сек',
+        },
+        {
+          value: 2,
+          label: 'Мин',
+        }
+      ]
+    )
   else
     return (
       [
@@ -329,14 +380,9 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
   }
 
   const onChangeSet = (set) => {
-    console.log("onChangeSet");
-    console.log(set);
     daySets[set.index] = {...set};
     setDaySets([...daySets]);
   }
-
-  console.log("daySets")
-  console.log(daySets)
 
   return (
     <Sets>

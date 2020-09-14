@@ -114,6 +114,10 @@ export const Panel = styled.div`
         color: black;
       }
     }
+    .exercise-images.done {
+      -webkit-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
     .exercise-images {
       display: flex;
       .start-image, .end-image {

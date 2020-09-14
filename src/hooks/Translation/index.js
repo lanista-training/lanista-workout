@@ -8,7 +8,7 @@ function translator(namespace) {
 }
 
 const Context = createContext({ translator, locale: null });
-const languages = ['en', 'de', 'es']
+const languages = ['en', 'de', 'es', 'fr', 'pt', 'ru']
 
 export function useTranslate(namespace) {
   let { translator, locale, changeLanguage } = useContext(Context);
@@ -55,6 +55,9 @@ export function TranslatorProvider({ children, client }) {
         translator: createTranslator(translations),
         locale: translations.locale,
         changeLanguage: (lang) => {
+          if(lang != language) {
+            window.localStorage.clear();
+          }
           window.localStorage.setItem('language', lang);
           setLanguage(lang)
         },

@@ -22,8 +22,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
         client: null,
         loaded: false,
       }
-      const cache = new InMemoryCache(initData)
-
+      const cache = new InMemoryCache(initData);
       const authLink = setContext((_, { headers }) => {
         const token = cookie.get('token')
         return {
@@ -49,10 +48,10 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       }));
 
       // Website Link
-      var graphqlServer = 'https://' + document.location.host + '/graphql';
+      //var graphqlServer = 'https://' + document.location.host + '/graphql';
 
       // App Link
-      //var graphqlServer = 'https://mobile.lanista-training.com/graphql';
+      var graphqlServer = 'https://mobile.lanista-training.com/graphql';
 
       // Local Test Link
       //var graphqlServer = 'http://localhost:4000/graphql';

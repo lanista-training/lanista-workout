@@ -32,6 +32,13 @@ import Pullable from 'react-pullable';
 
 import { useTheme } from '@material-ui/core/styles';
 
+const getProgress = (protocolls, sets) => {
+  console.log("getProgress")
+  console.log(protocolls)
+  console.log(sets)
+  return protocolls && protocolls.length > 0 && <LinearProgress variant="determinate" value={protocolls.length > sets ? 100 : protocolls.length / sets * 100} color="secondary" />;
+}
+
 export default ({
     onGoBack,
     signedIn,
@@ -48,7 +55,10 @@ export default ({
     setCurrentTab,
     hasNorch,
     refetch,
+    todayExecutions,
   }) => {
+    console.log("todayExecutions")
+    console.log(todayExecutions)
   const {t} = useTranslate("workout");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -107,8 +117,7 @@ export default ({
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               {plan && plan.description && plan.description.split('||').map( (line, index) => (<div key={"description-line" + index}>{line.charAt(0).toUpperCase() + line.slice(1)}</div>)) }
-              {plan && plan.creator_name && <div className="plan-author">Ersteller: <span>{plan.creator_name}</span></div>}
-              {(plan && plan.duration > 0) && (<div className="plan-duration">Plandauer: <span>{plan.duration} {plan.duration > 1 ? 'Wochen' : 'Woche'}</span></div>)}
+              {(plan && plan.duration > 0) && (<div className="plan-duration">{t("plan_duration")}: <span>{plan.duration} {plan.duration > 1 ? t("weeks") : t("week")}</span></div>)}
               {plan && !showAssignButton &&
                 <Button
                   variant="outlined"
@@ -166,7 +175,7 @@ export default ({
                       <Card className="plan-exercise" key={'plan-exercise-' + planExercise.exercise.id} onClick={() => showExercise(planExercise.exercise.id, planExercise.id)}>
                         <CardActionArea>
                           <CardMedia
-                            className="exercise-images"
+                            className={todayExecutions && todayExecutions.filter(e => e.exercise_id == planExercise.exercise.id).length >= planExercise.rounds ? "exercise-images done" : "exercise-images"}
                             title="Contemplative Reptile"
                           >
                             <div
@@ -178,6 +187,7 @@ export default ({
                               style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
                             />
                           </CardMedia>
+                          {getProgress(todayExecutions && todayExecutions.filter(e => e.exercise_id == planExercise.exercise.id), planExercise.rounds)}
                           <CardContent>
                             {planExercise.exercise.name}
                           </CardContent>

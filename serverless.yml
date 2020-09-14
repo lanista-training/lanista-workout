@@ -3,6 +3,7 @@ service: lanista-workout-app
 provider:
   name: aws
   runtime: nodejs10.x
+  versionFunctions: false
   stage: prod
   region: eu-central-1
   memorySize: 512
