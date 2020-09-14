@@ -1,0 +1,2347 @@
+{
+  "config": {
+    "title": "Lanista Coach",
+    "description": "Lanista website",
+    "menu": [],
+    "version": "1.0.0",
+    "repository": "https://github.com/lanista-training/lanista-workout",
+    "native": false,
+    "themeConfig": {},
+    "separator": "-"
+  },
+  "entries": [
+    {
+      "key": "README.md",
+      "value": {
+        "id": "04c6e90faac2675aa89e2176d2eec7d8",
+        "filepath": "README.md",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/README.md",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/README.md",
+        "hidden": false,
+        "slug": "readme",
+        "route": "/readme",
+        "name": "Readme",
+        "menu": "",
+        "headings": [
+          {
+            "slug": "basic-next-serverless-app",
+            "depth": 2,
+            "value": "basic-next-serverless-app"
+          },
+          {
+            "slug": "running-the-example",
+            "depth": 3,
+            "value": "Running the example"
+          },
+          {
+            "slug": "install-dependencies",
+            "depth": 4,
+            "value": "Install dependencies"
+          },
+          {
+            "slug": "running-locally",
+            "depth": 4,
+            "value": "Running locally"
+          },
+          {
+            "slug": "deploy",
+            "depth": 4,
+            "value": "Deploy"
+          },
+          {
+            "slug": "lanista-coach",
+            "depth": 1,
+            "value": "lanista-coach"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/dashboard/dashboard.mdx",
+      "value": {
+        "name": "Dashboard",
+        "menu": "SCREENS",
+        "id": "fe23bbf5c777f82fcd1d0228833b7233",
+        "filepath": "src/screens/dashboard/dashboard.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/dashboard/dashboard.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/dashboard/dashboard.mdx",
+        "hidden": false,
+        "slug": "src-screens-dashboard-dashboard",
+        "route": "/src-screens-dashboard-dashboard",
+        "headings": [
+          {
+            "slug": "dashboard-view-component",
+            "depth": 1,
+            "value": "Dashboard View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/exercise/exercise.mdx",
+      "value": {
+        "name": "Exercise",
+        "menu": "SCREENS",
+        "id": "1ddfbd4e9ef3147299fc2596787c6c19",
+        "filepath": "src/screens/exercise/exercise.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/exercise/exercise.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/exercise/exercise.mdx",
+        "hidden": false,
+        "slug": "src-screens-exercise-exercise",
+        "route": "/src-screens-exercise-exercise",
+        "headings": [
+          {
+            "slug": "exercise-view-component",
+            "depth": 1,
+            "value": "Exercise View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/exercises/exercises.mdx",
+      "value": {
+        "name": "Exercises",
+        "route": "/components/",
+        "menu": "SCREENS",
+        "id": "eb5510d2c6bc4777853fbc022ad1be56",
+        "filepath": "src/screens/exercises/exercises.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/exercises/exercises.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/exercises/exercises.mdx",
+        "hidden": false,
+        "slug": "src-screens-exercises-exercises",
+        "headings": [
+          {
+            "slug": "exercises-view-component",
+            "depth": 1,
+            "value": "Exercises View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/filter/filter.mdx",
+      "value": {
+        "name": "Filter",
+        "route": "/components/",
+        "menu": "SCREENS",
+        "id": "0918448dd5ccc3d791e48e49da3c0d81",
+        "filepath": "src/screens/filter/filter.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/filter/filter.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/filter/filter.mdx",
+        "hidden": false,
+        "slug": "src-screens-filter-filter",
+        "headings": [
+          {
+            "slug": "filter-view-component",
+            "depth": 1,
+            "value": "Filter View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/gymsearch/gymsearch.mdx",
+      "value": {
+        "name": "Gymsearch",
+        "menu": "SCREENS",
+        "id": "017904795305a74bb85a44993547810c",
+        "filepath": "src/screens/gymsearch/gymsearch.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/gymsearch/gymsearch.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/gymsearch/gymsearch.mdx",
+        "hidden": false,
+        "slug": "src-screens-gymsearch-gymsearch",
+        "route": "/src-screens-gymsearch-gymsearch",
+        "headings": [
+          {
+            "slug": "gymsearch-view-component",
+            "depth": 1,
+            "value": "Gymsearch View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/login/login.mdx",
+      "value": {
+        "name": "Login",
+        "menu": "SCREENS",
+        "id": "d68fa98b2648e5ed6a7795fdc819d212",
+        "filepath": "src/screens/login/login.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/login/login.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/login/login.mdx",
+        "hidden": false,
+        "slug": "src-screens-login-login",
+        "route": "/src-screens-login-login",
+        "headings": [
+          {
+            "slug": "login-view-component",
+            "depth": 1,
+            "value": "Login View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/measurements/measurements.mdx",
+      "value": {
+        "name": "Measurements",
+        "menu": "SCREENS",
+        "id": "3485a5166543f8a30d3353cb1dcff08c",
+        "filepath": "src/screens/measurements/measurements.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/measurements/measurements.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/measurements/measurements.mdx",
+        "hidden": false,
+        "slug": "src-screens-measurements-measurements",
+        "route": "/src-screens-measurements-measurements",
+        "headings": [
+          {
+            "slug": "measurements-view-component",
+            "depth": 1,
+            "value": "Measurements View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/protocolls/protocolls.mdx",
+      "value": {
+        "name": "Protocolls",
+        "menu": "SCREENS",
+        "id": "f74c0ae1b85f5c3614cc3abf44bbfd08",
+        "filepath": "src/screens/protocolls/protocolls.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/protocolls/protocolls.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/protocolls/protocolls.mdx",
+        "hidden": false,
+        "slug": "src-screens-protocolls-protocolls",
+        "route": "/src-screens-protocolls-protocolls",
+        "headings": [
+          {
+            "slug": "protocolls-view-component",
+            "depth": 1,
+            "value": "Protocolls View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/publicplan/publicplan.mdx",
+      "value": {
+        "name": "Publicplan",
+        "menu": "SCREENS",
+        "id": "343666b2cbe063e976fe986c5876c526",
+        "filepath": "src/screens/publicplan/publicplan.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/publicplan/publicplan.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/publicplan/publicplan.mdx",
+        "hidden": false,
+        "slug": "src-screens-publicplan-publicplan",
+        "route": "/src-screens-publicplan-publicplan",
+        "headings": [
+          {
+            "slug": "publicplan-view-component",
+            "depth": 1,
+            "value": "Publicplan View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/registration/registration.mdx",
+      "value": {
+        "name": "Registration",
+        "menu": "SCREENS",
+        "id": "04ca7481b8fe8ab1b9c8f938e87c4ac7",
+        "filepath": "src/screens/registration/registration.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/registration/registration.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/registration/registration.mdx",
+        "hidden": false,
+        "slug": "src-screens-registration-registration",
+        "route": "/src-screens-registration-registration",
+        "headings": [
+          {
+            "slug": "anamnese-view-component",
+            "depth": 1,
+            "value": "Anamnese View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/setup/setup.mdx",
+      "value": {
+        "name": "Setup",
+        "menu": "SCREENS",
+        "id": "8e0eb8600050c4d79e46b386096d9b26",
+        "filepath": "src/screens/setup/setup.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/setup/setup.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/setup/setup.mdx",
+        "hidden": false,
+        "slug": "src-screens-setup-setup",
+        "route": "/src-screens-setup-setup",
+        "headings": [
+          {
+            "slug": "setup-view-component",
+            "depth": 1,
+            "value": "Setup View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/workout/workout.mdx",
+      "value": {
+        "name": "Workout",
+        "menu": "SCREENS",
+        "id": "15c37317683808245569aef922d9c7aa",
+        "filepath": "src/screens/workout/workout.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/workout/workout.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/workout/workout.mdx",
+        "hidden": false,
+        "slug": "src-screens-workout-workout",
+        "route": "/src-screens-workout-workout",
+        "headings": [
+          {
+            "slug": "workout-view-component",
+            "depth": 1,
+            "value": "Workout View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    },
+    {
+      "key": "src/screens/workouts/workouts.mdx",
+      "value": {
+        "name": "Workouts",
+        "menu": "SCREENS",
+        "id": "6a572e9925506c1d7b70e78ca8e68db1",
+        "filepath": "src/screens/workouts/workouts.mdx",
+        "fullpath": "/Users/rafaeldiaz/Documents/development/lanista-workout/src/screens/workouts/workouts.mdx",
+        "link": "https://github.com/lanista-training/lanista-workout/edit/master/src/screens/workouts/workouts.mdx",
+        "hidden": false,
+        "slug": "src-screens-workouts-workouts",
+        "route": "/src-screens-workouts-workouts",
+        "headings": [
+          {
+            "slug": "workouts-view-component",
+            "depth": 1,
+            "value": "Workouts View Component"
+          },
+          {
+            "slug": "beschreibung",
+            "depth": 2,
+            "value": "Beschreibung"
+          }
+        ]
+      }
+    }
+  ],
+  "props": [
+    {
+      "key": "pages/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Index",
+          "methods": [],
+          "actualName": "Index"
+        }
+      ]
+    },
+    {
+      "key": "src/App.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "App",
+          "methods": [],
+          "actualName": "App"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Body.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaBody",
+          "methods": [],
+          "actualName": "LanistaBody"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Button.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaButton",
+          "methods": [],
+          "actualName": "LanistaButton"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Card.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaCard",
+          "methods": [],
+          "actualName": "LanistaCard"
+        }
+      ]
+    },
+    {
+      "key": "src/components/CardItem.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaCardItem",
+          "methods": [],
+          "actualName": "LanistaCardItem"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Form.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaForm",
+          "methods": [],
+          "actualName": "LanistaForm"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Iconcomponent.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Icon",
+          "methods": [],
+          "actualName": "Icon"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Input.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaInput",
+          "methods": [],
+          "actualName": "LanistaInput"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Item.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaItem",
+          "methods": [],
+          "actualName": "LanistaItem"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Text.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LanistaText",
+          "methods": [],
+          "actualName": "LanistaText"
+        }
+      ]
+    },
+    {
+      "key": "src/contexts/identity/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "IdentityProviderWithoutRouter",
+          "methods": [
+            {
+              "name": "login",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "credentials",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "logout",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            }
+          ],
+          "actualName": "IdentityProviderWithoutRouter"
+        }
+      ]
+    },
+    {
+      "key": "src/components/BodyFilter/BodyFilter.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/BodyPartsSelector/index.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/Calender/Calender.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Calender",
+          "methods": [
+            {
+              "name": "handleOpen",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "handleClose",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            }
+          ],
+          "actualName": "Calender"
+        }
+      ]
+    },
+    {
+      "key": "src/components/Chat/Chat.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/CustomerSearchField/CustomerSearchField.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/EmptyListMessage/EmptyListMessage.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/ExercisesFilter/ExercisesFilter.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/ExercisesHeader/ExercisesHeader.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/FloatingAction/AddIcon.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "AddIcon",
+          "methods": [],
+          "actualName": "AddIcon",
+          "props": {
+            "width": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": ""
+            },
+            "height": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "src/components/FloatingAction/FloatingAction.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "FloatingAction",
+          "methods": [
+            {
+              "name": "onKeyboardShow",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "e",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "onKeyboardHideHide",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "getIcon",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "handlePressItem",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "itemName",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "reset",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "animateButton",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "renderMainButton",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "renderActions",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "renderTappableBackground",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            }
+          ],
+          "actualName": "FloatingAction",
+          "props": {
+            "actions": {
+              "type": {
+                "name": "arrayOf",
+                "value": {
+                  "name": "shape",
+                  "value": {
+                    "color": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "icon": {
+                      "name": "any",
+                      "required": false
+                    },
+                    "name": {
+                      "name": "string",
+                      "required": true
+                    },
+                    "text": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "textBackground": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "textColor": {
+                      "name": "string",
+                      "required": false
+                    },
+                    "component": {
+                      "name": "func",
+                      "required": false
+                    }
+                  }
+                }
+              },
+              "required": false,
+              "description": ""
+            },
+            "color": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "'#1253bc'",
+                "computed": false
+              }
+            },
+            "distanceToEdge": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "30",
+                "computed": false
+              }
+            },
+            "visible": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "true",
+                "computed": false
+              }
+            },
+            "overlayColor": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "'rgba(68, 68, 68, 0.6)'",
+                "computed": false
+              }
+            },
+            "position": {
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "'right'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'left'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'center'",
+                    "computed": false
+                  }
+                ]
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "'right'",
+                "computed": false
+              }
+            },
+            "overrideWithAction": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "false",
+                "computed": false
+              }
+            },
+            "floatingIcon": {
+              "type": {
+                "name": "any"
+              },
+              "required": false,
+              "description": ""
+            },
+            "showBackground": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "true",
+                "computed": false
+              }
+            },
+            "openOnMount": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "false",
+                "computed": false
+              }
+            },
+            "actionsPaddingTopBottom": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "8",
+                "computed": false
+              }
+            },
+            "iconHeight": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "15",
+                "computed": false
+              }
+            },
+            "iconWidth": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "15",
+                "computed": false
+              }
+            },
+            "listenKeyboard": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "false",
+                "computed": false
+              }
+            },
+            "dismissKeyboardOnPress": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "false",
+                "computed": false
+              }
+            },
+            "onPressItem": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "onPressMain": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "src/components/FloatingAction/FloatingActionItem.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "FloatingActionItem",
+          "methods": [
+            {
+              "name": "handleOnPress",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "renderText",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "renderButton",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            }
+          ],
+          "actualName": "FloatingActionItem",
+          "props": {
+            "color": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "'#1253bc'",
+                "computed": false
+              }
+            },
+            "icon": {
+              "type": {
+                "name": "any"
+              },
+              "required": false,
+              "description": ""
+            },
+            "name": {
+              "type": {
+                "name": "string"
+              },
+              "required": true,
+              "description": ""
+            },
+            "textContainerStyle": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": ""
+            },
+            "text": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": ""
+            },
+            "textStyle": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": ""
+            },
+            "textProps": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": ""
+            },
+            "textBackground": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "'#ffffff'",
+                "computed": false
+              }
+            },
+            "textColor": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "'#444444'",
+                "computed": false
+              }
+            },
+            "textElevation": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "5",
+                "computed": false
+              }
+            },
+            "position": {
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "'left'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'right'",
+                    "computed": false
+                  },
+                  {
+                    "value": "'center'",
+                    "computed": false
+                  }
+                ]
+              },
+              "required": false,
+              "description": ""
+            },
+            "active": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": ""
+            },
+            "distanceToEdge": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "30",
+                "computed": false
+              }
+            },
+            "paddingTopBottom": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": ""
+            },
+            "onPress": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "render": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "margin": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "8",
+                "computed": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "src/components/Footer/Footer.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/Header/Header.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/InfiniteList/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "InfiniteScroll",
+          "methods": [
+            {
+              "name": "attachScrollListener",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "detachScrollListener",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "scrollListener",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "e",
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "isPassiveSupported",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "calculatePageSize",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "loadMore",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "direction",
+                  "type": null
+                }
+              ],
+              "returns": null
+            }
+          ],
+          "actualName": "InfiniteScroll"
+        }
+      ]
+    },
+    {
+      "key": "src/components/MenuButton/MenuButton.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/MenuButton/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Button",
+          "methods": [],
+          "actualName": "Button"
+        }
+      ]
+    },
+    {
+      "key": "src/components/ScannerButtons/ScannerButtons.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/Scene/Scene.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/Scene/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "SceneWithData",
+          "methods": [
+            {
+              "name": "goToSetup",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            }
+          ],
+          "actualName": "SceneWithData"
+        }
+      ]
+    },
+    {
+      "key": "src/components/TestHeader/TestHeader.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/WorkoutHeader/WorkoutHeader.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/WorkoutsHeader/WorkoutsHeader.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/example/index.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/feeds/Feeds.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Feeds",
+          "methods": [
+            {
+              "name": "handleDayClick",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "day",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            }
+          ],
+          "actualName": "Feeds"
+        }
+      ]
+    },
+    {
+      "key": "src/hooks/Translation/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "TranslatorProvider",
+          "methods": [],
+          "actualName": "TranslatorProvider"
+        }
+      ]
+    },
+    {
+      "key": "src/routes/animation/Stack.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Stack",
+          "methods": [
+            {
+              "name": "onLayout",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "event",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            }
+          ],
+          "actualName": "Stack",
+          "props": {
+            "children": {
+              "type": {
+                "name": "node"
+              },
+              "required": false,
+              "description": ""
+            },
+            "history": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": ""
+            },
+            "location": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": ""
+            },
+            "renderHeader": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "renderTitle": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "renderLeftSegment": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "renderRightSegment": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            },
+            "animationType": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "Platform.OS === 'ios' ? SLIDE_HORIZONTAL : FADE_VERTICAL",
+                "computed": false
+              }
+            },
+            "gestureEnabled": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "true",
+                "computed": false
+              }
+            },
+            "stackViewStyle": {
+              "type": {
+                "name": "custom",
+                "raw": "ViewPropTypes.style"
+              },
+              "required": false,
+              "description": ""
+            },
+            "replaceTransitionType": {
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "import { PUSH, POP } from './transitionTypes';",
+                    "computed": true
+                  },
+                  {
+                    "value": "import { PUSH, POP } from './transitionTypes';",
+                    "computed": true
+                  }
+                ]
+              },
+              "required": false,
+              "description": ""
+            },
+            "isAnimating": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "",
+              "defaultValue": {
+                "value": "() => null",
+                "computed": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "src/routes/animation/StackTransitioner.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "StackTransitioner",
+          "methods": [
+            {
+              "name": "isHorizontal",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "animationType",
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "cancelNavigation",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "duration",
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "finishNavigation",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "duration",
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "afterPan",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "getChildren",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "currentLocation",
+                  "type": null
+                },
+                {
+                  "name": "previousLocation",
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "getDimension",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "getRouteStyle",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "index",
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "isFixed",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "element",
+                  "type": null
+                }
+              ],
+              "returns": null
+            }
+          ],
+          "actualName": "StackTransitioner",
+          "props": {
+            "children": {
+              "type": {
+                "name": "node"
+              },
+              "required": false,
+              "description": ""
+            },
+            "history": {
+              "type": {
+                "name": "object"
+              },
+              "required": true,
+              "description": ""
+            },
+            "location": {
+              "type": {
+                "name": "object"
+              },
+              "required": true,
+              "description": ""
+            },
+            "width": {
+              "type": {
+                "name": "number"
+              },
+              "required": true,
+              "description": ""
+            },
+            "height": {
+              "type": {
+                "name": "number"
+              },
+              "required": true,
+              "description": ""
+            },
+            "animationType": {
+              "type": {
+                "name": "string"
+              },
+              "required": true,
+              "description": ""
+            },
+            "gestureEnabled": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": ""
+            },
+            "stackViewStyle": {
+              "type": {
+                "name": "custom",
+                "raw": "ViewPropTypes.style"
+              },
+              "required": false,
+              "description": ""
+            },
+            "replaceTransitionType": {
+              "type": {
+                "name": "enum",
+                "value": [
+                  {
+                    "value": "import { PUSH, POP, REPLACE } from './transitionTypes';",
+                    "computed": true
+                  },
+                  {
+                    "value": "import { PUSH, POP, REPLACE } from './transitionTypes';",
+                    "computed": true
+                  }
+                ]
+              },
+              "required": false,
+              "description": ""
+            },
+            "isAnimating": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": ""
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "src/screens/cclogin/Login.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/cclogin/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LoginPanel",
+          "methods": [],
+          "actualName": "LoginPanel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/dashboard/Dashboard.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Dashboard",
+          "methods": [],
+          "actualName": "Dashboard",
+          "props": {
+            "t": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "feeds": {
+              "type": {
+                "name": "array"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "type": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "currentScrollPosition": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "jumpToNow": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "jumpToDay": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "onRequestPage": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "loading": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "error": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "hasMore": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "hasMoreUp": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "initialLoading": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "setPageSize": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "congratulateMember": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "openMember": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "openPlan": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "showModal": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "modalPanel": {
+              "type": {
+                "name": "object"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "eventsQuery": {
+              "type": {
+                "name": "string"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "accesslevel": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "bu": {
+              "type": {
+                "name": "number"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "hasInterface": {
+              "type": {
+                "name": "bool"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            },
+            "setFilter": {
+              "type": {
+                "name": "func"
+              },
+              "required": false,
+              "description": "Function to translate content"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "src/screens/dashboard/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercise/Exercise.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercise/Set.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercise/Sets.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercise/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercises/Exercises.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercises/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/filter/Filter.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/filter/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/forgotpassword/Forgotpassword.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Forgotpassword",
+          "methods": [],
+          "actualName": "Forgotpassword"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/forgotpassword/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "ForgotpasswordWithData",
+          "methods": [
+            {
+              "name": "goBack",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "getCommandsRight",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "getCommandsLeft",
+              "docblock": null,
+              "modifiers": [],
+              "params": [],
+              "returns": null
+            },
+            {
+              "name": "t",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "text",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "validateEmail",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "callback",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "onChangeLanguage",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "language",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            },
+            {
+              "name": "handleEmailChange",
+              "docblock": null,
+              "modifiers": [],
+              "params": [
+                {
+                  "name": "event",
+                  "optional": false,
+                  "type": null
+                }
+              ],
+              "returns": null
+            }
+          ],
+          "actualName": "ForgotpasswordWithData"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/gymsearch/Gymsearch.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/gymsearch/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/login/Login.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/login/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "LoginPanel",
+          "methods": [],
+          "actualName": "LoginPanel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/measurements/Measurements.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/measurements/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/protocolls/Protocolls.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/protocolls/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/publicplan/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/Registration.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "RegistrationPanel",
+          "methods": [],
+          "actualName": "RegistrationPanel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/setup/Setup.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/setup/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/workout/Workout.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/workout/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/screens/workouts/Workouts.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/workouts/index.js",
+      "value": [
+        {
+          "description": "",
+          "displayName": "Panel",
+          "methods": [],
+          "actualName": "Panel"
+        }
+      ]
+    },
+    {
+      "key": "src/components/feeds/Feed/Feed.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/feeds/FeedsList/FeedsList.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/components/feeds/Filter/Filter.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/exercise/NumberInputField/index.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/TermsAndConditionsDE.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/TermsAndConditionsEN.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/TermsAndConditionsES.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/TermsAndConditionsFR.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/TermsAndConditionsPT.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/TermsAndConditionsRU.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    },
+    {
+      "key": "src/screens/registration/TermsAndConditions/index.js",
+      "value": [
+        {
+          "description": "",
+          "methods": []
+        }
+      ]
+    }
+  ]
+}
