@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Fab from '@material-ui/core/Fab';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
 export const Panel = styled.div`
   font-family: Roboto;
@@ -288,4 +289,29 @@ export const StyledButton = styled(Fab)`
   left: 50%;
   margin-left: -28px!important;
   background-color: rgb(220,0,78)!important;
+`;
+
+export const StyledCaliper = styled.div`
+  .header-section {
+    text-align: center;
+    margin-bottom: 1em;
+    font-weight: 900;
+  }
+  .record-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 0;
+  }
+  .caliper-total{
+    margin-top: 1em;
+    font-weight: 900;
+  }
+`;
+
+export const StyledSwipeableDrawer = styled(SwipeableDrawer)`
+  .MuiPaper-root {
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    padding: 2em;
+  }
 `;

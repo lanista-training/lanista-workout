@@ -65,6 +65,7 @@
     "cut_connection": "Desconectar",
     "cut_connection_text": "Despues de desconectarte, tu Gimnasio/Entrenador no tendrá acceso a tus datos.",
     "back": "REGRESAR",
+    "delete": "BORRAR",
     "language": "Idioma",
     "support": "SOPORTE",
     "connect_hint": "Al conectarte tu entrenador o tu gimnasio tendrá acceso a tus datos. Si estás de acuerdo continúa",
@@ -72,7 +73,10 @@
     "check_for_invitations": "Invitaciones",
     "invitation_message": "QUIERES ACCEDER A TUS DATOS",
     "invitation_connect": "DE ACUERDO",
-    "invitation_refuse": "RECHAZAR"
+    "invitation_refuse": "RECHAZAR",
+    "delete_account": "Borrar Cuenta",
+    "delete_account_title": "Borrar Cuenta?",
+    "delete_account_message": "Estas seguro que deseas borrar tu cuenta?"
   },
   "workout": {
     "delete_plan": "Borrar plano",
@@ -139,7 +143,23 @@
     "change_access_denied": "No puedes modificar datos de tu entrenador",
     "delete_access_denied": "No puedes borrar datos de tu entrenador",
     "day_of_measure": "Día de la medición",
-    "delete": "BORRAR"
+    "delete": "BORRAR",
+    "abs" : "abs",
+    "auxiliar": "auxiliar",
+    "chest": "chest",
+    "scapula": "scapula",
+    "sprailium": "sprailium",
+    "triceps": "triceps",
+    "quads": "quads",
+    "arm_right": "Arm_ right",
+    "arm_left": "Arm left",
+    "waist": "Waist",
+    "umbilical": "Waist",
+    "spina_ilica_ant": "Spina ilica ant",
+    "wide_hips": "Wide hips",
+    "quads_right": "Quads_ ight",
+    "quads_left": "Qads left",
+    "sum": "Sum"
   },
   "protocolls": {
     "protocolls": "Diario de ejercicios",

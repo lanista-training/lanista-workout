@@ -132,8 +132,6 @@ const Panel = ({
     console.log(beaconLink)
     if( beaconLink && beaconLink !== '' ) {
       const {beacon} = beaconLink
-      console.log("processing")
-      console.log(beacon.link)
       processScannerMessage(beacon.link)
     }
   }, [beaconLink]);

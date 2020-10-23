@@ -18,6 +18,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
 import IconButton from '@material-ui/core/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -56,6 +57,7 @@ const Setup = ({
   rejectRequest,
   checkForInvitations,
   version,
+  onDeleteAccount,
 }) => {
 
   const [firstNameInput, setFirstNameInput] = React.useState(firstName);
@@ -64,11 +66,14 @@ const Setup = ({
   const [birthdayInput, setBirthdayInput] = React.useState(birthday);
   const [genderInput, setGenderInput] = React.useState(gender);
   const [languageInput, setLanguageInput] = React.useState(language);
+
   const inputLabel = React.useRef(null);
   const inputLabel2 = React.useRef(null);
   const [labelWidth, setLabelWidth] = React.useState(0);
   const [dataChanged, setDataChanged] = React.useState(false);
+
   const {t} = useTranslate("settings");
+
   const goToSupoort = () => {
     if( typeof window.cordova !== 'undefined' ) {
       let win = window.cordova.InAppBrowser.open('https://lanista-training.com/customer-support.html', '_blank', 'location=yes');
@@ -84,6 +89,9 @@ const Setup = ({
   const handleConnectedDialogClose = () => {
     setConnectedDialogOpen(false);
   };
+
+  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = React.useState(false);
+  const toggleDeleteAccountDialogOpen = () => setDeleteAccountDialogOpen(!deleteAccountDialogOpen);
 
   React.useEffect(() => {
     setFirstNameInput(firstName)
@@ -322,6 +330,17 @@ const Setup = ({
             {t('support')}
           </Button>
 
+          <Button
+            className="logout-button"
+            variant="contained"
+            color="secondary"
+            endIcon={<HighlightOffIcon/>}
+            onClick={toggleDeleteAccountDialogOpen}
+            style={{marginTop: "4em"}}
+          >
+            {t('delete_account')}
+          </Button>
+
           <div className="version-section">
             Version {version}
           </div>
@@ -389,6 +408,31 @@ const Setup = ({
           </DialogActions>
         </Dialog>
       }
+
+      <Dialog
+        open={deleteAccountDialogOpen}
+        onClose={toggleDeleteAccountDialogOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{t("delete_account_title")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {t("delete_account_message")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleDeleteAccountDialogOpen} color="primary" autoFocus>
+            {t("back")}
+          </Button>
+          <Button onClick={() => {
+            console.log("DELETE ACCOUNT");
+            onDeleteAccount();
+          }} color="primary" autoFocus>
+            {t("delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <StyledButton color="primary" onClick={onGoBack}>
         <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>

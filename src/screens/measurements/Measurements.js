@@ -2,7 +2,7 @@ import * as React from "react";
 import PropTypes from 'prop-types';
 import moment from "moment";
 import { useTranslate } from '../../hooks/Translation';
-import {Panel, StyledButton} from './styles';
+import {Panel, StyledButton, StyledCaliper, StyledSwipeableDrawer} from './styles';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import SquareFootIcon from '@material-ui/icons/SquareFoot';
 import StraightenIcon from '@material-ui/icons/Straighten';
@@ -25,7 +25,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import Slider from "react-slick";
-import {LineChart, Line, YAxis, ResponsiveContainer} from 'recharts'
+import {LineChart, Line, YAxis, ResponsiveContainer} from 'recharts';
 
 const settings = {
   dots: false,
@@ -39,6 +39,28 @@ const settings = {
 
 const CustomizedLabel = ({x, y, stroke, value}) => {
   return <text x={x} y={y-10} dy={-4} fill="white" fontSize={15} textAnchor="middle">{value}</text>;
+}
+
+const renderCaliper = (record, t) => {
+  console.log("renderCaliper", record);
+  const { abs, auxiliar, chest, quads, scapula, sprailium, trizeps, body_fat, record_date} = record ? record : {};
+  return (
+    <StyledCaliper>
+      <div className="header-section">{t("day_of_measure")} {moment(new Date(record_date)).format('DD MMMM YYYY')}</div>
+      <div className="records-section">
+        <div className="record-entry">{t("abs")}<div></div>{abs} mm</div>
+        <div className="record-entry">{t("auxiliar")}<div></div>{auxiliar} mm</div>
+        <div className="record-entry">{t("chest")}<div></div>{chest} mm</div>
+        <div className="record-entry">{t("quads")}<div></div>{quads} mm</div>
+        <div className="record-entry">{t("scapula")}<div></div>{scapula} mm</div>
+        <div className="record-entry">{t("sprailium")}<div></div>{sprailium} mm</div>
+        <div className="record-entry">{t("triceps")}<div></div>{trizeps} mm</div>
+      </div>
+      <div className="caliper-total">
+        <div className="record-entry">{t("caliper")}<div></div>{body_fat}%</div>
+      </div>
+    </StyledCaliper>
+  )
 }
 
 const renderWeightGraph = (records, t) => {
@@ -116,6 +138,30 @@ const renderVolumensGraph = (records, t) => {
   )
 }
 
+const renderVolume = (record, t) => {
+  console.log("renderCaliper", record);
+  const { arm_left, arm_right, chest, quads_left, quads_right, spina_ilica_ant, umbilical, waist, wide_hips, sum, record_date} = record ? record : {};
+  return (
+    <StyledCaliper>
+      <div className="header-section">{t("day_of_measure")} {moment(new Date(record_date)).format('DD MMMM YYYY')}</div>
+      <div className="records-section">
+        <div className="record-entry">{t("arm_left")}<div></div>{arm_left} mm</div>
+        <div className="record-entry">{t("arm_right")}<div></div>{arm_right} mm</div>
+        <div className="record-entry">{t("chest")}<div></div>{chest} mm</div>
+        <div className="record-entry">{t("quads_left")}<div></div>{quads_left} mm</div>
+        <div className="record-entry">{t("quads_right")}<div></div>{quads_right} mm</div>
+        <div className="record-entry">{t("spina_ilica_ant")}<div></div>{spina_ilica_ant} mm</div>
+        <div className="record-entry">{t("umbilical")}<div></div>{umbilical} mm</div>
+        <div className="record-entry">{t("waist")}<div></div>{waist} mm</div>
+        <div className="record-entry">{t("wide_hips")}<div></div>{wide_hips} mm</div>
+      </div>
+      <div className="caliper-total">
+        <div className="record-entry">{t("sum")}<div></div>{sum}%</div>
+      </div>
+    </StyledCaliper>
+  )
+}
+
 const renderFutrexGraph = (records, t) => {
   const available = records && records.length > 0
   return(
@@ -181,12 +227,12 @@ const renderWeightList = (records, showForm, onSelection, selectedRecordId, dele
   )
 }
 
-const renderCaliperList = (records, t) => {
+const renderCaliperList = (records, t, onCaliperClick) => {
   const sortedRecords = records.slice(0);
   return(
     <>
       {sortedRecords.reverse().map(record => (
-        <div className="list-record">
+        <div className="list-record" onClick={() => onCaliperClick(record)}>
           <div className="record-date">{moment(record.record_date).format("DD/MM/YYYY")}</div>
           <div className="record-value">{record.body_fat} %</div>
         </div>
@@ -199,12 +245,12 @@ const renderCaliperList = (records, t) => {
   )
 }
 
-const renderVolumensList = (records, t) => {
+const renderVolumensList = (records, t, onVolumeClick) => {
   const sortedRecords = records.slice(0);
   return(
     <>
       {sortedRecords.reverse().map(record => (
-        <div className="list-record">
+        <div className="list-record" onClick={() => onVolumeClick(record)}>
           <div className="record-date">{moment(record.record_date).format("DD/MM/YYYY")}</div>
           <div className="record-value">{record.sum} mm</div>
         </div>
@@ -251,6 +297,7 @@ const Measurements = ({
   deleteWeightError,
   hasNorch,
 }) => {
+
   const {t} = useTranslate("measures");
   const[currentSlide, setCurrentSlide] = React.useState(0)
   const[showForm, setShowForm] = React.useState(0)
@@ -258,6 +305,16 @@ const Measurements = ({
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [weight, setWeight] = React.useState(0.0);
   const [selectedWeight, setSelectedWeight] = React.useState(0);
+
+  const [drawlerOpen, setDrawlerOpen] = React.useState(false);
+  const toggleDrawer = () => {console.log("mark"); setDrawlerOpen(!drawlerOpen);};
+  React.useEffect(() => {
+    if( !drawlerOpen ) {
+      setSelectedVolume(null);
+      setSelectedCaliper(null);
+    }
+  }, [drawlerOpen])
+
   React.useEffect(() => {
     console.log("ERROR")
     if( saveWeightError && saveWeightError.message.indexOf("ACCESSDENIED") > -1 ) {
@@ -274,6 +331,21 @@ const Measurements = ({
   const onCloseMessage = () => {
     setMessage(null)
   }
+
+
+  const [selectedCaliper, setSelectedCaliper] = React.useState(null);
+  const onCaliperClick = (caliper) => {
+    setSelectedCaliper(caliper);
+    toggleDrawer();
+  }
+
+  const [selectedVolume, setSelectedVolume] = React.useState(null);
+  const onVolumeClick = (volume) => {
+    setSelectedVolume(volume);
+    toggleDrawer();
+  }
+
+  console.log(selectedVolume, selectedCaliper)
 
   return (
     <Panel>
@@ -353,8 +425,8 @@ const Measurements = ({
         { currentSlide == 0 && renderWeightList(weights, () => setShowForm(true), (record) => {
           setSelectedWeight(record.id == selectedWeight ? 0 : record.id)
         }, selectedWeight, deleteWeight, t)}
-        { currentSlide == 1 && renderCaliperList(calipers, t) }
-        { currentSlide == 2 && renderVolumensList(valumens, t) }
+        { currentSlide == 1 && renderCaliperList(calipers, t, onCaliperClick) }
+        { currentSlide == 2 && renderVolumensList(valumens, t, onVolumeClick) }
         { currentSlide == 3 && renderFutrexList(futrex, t) }
         </div>
       </div>
@@ -440,6 +512,17 @@ const Measurements = ({
           ]}
         />
       </Snackbar>
+
+      <StyledSwipeableDrawer
+        open={drawlerOpen}
+        anchor="bottom"
+        onClose={toggleDrawer}
+        onOpen={toggleDrawer}
+      >
+        {drawlerOpen && selectedCaliper && renderCaliper(selectedCaliper, t)}
+        {drawlerOpen && selectedVolume && renderVolume(selectedVolume, t)}
+      </StyledSwipeableDrawer>
+
     </Panel>
   )
 };

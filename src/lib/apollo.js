@@ -51,10 +51,10 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       //var graphqlServer = 'https://' + document.location.host + '/graphql';
 
       // App Link
-      var graphqlServer = 'https://mobile.lanista-training.com/graphql';
+      //var graphqlServer = 'https://mobile.lanista-training.com/graphql';
 
       // Local Test Link
-      //var graphqlServer = 'http://localhost:4000/graphql';
+      var graphqlServer = 'http://localhost:4000/graphql';
 
 
       const httpLink = errorLink.concat(new HttpLink({

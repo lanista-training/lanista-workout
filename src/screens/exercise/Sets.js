@@ -217,7 +217,7 @@ const Form = ({defaulValues, toggleShowForm, createProtocoll}) => {
   )
 }
 
-export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtocoll, onCreateAllProtocolls}) => {
+export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtocoll, onCreateAllProtocolls, openChronometer}) => {
 
   const {t} = useTranslate("exercise");
 
@@ -235,15 +235,11 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
   }
 
   React.useEffect(() => {
-
     const selectedDay = moment(day).format("YYYY-MM-DD");
     const dayWorkouts = workouts[selectedDay] ? workouts[selectedDay] : [];
     let lastDayWorkouts = [];
 
     const collection = [];
-
-    //console.log("workouts")
-    //console.log(workouts)
 
     // use the last workout as a reference
     if( workouts && _.size(workouts) > 0 ) {
@@ -253,14 +249,7 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
       });
     }
 
-    //console.log("lastDayWorkouts")
-    //console.log(lastDayWorkouts)
-
-    //console.log("sets")
-    //console.log(sets)
-
-    //console.log("dayWorkouts")
-    //console.log(dayWorkouts)
+    console.log("workouts", workouts, lastDayWorkouts)
 
     if( lastDayWorkouts && lastDayWorkouts.length > 0 ) {
       lastDayWorkouts.map((set, index) => {
@@ -275,11 +264,11 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
           });
         } else {
           const {weight, repetitions, training_unit} = set;
-          collection.push({
+          index < sets.length && collection.push({
             index: index,
             weight: weight,
-            training: repetitions,
-            unit: training_unit,
+            training: sets[index] ? sets[index].training : repetitions,
+            unit: sets[index] ? sets[index].unit : training_unit,
           });
         }
       });
@@ -306,7 +295,6 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
         }
       });
     }
-
     dayWorkouts.map((set, index) => {
       if(index > collection.length - 1) {
         const {id, weight, repetitions, training_unit} = dayWorkouts[index];
@@ -319,45 +307,6 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
         });
       }
     });
-
-    /*
-    sets.map((set, index) => {
-      if(dayWorkouts[index]) {
-        const {id, weight, repetitions, training_unit} = dayWorkouts[index];
-        collection.push({
-          index: index,
-          weight: id > 0 ? weight : lastWorkoutValues ? lastWorkoutValues.weight : weight,
-          //weight: set.weight,
-          training: repetitions,
-          unit: training_unit,
-          id: id,
-        });
-      } else {
-        const {weight, training, unit} = set;
-        collection.push({
-          index: index,
-          weight: lastWorkoutValues ? lastWorkoutValues.weight : weight,
-          training: training,
-          unit: unit,
-          id: null,
-        });
-      }
-    });
-    dayWorkouts.map((set, index) => {
-      if(index > collection.length - 1) {
-        const {id, weight, repetitions, training_unit} = dayWorkouts[index];
-        collection.push({
-          index: index,
-          weight: lastWorkoutValues ? lastWorkoutValues.weight : weight,
-          training: repetitions,
-          unit: training_unit,
-          id: id,
-        });
-      }
-    })
-    */
-    console.log("collection");
-    console.log(collection);
 
     setDaySets(collection);
 
@@ -410,6 +359,7 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
           createProtocoll={createProtocoll}
           deleteProtocoll={onDeleteProtocoll}
           onChangeSet={onChangeSet}
+          openChronometer={openChronometer}
         />)
       }
       { showForm &&

@@ -280,3 +280,11 @@ export const DECLINEREQUEST = gql`
      }
   }
 `;
+
+export const DELETEACCOUNT = gql`
+  mutation DeleteAccount {
+     deleteAccount {
+       id
+     }
+  }
+`;

@@ -41,6 +41,7 @@ import { useTheme } from '@material-ui/core/styles';
 import Set from './Set';
 import Sets from './Sets';
 import Pullable from 'react-pullable';
+import Chronometer from '../../components/Chronometer';
 
 const sliderSettings = {
   arrows: true,
@@ -126,7 +127,12 @@ const Exercise = ({
   hasNorch,
   refetch,
 }) => {
+
+  const [showChronometer, setShowChronometer] = React.useState(false);
+  const toggleShowChronometer = () => setShowChronometer(!showChronometer);
+
   const {t, locale} = useTranslate("exercise");
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -200,6 +206,7 @@ const Exercise = ({
       setValue(1);
     }
   }, [workouts]);
+
   const [value, setValue] = React.useState(days.length > 0 ? 1 : 0);
   const [currentImage, setCurrentImage] = React.useState(0);
   const [selectedExecution, setSelectedExecution] = React.useState(0);
@@ -209,6 +216,7 @@ const Exercise = ({
 
   return (
     <Panel>
+      {showChronometer && <Chronometer onClose={() => setShowChronometer(false)}/>}
       <AppBar className="exercise-header" position="static" style={hasNorch ? {paddingTop: "30px"} : {}}>
         <div className="exercise-name">{!video && exercise && exercise.name}</div>
         <IconButton aria-label="show 4 new mails" color="inherit" onClick={playVideo}>
@@ -288,6 +296,7 @@ const Exercise = ({
                 onCreateProtocoll={createProtocoll}
                 onDeleteProtocoll={deleteProtocoll}
                 onCreateAllProtocolls={createAllProtocolls}
+                openChronometer={toggleShowChronometer}
               />
 
 

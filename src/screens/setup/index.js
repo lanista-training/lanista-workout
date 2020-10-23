@@ -7,9 +7,9 @@ import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment";
 import { ME } from "../../queries";
-import { UPDATEPROFILE, LINK, UNLINK, ACCEPTREQUEST, DECLINEREQUEST } from "../../mutations"
+import { UPDATEPROFILE, LINK, UNLINK, ACCEPTREQUEST, DECLINEREQUEST, DELETEACCOUNT } from "../../mutations"
 
-const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
+const Panel = ({client, goBack, goToGymsearch, hasNorch, doLogout, goToLogin}) => {
   let {changeLanguage, languages, locale} = useTranslate("setup");
   const[filter, setFilter] = React.useState(true)
   const { data, error, loading, refetch } = useQuery(ME);
@@ -97,24 +97,15 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
     }
   );
 
-  const [declineRequest, { loading: declineRequestLoading, error: declineRequestError }] = useMutation(
-    DECLINEREQUEST,
+  const [deleteAccount, { loading: deleteAccountLoading, error: deleteAccountError }] = useMutation(
+    DELETEACCOUNT,
     {
-      update(cache,  { data: {declineRequest} }) {
-        let {me} = cache.readQuery({
-          query: ME,
-        });
-        const {connectionRequests} = me
-        const requestIndex = connectionRequests.findIndex(i => i.id == declineRequest.id)
-        connectionRequests.splice(requestIndex, 1)
-        cache.writeQuery({
-          query: ME,
-          data: { me: {
-            ...me,
-            connectionRequests: connectionRequests
-          }},
-        });
-        refetch();
+      update(cache,  { data: {deleteAccount} }) {
+        doLogout();
+        console.log("RESETING THE STORE...")
+        client.resetStore();
+        window.localStorage.clear();
+        goToLogin();
       }
     }
   );
@@ -179,6 +170,7 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch}) => {
       rejectRequest={onRejectRequest}
       checkForInvitations={checkForInvitations}
       version={3537}
+      onDeleteAccount={deleteAccount}
     />
   )
 }

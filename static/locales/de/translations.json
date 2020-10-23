@@ -65,6 +65,7 @@
     "cut_connection": "Verbindung trennen",
     "cut_connection_text": "Nach der Trennung wird dein Trainer bzw. Studio nicht mehr auf deine Daten zugreifen können.",
     "back": "zurück",
+    "delete": "LÖSCHEN",
     "language": "Sprache",
     "support": "Support",
     "connect_hint": "Nach der Verbindung wird dein Trainer bzw. Studio auf deine Daten zugreifen können. Wenn du damit einverstanden bist, klicke auf 'verbinden'",
@@ -72,7 +73,10 @@
     "check_for_invitations": "Studio / Trainer Einladungen",
     "invitation_message": "Möchte sich mit deinem Account verbinden",
     "invitation_connect": "Zustimmen",
-    "invitation_refuse": "Ablehnen"
+    "invitation_refuse": "Ablehnen",
+    "delete_account": "Account löschen",
+    "delete_account_title": "Account wirklich löschen?",
+    "delete_account_message": "Mit diesem Vorgang werden alle gespeicherten Daten unwiderruflich gelöscht."
   },
   "workout": {
     "delete_plan": "Plan löschen",
@@ -139,7 +143,23 @@
     "change_access_denied": "Du kannst Einträge von deinem Trainer nicht ändern",
     "delete_access_denied": "Du kannst Einträge von deinem Trainer nicht löschen",
     "day_of_measure": "Tag der Messung",
-    "delete": "löschen"
+    "delete": "löschen",
+    "abs" : "Bauch",
+    "auxiliar": "Achsel",
+    "chest": "Brust",
+    "scapula": "Schulterblatt",
+    "sprailium": "Beckenkamm",
+    "triceps": "Trizeps",
+    "quads": "Oberschenkel",
+    "arm_right": "rechter Arm",
+    "arm_left": "linker Arm",
+    "waist": "Taille",
+    "umbilical": "Bauchnabel",
+    "spina_ilica_ant": "Beckenkamm",
+    "wide_hips": "Hüfte",
+    "quads_right": "rechter Oberschenkel",
+    "quads_left": "linker Oberschenkel",
+    "sum": "Summe"
   },
   "protocolls": {
     "protocolls": "Trainingstagebuch",

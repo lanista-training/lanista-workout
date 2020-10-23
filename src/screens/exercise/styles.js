@@ -361,6 +361,10 @@ export const Sets = styled.div`
         width: 40%;
         font-size: 1.2em;
         font-weight: 700;
+        display: flex;
+        button {
+          max-height: 40px;
+        }
         span {
           font-weight: 100;
           font-size: 0.8em;

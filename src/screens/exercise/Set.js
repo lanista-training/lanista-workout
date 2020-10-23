@@ -8,6 +8,9 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import Select from '@material-ui/core/Select';
 import NumberInputField from './NumberInputField';
 
+import IconButton from '@material-ui/core/IconButton';
+import AccessAlarmsIcon from '@material-ui/icons/AccessAlarms';
+
 const weightOtions = (currentValue = 0) => {
   const minValue = (currentValue - 50) < 0 ? 0 : (currentValue - 50);
   const maxValue = minValue + 100;
@@ -33,7 +36,7 @@ const trainingOtions = (currentValue = 0) => {
 
 const ITEM_HEIGHT = 48;
 
-export default ({set, createProtocoll, deleteProtocoll, onChangeSet}) => {
+export default ({set, createProtocoll, deleteProtocoll, onChangeSet, openChronometer}) => {
 
   const {t, locale} = useTranslate("exercise");
 
@@ -66,12 +69,17 @@ export default ({set, createProtocoll, deleteProtocoll, onChangeSet}) => {
     <div className={id > 0 ? "set-wrapper set-done" : "set-wrapper"}>
       <div className="set-frame">
         <div className="set-settings" >
-          <div className="set-training" onClick={() => !trainingEditModus && toggleTrainingEditModus()}>
+          <div className="set-training">
             {!trainingEditModus &&
-              <>
+              <div  onClick={() => !trainingEditModus && toggleTrainingEditModus()}>
                 {training} <span>{unit == 0 ? t("rep") : unit == 1 ? t("sec") : t("min")}</span>
-              </>
+              </div>
             }
+            {unit > 0 && (
+              <IconButton onClick={openChronometer}>
+                <AccessAlarmsIcon fontSize="inherit" />
+              </IconButton>
+            )}
             {trainingEditModus &&
               <NumberInputField
                 defaultValue={training}

@@ -7,7 +7,8 @@ import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
 import { EXERCISE, PROTOCOLLS, ME } from "../../queries";
-import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL } from "../../mutations"
+import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL } from "../../mutations";
+import Chronometer from '../../components/Chronometer';
 
 const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
 
