@@ -429,7 +429,7 @@ Registration.propTypes = {
   /**
    * Function to translate content
   */
-  selectedGym: PropTypes.objec,
+  selectedGym: PropTypes.func,
 
   /**
    * Function to translate content
@@ -464,7 +464,7 @@ Registration.propTypes = {
   /**
    * Function to translate content
   */
-  errorMessage: PropTypes.function,
+  errorMessage: PropTypes.object,
 
   /**
    * Function to translate content

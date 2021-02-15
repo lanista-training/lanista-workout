@@ -265,5 +265,8 @@
     "min_3_characters": "Минимум три буквы задать",
     "search_results": "Число найденных Слов",
     "no_resuts": "Упражнения не найденны"
+  },
+  "favorites": {
+    "exercises": "Favorites"
   }
 }

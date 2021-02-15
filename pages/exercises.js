@@ -1,6 +1,5 @@
 import React from "react";
 import Router from 'next/router';
-import { withAuthSync } from '../lib/auth';
 import ExercisesScreen from "../src/screens/exercises";
 
 function Exercises(props) {
@@ -41,4 +40,4 @@ Exercises.getInitialProps = context => {
   })
 };
 
-export default withAuthSync(Exercises);
+export default Exercises;

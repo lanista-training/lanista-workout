@@ -28,6 +28,7 @@ import ReactPlayer from 'react-player';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import SendIcon from '@material-ui/icons/Send';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Icon from '@material-ui/core/Icon';
 import Slider from "react-slick";
@@ -42,6 +43,17 @@ import Set from './Set';
 import Sets from './Sets';
 import Pullable from 'react-pullable';
 import Chronometer from '../../components/Chronometer';
+
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+
+import Chat from '../../components/Chat';
+import InfoIcon from '@material-ui/icons/Info';
+import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
+import TimelineIcon from '@material-ui/icons/Timeline';
+import ChatIcon from '@material-ui/icons/Chat';
+import Badge from '@material-ui/core/Badge';
+
 
 const sliderSettings = {
   arrows: true,
@@ -126,6 +138,12 @@ const Exercise = ({
   loading,
   hasNorch,
   refetch,
+  showFavoriteButton,
+  onToggleFavorites,
+  chatSupport,
+
+  onSendMessage,
+  onMarkChatMessages,
 }) => {
 
   const [showChronometer, setShowChronometer] = React.useState(false);
@@ -210,9 +228,10 @@ const Exercise = ({
   const [value, setValue] = React.useState(days.length > 0 ? 1 : 0);
   const [currentImage, setCurrentImage] = React.useState(0);
   const [selectedExecution, setSelectedExecution] = React.useState(0);
-  const {settings} = exercise ? exercise : {};
+  const {settings, favorite, member, chats} = exercise ? exercise : {};
   const {sets} = settings ? settings : [];
   const [savingAll, setSavingAll] = React.useState(false);
+  const unreadMessages = chats ? chats.filter(chat => chat.type == 0 && chat.status == 0).length : 0;
 
   return (
     <Panel>
@@ -242,6 +261,15 @@ const Exercise = ({
             <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.end_image) + ")"}}/>
           </div>
         </Slider>
+        { showFavoriteButton &&
+          <div className="favorite-icon">
+            <IconButton aria-label="favorite" component="div" onClick={onToggleFavorites}>
+              {
+                favorite ? <FavoriteIcon fontSize="large"/> : <FavoriteBorderIcon fontSize="large"/>
+              }
+            </IconButton>
+          </div>
+        }
       </div>
       <div className="content">
         <AppBar position="static" color="default">
@@ -253,12 +281,13 @@ const Exercise = ({
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            <Tab label={t("info")} {...a11yProps(0)} />
-            <Tab label={t("protocolls")} {...a11yProps(1)} />
-            <Tab label={t("statistics")} {...a11yProps(2)} />
+            <Tab icon={<InfoIcon />} {...a11yProps(0)} />
+            <Tab icon={<QueryBuilderIcon />} {...a11yProps(1)} />
+            <Tab icon={<TimelineIcon />} {...a11yProps(2)} />
+            { member && chatSupport && <Tab icon={<Badge badgeContent={unreadMessages} color="secondary"><ChatIcon /></Badge>} {...a11yProps(3)} onClick={onMarkChatMessages}/>}
           </Tabs>
         </AppBar>
-        <div>
+        <div className="tab-panels">
           <TabPanel key="tab-1" className="tab-panel" value={value} index={0} dir={theme.direction}>
           {
             exercise && exercise.settings && exercise.settings.indications && exercise.settings.indications.length > 0 && (
@@ -368,6 +397,23 @@ const Exercise = ({
               {renderOneRepetitionGraph(days, t)}
             </div>
           </TabPanel>
+          {
+            member &&
+            <TabPanel key="tab-4" className="tab-panel chat-tab-panel" value={value} index={3} dir={theme.direction}>
+              <div className="chat-panel">
+                <Chat
+                  closePanel={false}
+                  visible={true}
+                  member={member}
+                  data={chats ? chats : []}
+                  hideHeader={true}
+                  hideExercises={true}
+                  hideInputField={false}
+                  onSendMessage={onSendMessage}
+                />
+              </div>
+            </TabPanel>
+          }
         </div>
       </div>
       <StyledButton color="primary" onClick={onGoBack}>

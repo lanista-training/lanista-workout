@@ -53,7 +53,8 @@ const RegistrationPanel = ({studio, goBack, hasNorch}) => {
     register({
       variables: {
         email: email,
-        recaptchaToken: isBrowser ? recaptchaToken : "6LdxOscUAAAAABV4CpcKtVooD61OFXFvcOajsaDM11566119",
+        //recaptchaToken: isBrowser ? recaptchaToken : "6LdxOscUAAAAABV4CpcKtVooD61OFXFvcOajsaDM11566119",
+        recaptchaToken: isBrowser ? "6LdxOscUAAAAABV4CpcKtVooD61OFXFvcOajsaDM11566119" : "6LdxOscUAAAAABV4CpcKtVooD61OFXFvcOajsaDM11566119",
         gym: selectedGym ? selectedGym.id : null,
         language: locale
       }

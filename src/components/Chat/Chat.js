@@ -1,7 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
-import { Transition, Input } from 'semantic-ui-react'
-import moment from 'moment'
+import TextField from '@material-ui/core/TextField';
+import moment from 'moment';
+import SendIcon from '@material-ui/icons/Send';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Grow from '@material-ui/core/Grow';
 
 const Chat = styled.div`
   height: 100%;
@@ -68,6 +72,9 @@ const Chat = styled.div`
       outline: none;
       padding: 14px 16px 12px;
     }
+  }
+  .send-button-icon {
+    color: rgb(220,0,78);
   }
 `;
 const Message = styled.div`
@@ -180,16 +187,10 @@ const Message = styled.div`
   }
 `;
 
-export default ({closePanel, visible, member, data, hideHeader, hideExercises, hideInputField, message, onMessageChange}) => {
-
-  const el = useRef(null);
-  useEffect(() => {
-    el.current && el.current && el.current.scrollIntoView({ block: 'end' });
-  });
-
-  const messages = data.map(message => (
-    <Message onClick={() => console.log(message)}>
-      <div className={message.type === 0 ? 'trainer' : 'member'}>
+const SingleMessage = ({message, hideExercises}) => {
+  return (
+    <Message key={"message-" + message.id}>
+      <div className={message.type !== 0 ? 'trainer' : 'member'}>
         <div className='image-container'>
           <div className="image" style={{backgroundImage: 'url("' + message.photoUrl + '")'}}/>
         </div>
@@ -208,29 +209,67 @@ export default ({closePanel, visible, member, data, hideHeader, hideExercises, h
         </div>
       </div>
     </Message>
-  ))
+  )
+}
+
+
+export default ({closePanel, visible, member, data, hideHeader, hideExercises, hideInputField, onSendMessage}) => {
+
+  const [message, setMessage] = useState('');
+  const el = useRef(null);
+
+  useEffect(() => {
+    el.current && el.current && el.current.scrollIntoView({ block: 'end' });
+  });
+
   return (
-    <Transition unmountOnHide visible={visible} animation='fly left' >
-      <Chat>
-        {!hideHeader && (
-          <div className='header'>
-            <div onClick={closePanel} className='back-button'/>
-            <div className='title'>{member.first_name} {member.last_name}</div>
-          </div>
-        )}
-        <div className='panel'>
-          <div ref={el}>
-            {messages}
-          </div>
+    <Chat>
+      {!hideHeader && (
+        <div className='header'>
+          <div onClick={closePanel} className='back-button'/>
+          <div className='title'>{member.first_name} {member.last_name}</div>
         </div>
-        {!hideInputField && (
-          <Input
-            placeholder='Nachricht'
-            value={message}
-            onChange={onMessageChange}
-          />
-        )}
-      </Chat>
-    </Transition>
+      )}
+      <div className='panel'>
+        <div ref={el}>
+          {
+            data.map((message, index) => index == data.length -1 ? (
+              <Grow in={true}>
+                <SingleMessage
+                  message={message}
+                  hideExercises={hideExercises}
+                />
+              </Grow>)
+              :
+              (<Grow in={true}>
+              <SingleMessage
+                message={message}
+                hideExercises={hideExercises}
+              /></Grow>)
+            )}
+        </div>
+      </div>
+      {!hideInputField && (
+        <TextField
+          id="outlined-basic"
+          placeholder='Nachricht'
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          variant="outlined"
+          InputProps={{
+            endAdornment: <InputAdornment position="end">
+            <IconButton
+              aria-label="send"
+              onClick={() => onSendMessage(message)}
+              edge="end"
+              className="send-button-icon"
+            >
+              <SendIcon />
+            </IconButton>
+          </InputAdornment>,
+          }}
+        />
+      )}
+    </Chat>
   )
 };

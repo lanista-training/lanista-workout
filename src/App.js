@@ -15,6 +15,7 @@ import RegistrationPanel from './screens/registration';
 import WorkoutPanel from './screens/workout';
 import ExercisePanel from './screens/exercise';
 import ExercisesPanel from './screens/exercises';
+import FavoritesPanel from './screens/favorites';
 import GymsearchPanel from './screens/gymsearch';
 import MeasurementsPanel from './screens/measurements';
 import ProtocollsPanel from './screens/protocolls';
@@ -149,6 +150,7 @@ const Dashboard = () => {
       history.push('/exercises/' + params );
     }}
     onGoToFilter={() => history.push('/filter')}
+    onShowFavorites={() => history.push('/favorites')}
   />
 }
 
@@ -216,20 +218,6 @@ const Exercise = () => {
 const Exercises = () => {
   let history = useHistory();
   let { muscle, type, addition, exercises } = useParams();
-    console.log("Exercises")
-
-    console.log(muscle)
-    console.log(type)
-    console.log(addition)
-    console.log(exercises)
-
-    console.log((muscle + '').split(',').filter(i => i > 0))
-    console.log((type + '').split(',').filter(i => i >0))
-    console.log((addition+ '').split(',').filter(i => i >0))
-
-    console.log(getMusclesNames((muscle + '').split(',').filter(i => i > 0)))
-    console.log(getTypesNames((type + '').split(',').filter(i => i > 0)))
-    console.log(getToolsNames((addition+ '').split(',').filter(i => i > 0)))
 
   return <ExercisesPanel
     hasNorch={hasNorch}
@@ -239,6 +227,20 @@ const Exercises = () => {
     muscles={getMusclesNames((muscle + '').split(',').filter(i => i > 0))}
     additions={getToolsNames((addition + '').split(',').filter(i => i > 0))}
 
+    showExercise={(exerciseId) => {
+      history.push('/exercise/' + exerciseId);
+    }}
+    goBack={() => {
+      history.goBack()
+    }}
+  />
+}
+
+const Favorites = () => {
+  let history = useHistory();
+
+  return <FavoritesPanel
+    hasNorch={hasNorch}
     showExercise={(exerciseId) => {
       history.push('/exercise/' + exerciseId);
     }}
@@ -313,6 +315,9 @@ function App() {
         </Route>
         <Route path="/exercises/:muscle/:type/:addition/:exercises">
           <Exercises />
+        </Route>
+        <Route path="/favorites">
+          <Favorites />
         </Route>
         <Route path="/publicplan/:workoutId">
           <Publicplan />

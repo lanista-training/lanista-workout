@@ -54,6 +54,12 @@ function Index(props) {
       pathname: '/filter',
     });
   }
+
+  const onShowFavorites = () => {
+    Router.push({
+      pathname: '/favorites',
+    });
+  }
   return (
     <DashboardScreen
       doLogout={logout}
@@ -66,6 +72,7 @@ function Index(props) {
       onGoToProtocolls={onGoToProtocolls}
       onGoToMeasurements={onGoToMeasurements}
       onGoToFilter={onGoToFilter}
+      onShowFavorites={onShowFavorites}
     />
   );
 }

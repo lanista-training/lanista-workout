@@ -264,5 +264,8 @@
     "min_3_characters": "Saisissez au moins 3 lettres",
     "search_results": "Nombre de résultats",
     "no_resuts": "Aucun exercice n'a été trouvé"
+  },
+  "favorites": {
+    "exercises": "Favorites"
   }
 }

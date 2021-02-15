@@ -31,7 +31,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
             authorization: token ? `Bearer ${token}` : ''
           }
         }
-      })
+      });
       const errorLink = authLink.concat(onError(({ graphQLErrors, networkError }) => {
         console.log("NEW ERROR");
         if (graphQLErrors)
@@ -52,9 +52,11 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
       // App Link
       //var graphqlServer = 'https://mobile.lanista-training.com/graphql';
+      var graphqlServer = (typeof document !== 'undefined') ? (document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql') : 'https://mobile.lanista-training.com/graphql';
 
       // Local Test Link
-      var graphqlServer = 'http://localhost:4000/graphql';
+      //var graphqlServer = 'http://localhost:4000/graphql';
+
 
 
       const httpLink = errorLink.concat(new HttpLink({
@@ -62,15 +64,26 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
         credentials: 'same-origin',
         fetch: fetch
       }))
+      const token = cookie.get('token');
+      console.log("TOKEN", token);
       const wsClient = new SubscriptionClient(
-        "ws://localhost:3001",
-        { lazy: true, reconnect: true },
+        //"ws://localhost:3001",
+        document.location.origin.indexOf('localhost') > -1 ? "ws://localhost:3001" : "wss://jq3eu6hd5h.execute-api.eu-central-1.amazonaws.com/prod",
+        {
+          connectionParams: {
+            authToken: `Bearer ${token}`,
+          },
+          lazy: true,
+          reconnect: true
+        },
         null,
         [],
       );
-      const wsLink = new WebSocketLink(wsClient);
+      const wsLink = errorLink.concat(new WebSocketLink(wsClient));
       const link = split(
         ({ query }) => {
+          console.log("QUERY")
+          console.log(query)
           const { kind, operation } = getMainDefinition(query);
           return kind === 'OperationDefinition' && operation === 'subscription';
         },
@@ -78,7 +91,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
         httpLink,
       )
       const client = new ApolloClient({
-        link: authLink.concat(link),
+        link: link,
         cache: cache,
       });
       persistCache({

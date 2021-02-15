@@ -75,6 +75,8 @@ export const Panel = styled.div`
         overflow: hidden;
         .MuiGridList-root {
           flex-wrap: nowrap;
+          display: flex;
+          justify-content: center;
           width: 100%;
           .gym-item {
             margin-right: 0.5em;

@@ -11,7 +11,7 @@ import { LINK } from "../../mutations"
 const Panel = ({client, goBack, hasNorch}) => {
   const[filter, setFilter] = React.useState('');
   const { data, error, loading, refetch } = useQuery(ME);
-  const { data: gyms, error: gymsError, gymsLoading } = useQuery(GYMS, {
+  const { data: gyms, error: gymsError, gymsLoading, refetch: refetchGyms } = useQuery(GYMS, {
     variables: {
       filter: filter
     },
@@ -22,26 +22,12 @@ const Panel = ({client, goBack, hasNorch}) => {
     {
       update(cache,  { data: {link} }) {
         if(link.id.indexOf('0-') > -1 ) {
+          refetch();
+          refetchGyms();
           setConnectedDialogOpen(true);
         } else {
-          let {me} = cache.readQuery({
-            query: ME,
-          });
-          const {gyms} = me
-          if( gyms instanceof Array ) {
-            console.log("gmy is an Array")
-          } else {
-            gyms = []
-          }
-          gyms.push(link)
-          cache.writeQuery({
-            query: ME,
-            data: { me: {
-              ...me,
-              gyms: gyms
-            }},
-          });
           refetch();
+          refetchGyms();
           goBack();
         }
       }

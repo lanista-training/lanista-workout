@@ -156,6 +156,7 @@ export const EXERCISE = gql`
       mistakes
       muscle
       videoUrl
+      favorite
       member {
         id
         first_name
@@ -207,6 +208,27 @@ export const EXERCISE = gql`
           training
           unit
         }
+      }
+    }
+  }
+`
+
+export const EXERCISECHATUPDATE = gql`
+  query Exercise($exerciseId:ID!, $memberId:ID, $planexerciseId:ID, $language:String) {
+    exercise(exerciseId: $exerciseId, memberId: $memberId, planexerciseId: $planexerciseId, language:$language) {
+      id
+      chats {
+        id
+        text
+        type
+        photoUrl
+        first_name
+        last_name
+        status
+        creation_date
+        exercise_name
+        exercise_start_image
+        exercise_end_image
       }
     }
   }
@@ -530,6 +552,7 @@ export const ME = gql`
       language
       beaconScanning
       nfcScanning
+      chatSupport
       todayExecutions {
         id
         exercise_id
@@ -681,6 +704,33 @@ export const EXERCISES = gql`
     exercises(exercises: $exercises, types: $types, muscles: $muscles, additions: $additions, text: $text, language: $language) {
       cursor
       hasMore
+      total
+      exercises {
+        id
+        name
+        start_image
+        end_image
+      }
+    }
+  }
+`;
+
+export const GETBYREF = gql`
+  query GetByRef( $userId:ID!, $ref:String! ) {
+    getByRef( userId: $userId, ref: $ref ) {
+      id
+      first_name
+      last_name
+      gyms {
+        imageUrl
+      }
+    }
+  }
+`;
+
+export const FAVORITES = gql`
+  query Favorites {
+    favorites {
       total
       exercises {
         id

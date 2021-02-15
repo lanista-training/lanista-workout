@@ -89,6 +89,8 @@ const Dashboard = ({
   showScannButtons,
   openBeaconSearch,
   setOpenBeaconSearch,
+  onShowFavorites,
+
 
   beaconScanning,
   nfcScanning,
@@ -127,7 +129,7 @@ const Dashboard = ({
                   <div key={'banner-' + banner.id} className={ banners && banners.banners.length == 1 ? "one-banner banner-wrapper" : "banner-wrapper" }>
                     <div className="banner" onClick={() => {
                       if( typeof window.cordova !== 'undefined' ) {
-                        let win = window.cordova.InAppBrowser.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank', 'location=yes');
+                        let win = window.cordova.InAppBrowser.open(banners.banners[i].link ? banners.banners[i].link : banner.link, banners.banners[i].link && banners.banners[i].link.indexOf('mailto') > -1 ? '_system' : '_blank', 'location=yes');
                         win.focus();
                       } else {
                         let win = window.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank');
@@ -220,6 +222,7 @@ const Dashboard = ({
         scannQrDisablen={scannQrDisable}
         scannBeaconDisablen={scannBeaconDisable}
         showScannButtons={showScannButtons}
+        onShowFavorites={onShowFavorites}
 
         beaconScanning={beaconScanning}
         nfcScanning={nfcScanning}

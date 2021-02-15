@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Lanista website",
   "main": "index.js",
-  "homepage": "https://github.com/lanista-training/lanista-workout#readme",
+  "homepage": "./",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lanista-training/lanista-workout.git"

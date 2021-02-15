@@ -10,16 +10,6 @@ export const CREATENOTE = gql`
   }
 `;
 
-export const CREATECHATMESSAGE = gql`
-  mutation CreateChatMessage( $text: String, $memberId: ID!,  $exerciseId: ID) {
-     createChatMessage(text: $text, memberId: $memberId, exerciseId: $exerciseId) {
-         id
-         creation_date
-         text
-     }
-  }
-`;
-
 export const SAVEEXERCISESETTINGS = gql`
   mutation SaveExerciseSettings( $planexerciseId: ID!, $indications: String, $sets: Int, $weight: Float, $training: Int, $unit: Int, $setsConfig: String) {
      saveExerciseSettings(planexerciseId: $planexerciseId, indications: $indications, sets: $sets, weight: $weight, training: $training, unit: $unit, setsConfig: $setsConfig) {
@@ -285,6 +275,52 @@ export const DELETEACCOUNT = gql`
   mutation DeleteAccount {
      deleteAccount {
        id
+     }
+  }
+`;
+
+export const CONTACTREQUEST = gql`
+  mutation ContactRequest( $memberId: ID!, $reference: String!, $date: String!, $phoneNr: String, $comment: String) {
+     contactRequest(memberId: $memberId, reference: $reference, date: $date, phoneNr: $phoneNr, comment: $comment) {
+       success
+       error
+     }
+  }
+`;
+
+export const ADDTOFAVORITES = gql`
+  mutation AddToFavorites( $exerciseId: ID!) {
+     addToFavorites(exerciseId: $exerciseId) {
+       success
+       error
+     }
+  }
+`;
+
+export const DELETEFROMFAVORITES = gql`
+  mutation DeleteFromFavorites( $exerciseId: ID!) {
+     deleteFromFavorites(exerciseId: $exerciseId) {
+       success
+       error
+     }
+  }
+`;
+
+export const CREATECHATMESSAGE = gql`
+  mutation CreateChatMessage( $text: String,  $exerciseId: ID) {
+     createChatMessage(text: $text, exerciseId: $exerciseId) {
+         id
+         creation_date
+         text
+     }
+  }
+`;
+
+export const MARKCHATMESSAGES = gql`
+  mutation MarkChatMessages( $exerciseId: ID) {
+     markChatMessages(exerciseId: $exerciseId) {
+         success
+         error
      }
   }
 `;

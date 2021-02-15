@@ -265,5 +265,8 @@
     "min_3_characters": "Insira pelo menos 3 exercícios",
     "search_results": "Procurar resultados",
     "no_resuts": "Nenhum exercício foi encontrado"
+  },
+  "favorites": {
+    "exercises": "Favorites"
   }
 }

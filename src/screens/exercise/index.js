@@ -1,24 +1,74 @@
-import * as React from "react";
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { withApollo } from '../../lib/apollo'
 import { useTranslate } from '../../hooks/Translation'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks'
 import Exercise from './Exercise';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
-import { EXERCISE, PROTOCOLLS, ME } from "../../queries";
-import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL } from "../../mutations";
+import { EXERCISE, PROTOCOLLS, ME, EXERCISECHATUPDATE } from "../../queries";
+import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL, ADDTOFAVORITES, DELETEFROMFAVORITES, CREATECHATMESSAGE, MARKCHATMESSAGES } from "../../mutations";
+import { MESSAGEFEED } from "../../subscriptions";
 import Chronometer from '../../components/Chronometer';
 
 const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
 
   let {locale} = useTranslate("exercise");
+  const { data:meData } = useQuery(ME);
+  const { data, error, loading, refetch } = useQuery(EXERCISE, {
+    variables: {
+      exerciseId: exerciseId,
+      planexerciseId: planexerciseId,
+      language: locale ? locale.toUpperCase() : 'EN',
+    },
+    fetchPolicy: 'cache-and-network',
+  });
 
-  const { data, error, loading, refetch } = useQuery(EXERCISE, {variables: {
-    exerciseId: exerciseId,
-    planexerciseId: planexerciseId,
-    language: locale ? locale.toUpperCase() : 'EN',
-  }});
+  const { refetch: refetchChat } = useQuery(EXERCISECHATUPDATE, {
+    variables: {
+      exerciseId: exerciseId,
+      language: locale ? locale.toUpperCase() : 'EN',
+    },
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const [createChatMessage] = useMutation(CREATECHATMESSAGE,
+  {
+    update(cache,  { data: { createChatMessage } }) {
+      refetchChat();
+    }
+  });
+
+  const [addToFavorites] = useMutation(ADDTOFAVORITES,
+  {
+    update(cache,  { data: { addToFavorites } }) {
+      if( addToFavorites.success ) {
+        refetch();
+      }
+    }
+  });
+
+  const [deleteFromFavorites] = useMutation(
+    DELETEFROMFAVORITES,
+    {
+      update(cache,  { data: { deleteFromFavorites } }) {
+        if( deleteFromFavorites.success ) {
+          refetch();
+        }
+      }
+    }
+  );
+
+  const [markChatMessages] = useMutation(
+    MARKCHATMESSAGES,
+    {
+      update(cache,  { data: { markChatMessages } }) {
+        if( markChatMessages.success ) {
+          refetchChat();
+        }
+      }
+    }
+  );
 
   const [createProtocolls, { loading: createProtocollsLoading, error: createProtocollsError }] = useMutation(
     CREATEPROTOCOLLS,
@@ -35,8 +85,6 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
             language: (locale ? locale.toUpperCase() : 'EN'),
           },
         });
-        console.log("createProtocolls");
-        console.log(createProtocolls);
         let workouts = exercise.workouts.map(item => item);
         createProtocolls.map(protocoll => workouts.push({
           execution_date: protocoll.execution_date,
@@ -69,13 +117,10 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
         //
         // UPDATE PROTOCOLLS QUERY
         //
-        console.log("UPDATE PROTOCOLL QUERY")
         try {
           let protocollsQuery = cache.readQuery({
             query: PROTOCOLLS
           });
-          console.log("PROTOCOLLS QUERY")
-          console.log(protocollsQuery)
           if( protocollsQuery ) {
             const {protocolls} = protocollsQuery
             if( protocolls ) {
@@ -354,9 +399,7 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
   }
 
   const onCreateAllProtocolls = (sets) => {
-    console.log("onCreateAllProtocolls");
     const executions = sets.map( (set) => ({...set, exerciseId: exerciseId }) );
-    console.log(executions);
     createProtocolls({
       variables: {
         protocolls: JSON.stringify(executions)
@@ -369,7 +412,52 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
       protocollId: protocollId,
     }})
   }
-  console.log("rendering...")
+
+  const onAddToFavorites = () => {
+    addToFavorites({
+      variables: {
+        exerciseId: exerciseId,
+      }
+    })
+  }
+
+  const onDeleteFromFavorites = () => {
+    deleteFromFavorites({
+      variables: {
+        exerciseId: exerciseId,
+      }
+    })
+  }
+
+  const onSubscriptionData = useCallback(
+    (result) => {
+      refetchChat();
+    },
+    [],
+  );
+
+  const onSendMessage = (message) => {
+    createChatMessage({
+      variables: {
+        text: message,
+        exerciseId: exerciseId,
+      }
+    })
+  }
+
+  const onMarkChatMessages = () => {
+    markChatMessages({
+      variables: {
+        exerciseId: exerciseId,
+      }
+    })
+  }
+
+  useSubscription(MESSAGEFEED, { onSubscriptionData });
+
+  const {me} = meData ? meData : {};
+  console.log("me", me);
+
   return (
     <Exercise
       onGoBack={goBack}
@@ -381,6 +469,13 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
       loading={deleteProtocollLoading || createProtocollLoading}
       hasNorch={hasNorch}
       refetch={refetch}
+      showFavoriteButton={data && data.exercise.member ? true : false}
+      onToggleFavorites={data && data.exercise.favorite ? onDeleteFromFavorites : onAddToFavorites}
+      chatSupport={me && me.chatSupport}
+
+      onSendMessage={onSendMessage}
+      onMarkChatMessages={onMarkChatMessages}
+
     />
   )
 }

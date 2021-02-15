@@ -118,7 +118,8 @@
     "play_problems": "Wiedergabeproblem",
     "today": "Heute",
     "set": "Satz",
-    "kg": "Kg"
+    "kg": "Kg",
+    "chat": "Chat"
   },
   "gymsearch": {
     "your_data": "Meine Daten",
@@ -265,5 +266,17 @@
     "min_3_characters": "Mindestens 3 Buchstaben eingeben",
     "search_results": "Trefferanzahl",
     "no_resuts": "Keine Übungen gefunden"
+  },
+  "contactrequest": {
+    "select a day": "Wähle einen Wunschtermin aus",
+    "wich day and time": "Gewünschter Tag und Uhrzeit",
+    "call back": "Rückruf unter",
+    "comment": "Kommentar (max 100 Zeichen)",
+    "send invitation": "Versenden",
+    "message sent": "Deine Anfrage wurde gesendet",
+    "wait for confirmation": "Bitte warte auf die Bestätigung deiner Terminanfrage."
+  },
+  "favorites": {
+    "exercises": "Favoriten"
   }
 }

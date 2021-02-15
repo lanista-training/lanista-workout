@@ -16,7 +16,8 @@ const Panel = ({goBack, hasNorch, showExercise, exercises, types, muscles, text,
       additions: additions && additions.length > 0 ? additions : null,
       text: text,
       language: locale,
-    }
+    },
+    fetchPolicy: 'cache-and-network',
   });
 
   return (

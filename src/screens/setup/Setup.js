@@ -247,66 +247,68 @@ const Setup = ({
                   </div>
                 ))}
               </GridList>
-              <Button
-                className="logout-button"
-                variant="contained"
-                color="secondary"
-                endIcon={<Icon>search</Icon>}
-                onClick={goToGymsearch}
-              >
-                {t('search')}
-              </Button>
+              {gyms && gyms.length == 0 && (
+                <Button
+                  className="logout-button"
+                  variant="contained"
+                  color="secondary"
+                  endIcon={<Icon>search</Icon>}
+                  onClick={goToGymsearch}
+                >
+                  {t('search')}
+                </Button>
+              )}
             </div>
           </div>
 
-
-          <div className="setup-section">
-            <div className="setup-title">
-              {t('invitations')}
-            </div>
-            <div className="invitations-list">
-              {connectionRequests && connectionRequests.map(request => (
-                <Card className="invitations-root">
-                  <div className="invitations-details">
-                    <CardContent className="invitations-content">
-                      <Typography component="h6" variant="h6">
-                        {request.from.first_name + ' ' + request.from.last_name}
-                      </Typography>
-                      <Typography variant="subtitle1" color="textSecondary">
-                        {t("invitation_message")}
-                      </Typography>
-                    </CardContent>
-                    <div className="invitations-controls">
-                      <Button
-                        variant="contained"
-                        size="small"
-                        disableElevation
-                        onClick={() => {
-                          setSelectedRequest(request.id);
-                          setConnectedDialogOpen(true);
-                        }}
-                      >
-                        {t("invitation_connect")}
-                      </Button>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        disableElevation
-                        style={{ marginLeft: "2em" }}
-                        onClick={() => rejectRequest(request.id)}
-                      >
-                        {t("invitation_refuse")}
-                      </Button>
+          {gyms && gyms.length == 0 && (
+            <div className="setup-section">
+              <div className="setup-title">
+                {t('invitations')}
+              </div>
+              <div className="invitations-list">
+                {connectionRequests && connectionRequests.map(request => (
+                  <Card className="invitations-root">
+                    <div className="invitations-details">
+                      <CardContent className="invitations-content">
+                        <Typography component="h6" variant="h6">
+                          {request.from.first_name + ' ' + request.from.last_name}
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                          {t("invitation_message")}
+                        </Typography>
+                      </CardContent>
+                      <div className="invitations-controls">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          disableElevation
+                          onClick={() => {
+                            setSelectedRequest(request.id);
+                            setConnectedDialogOpen(true);
+                          }}
+                        >
+                          {t("invitation_connect")}
+                        </Button>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          disableElevation
+                          style={{ marginLeft: "2em" }}
+                          onClick={() => rejectRequest(request.id)}
+                        >
+                          {t("invitation_refuse")}
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                  <CardMedia
-                    className="invitations-cover"
-                    image={request.from.photoUrl}
-                    title={request.from.first_name + ' ' + request.from.last_name}
-                  />
-                </Card>
-              ))}
-            </div>
+                    <CardMedia
+                      className="invitations-cover"
+                      image={request.from.photoUrl}
+                      title={request.from.first_name + ' ' + request.from.last_name}
+                    />
+                  </Card>
+                ))}
+              </div>
             <Button
               className="logout-button"
               variant="contained"
@@ -317,7 +319,7 @@ const Setup = ({
               {t('check_for_invitations')}
             </Button>
           </div>
-
+          )}
 
           <Button
             className="logout-button"

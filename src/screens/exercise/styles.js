@@ -41,6 +41,8 @@ export const Panel = styled.div`
     margin-top: -20px;
     background-color: whitesmoke;
     box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
+    display: flex;
+    flex-flow: column;
     header {
       overflow: hidden;
       border-top-right-radius: 20px;
@@ -99,6 +101,14 @@ export const Panel = styled.div`
     background-position: right top, left top;
     background-repeat: no-repeat;
     background-size: 51% auto, 51% auto;
+    .favorite-icon {
+      margin-top: -85px;
+      display: flex;
+      justify-content: flex-end;
+      svg {
+        color: white;
+      }
+    }
   }
   .exercise-image {
     height: 100vw;
@@ -177,6 +187,18 @@ export const Panel = styled.div`
   }
   .graphic-one-repetition {
     margin-top: 2em;
+  }
+  .tab-panels {
+    flex: 1;
+  }
+  .chat-tab-panel {
+    padding-bottom: 0em;
+    .MuiBox-root {
+      padding: 0px 24px 24px 24px;
+    }
+  }
+  .chat-panel {
+    height: calc(100vh - 100vw + -130px);
   }
   /* Slider */
   .slick-slider

@@ -8,15 +8,19 @@ import WifiTetheringIcon from '@material-ui/icons/WifiTethering';
 import SearchIcon from '@material-ui/icons/Search';
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 import { motion } from "framer-motion";
 
 export default ({
   showScannButtons,
+
   onScannQr,
   onScannNfc,
   onScannBeacon,
   onSearchExercises,
+  onShowFavorites,
+
   scannNfcDisable,
   scannQrDisable,
   scannBeaconDisable,
@@ -59,7 +63,14 @@ export default ({
             </Fab>
           </motion.div>
         }
-        <Fab onClick={showScannButtons ? toggleOpen : onSearchExercises}>
+        {open &&
+          <motion.div animate={{ width: 56 }} initial={{ width: 0 }} >
+            <Fab onClick={onShowFavorites}>
+              <FavoriteIcon />
+            </Fab>
+          </motion.div>
+        }
+        <Fab onClick={toggleOpen}>
           {!open && <SearchIcon />}
           {open && <HighlightOffIcon />}
         </Fab>

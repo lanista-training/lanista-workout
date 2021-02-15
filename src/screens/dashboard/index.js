@@ -21,6 +21,7 @@ const Panel = ({
   openWorkout,
   goToExercise,
   goToExercises,
+  onShowFavorites,
 }) => {
   React.useEffect(() => {
     if( typeof cordova !== 'undefined' ) {
@@ -128,8 +129,6 @@ const Panel = ({
   }
 
   React.useEffect(() => {
-    console.log("NEW LINK ARRIVED");
-    console.log(beaconLink)
     if( beaconLink && beaconLink !== '' ) {
       const {beacon} = beaconLink
       processScannerMessage(beacon.link)
@@ -167,8 +166,6 @@ const Panel = ({
   }
 
   const processScannerMessage = (message) => {
-    console.log("processScannerMessage")
-    console.log(message)
     var link = "";
     if (message.indexOf("workout") > -1) {
       link = "showPlan/" + message.substring(message.lastIndexOf("/") + 1);
@@ -203,9 +200,6 @@ const Panel = ({
       setActiveScanner('qr')
 
       window.cordova.plugins.barcodeScanner.scan(function(result) {
-        console.log("barcodeScanner...")
-        console.log("result")
-        console.log(result)
         if(!result.cancelled) {
           processScannerMessage(result.text)
         }
@@ -231,20 +225,14 @@ const Panel = ({
       setActiveScanner('nfc')
       window.nfc.beginSession(() => {
         window.nfc.addNdefListener((nfcEvent) => {
-          console.log("Tag found")
-          console.log(nfcEvent)
           const {tag} = nfcEvent
           const {ndefMessage} = tag
-          console.log(tag)
-          console.log(ndefMessage)
           const message = window.nfc.bytesToString(ndefMessage[0].payload);
-          console.log(message)
           processScannerMessage(message)
           setModal(false)
           setScanning(false)
           setActiveScanner('')
         }, () => {
-          console.log("onSuccess")
           setModal(false)
           setScanning(false)
           setActiveScanner('')
@@ -269,23 +257,19 @@ const Panel = ({
     console.log("onScannBeacon")
     if( typeof cordova !== 'undefined' ) {
       if( isBeaconReceiverOn ) {
-        console.log("Stoping beacon reaceiver")
         stopBluetoothScanning();
         handleToggleBeaconSearch();
         setActiveScanner('')
       } else {
         console.log("Check bluetooth status")
         if (window.cordova.plugins.BluetoothStatus.hasBTLE && window.cordova.plugins.BluetoothStatus.BTenabled) {
-          console.log("Initializing beacon engine")
           initBeacon();
           handleToggleBeaconSearch()
           setActiveScanner('beacon')
           setTimeout(function () {
-            console.log("STOPING BEACON AFTER TIMEOUT");
             stopBluetoothScanning();
             setOpenBeaconSearch(false);
             setActiveScanner('')
-            console.log("DONE !");
           }, 5000);
         } else {
           if (window.device.platform == 'iOS') {
@@ -305,18 +289,11 @@ const Panel = ({
   }
 
   const onSearchExercises = () => {
-    console.log("onSearchExercises");
     onGoToFilter();
   }
 
   const initBeacon = () => {
-    console.log("Initializing estimotes library...");
     window.estimote.beacons.startRangingBeaconsInRegion({}, onBeaconsReceived, function(error) {
-      console.log("ERROR RECEIVING BEACONS");
-      console.log(error);
-      console.log(error !== undefined);
-      console.log(typeof error == 'string');
-      console.log(error.indexOf("Insufficient Location Services authorization"));
       if (error !== undefined && typeof error == 'string' && error.indexOf("Insufficient Location Services authorization") > -1) {
         setSnackbarMesssage('LOCATION_NOT_ALLOWED_ERROR');
         handleOpenSnackbar();
@@ -331,7 +308,6 @@ const Panel = ({
   }
 
   const stopBluetoothScanning = () => {
-    console.log("stopBluetoothScanning")
     window.estimote.beacons.stopRangingBeaconsInRegion({});
     setIsBeaconReceiverOn(false);
   }
@@ -387,6 +363,7 @@ const Panel = ({
       showScannButtons={typeof cordova !== 'undefined'}
       openBeaconSearch={openBeaconSearch}
       setOpenBeaconSearch={setOpenBeaconSearch}
+      onShowFavorites={onShowFavorites}
 
       refetch={refetch}
     />
