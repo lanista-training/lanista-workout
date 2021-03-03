@@ -56,6 +56,8 @@ const Panel = ({client, goBack, hasNorch}) => {
       hasNorch={hasNorch}
       connectedDialogOpen={connectedDialogOpen}
       handleConnectedDialogClose={handleConnectedDialogClose}
+      primaryColor={data ? data.me.primaryColor : null}
+      secondaryColor={data ? data.me.secondaryColor : null}
     />
   )
 }

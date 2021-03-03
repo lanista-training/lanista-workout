@@ -119,7 +119,9 @@
     "today": "Heute",
     "set": "Satz",
     "kg": "Kg",
-    "chat": "Chat"
+    "chat": "Chat",
+    "message": "Nachricht",
+    "note": "Notiz"
   },
   "gymsearch": {
     "your_data": "Meine Daten",

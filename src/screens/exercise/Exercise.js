@@ -53,6 +53,14 @@ import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import ChatIcon from '@material-ui/icons/Chat';
 import Badge from '@material-ui/core/Badge';
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
 
 
 const sliderSettings = {
@@ -144,12 +152,21 @@ const Exercise = ({
 
   onSendMessage,
   onMarkChatMessages,
+
+  onDeleteChatMessage,
+  deleteChatMessageLoading,
+  deleteChatMessageError,
+
+  inputFieldPlacehoder,
+
+  primaryColor,
+  secondaryColor,
 }) => {
 
   const [showChronometer, setShowChronometer] = React.useState(false);
   const toggleShowChronometer = () => setShowChronometer(!showChronometer);
 
-  const {t, locale} = useTranslate("exercise");
+  const {t} = useTranslate("exercise");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -221,7 +238,9 @@ const Exercise = ({
 
   React.useEffect(() => {
     if(workouts && _.size(workouts) > 0) {
-      setValue(1);
+      if( value != 3) {
+        setValue(1);
+      }
     }
   }, [workouts]);
 
@@ -233,212 +252,228 @@ const Exercise = ({
   const [savingAll, setSavingAll] = React.useState(false);
   const unreadMessages = chats ? chats.filter(chat => chat.type == 0 && chat.status == 0).length : 0;
 
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel>
-      {showChronometer && <Chronometer onClose={() => setShowChronometer(false)}/>}
-      <AppBar className="exercise-header" position="static" style={hasNorch ? {paddingTop: "30px"} : {}}>
-        <div className="exercise-name">{!video && exercise && exercise.name}</div>
-        <IconButton aria-label="show 4 new mails" color="inherit" onClick={playVideo}>
-          {video && <Icon>videocam_off</Icon>}
-          {!video && <Icon>videocam</Icon>}
-        </IconButton>
-      </AppBar>
-      <div className="exercise-images">
-        {
-          video && <ReactPlayer url={exercise.videoUrl} width="100%" height="100%" playing controls/>
-        }
-        <Slider
-          {...sliderSettings}
-          afterChange={(current, next) => {
-            setCurrentImage(current)
-          }}
-          className={currentImage == 0 ? 'start-position' : 'end-position'}
-        >
-          <div key='exercise-image-start' className="exercise-image-wrapper">
-            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.start_image) + ")"}}/>
-          </div>
-          <div key='exercise-end-end' className="exercise-image-wrapper">
-            <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.end_image) + ")"}}/>
-          </div>
-        </Slider>
-        { showFavoriteButton &&
-          <div className="favorite-icon">
-            <IconButton aria-label="favorite" component="div" onClick={onToggleFavorites}>
-              {
-                favorite ? <FavoriteIcon fontSize="large"/> : <FavoriteBorderIcon fontSize="large"/>
-              }
-            </IconButton>
-          </div>
-        }
-      </div>
-      <div className="content">
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            <Tab icon={<InfoIcon />} {...a11yProps(0)} />
-            <Tab icon={<QueryBuilderIcon />} {...a11yProps(1)} />
-            <Tab icon={<TimelineIcon />} {...a11yProps(2)} />
-            { member && chatSupport && <Tab icon={<Badge badgeContent={unreadMessages} color="secondary"><ChatIcon /></Badge>} {...a11yProps(3)} onClick={onMarkChatMessages}/>}
-          </Tabs>
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel>
+        {showChronometer && <Chronometer onClose={() => setShowChronometer(false)}/>}
+        <AppBar className="exercise-header" position="static" style={hasNorch ? {paddingTop: "30px"} : {}}>
+          <div className="exercise-name">{!video && exercise && exercise.name}</div>
+          <IconButton aria-label="show 4 new mails" color="inherit" onClick={playVideo}>
+            {video && <Icon>videocam_off</Icon>}
+            {!video && <Icon>videocam</Icon>}
+          </IconButton>
         </AppBar>
-        <div className="tab-panels">
-          <TabPanel key="tab-1" className="tab-panel" value={value} index={0} dir={theme.direction}>
+        <div className="exercise-images">
           {
-            exercise && exercise.settings && exercise.settings.indications && exercise.settings.indications.length > 0 && (
-              <>
-                <div className="exercise-title">{t("from_trainer")}</div>
-                <div className="exercise-content">
-                  {exercise.settings.indications.split("||").map( (note, index) => (<div key={"trainer-note" + index}>{note.charAt(0).toUpperCase() + note.slice(1)}</div>) )}
-                </div>
-              </>
-            )
+            video && <ReactPlayer url={exercise.videoUrl} width="100%" height="100%" playing controls/>
           }
-          <div className="exercise-title">{t("execution")}</div>
-            <div className="exercise-content">
-              {exercise && exercise.coaching_notes.map((coachingNote, index) => (
-                <div key={"coaching-note" + index}>{coachingNote}</div>
-              ))}
+          <Slider
+            {...sliderSettings}
+            afterChange={(current, next) => {
+              setCurrentImage(current)
+            }}
+            className={currentImage == 0 ? 'start-position' : 'end-position'}
+          >
+            <div key='exercise-image-start' className="exercise-image-wrapper">
+              <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.start_image) + ")"}}/>
             </div>
-            <div className="exercise-title">{t("errors")}</div>
-            <div className="exercise-content">
-              {exercise && exercise.mistakes.map((coachingNote, index) => (
-                <div key={"mistake-" + index}>{coachingNote}</div>
-              ))}
+            <div key='exercise-end-end' className="exercise-image-wrapper">
+              <div className="exercise-image start-position" style={{backgroundImage: "url(" + (exercise && exercise.end_image) + ")"}}/>
             </div>
-          </TabPanel>
-          <TabPanel key="tab-2" className="tab-panel protocolls" value={value} index={1} dir={theme.direction}>
-            <Pullable onRefresh={refetch}>
-
-
-
-              <Sets
-                sets={sets ? sets : []}
-                workouts={workouts}
-                day={new Date()}
-                loading={loading}
-                onCreateProtocoll={createProtocoll}
-                onDeleteProtocoll={deleteProtocoll}
-                onCreateAllProtocolls={createAllProtocolls}
-                openChronometer={toggleShowChronometer}
-              />
-
-
-
-
-              <List subheader={<li />}>
-                { loading &&
-                  <CircularProgress size={70} color="secondary"/>
+          </Slider>
+          { showFavoriteButton &&
+            <div className="favorite-icon">
+              <IconButton aria-label="favorite" component="div" onClick={onToggleFavorites}>
+                {
+                  favorite ? <FavoriteIcon fontSize="large"/> : <FavoriteBorderIcon fontSize="large"/>
                 }
-                { !loading &&
-                  days.map( workout => {
-                    return (
-                      <li key={`section-${workout.day}`}>
-                        <ul style={{ padding: 0 }}>
-                          <ListSubheader>{moment(new Date(workout.day)).format('dd, D. MMMM YYYY')}</ListSubheader>
-                          {workout.executions.map((execution, index) => (
-                            <ListItem
-                              className={selectedExecution==execution.id ? 'selected' : ''}
-                              key={`item-${workout.day}-${execution.id}`}
-                              onClick={() => {
-                                setSelectedExecution(execution.id == selectedExecution ? 0 : execution.id)
-                              }}
-                            >
-                              { selectedExecution==execution.id &&
-                                <Button
-                                  variant="contained"
-                                  color="secondary"
-                                  startIcon={<DeleteIcon />}
-                                  onClick={() => deleteProtocoll(execution.id)}
-                                >
-                                  Delete
-                                </Button>
-                              }
-                              <ListItemText primary={t("set") + " " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? (' ' + t("rep")) : execution.training_unit == 1 ? (' ' + t("sec")) : (' ' + t("min"))) + " x " + execution.weight + " Kg"} />
-                            </ListItem>
-                          ))}
-                        </ul>
-                      </li>
-                    )
-                })
-              }
-              </List>
-
-            </Pullable>
-          </TabPanel>
-          <TabPanel key="tab-3" className="tab-panel" value={value} index={2} dir={theme.direction}>
-            <div className="graphic graphic-total-weight" onClick={() => {
-              console.log("MARK 3")
-            }}>
-              <div className="graphic-header">
-                <div className="text-section">
-                  <div className="last-value">{days && days.length > 0 ? days[0].totalWeight : 0} Kg</div>
-                  <div className="graphic-title">{t("weight_day_total")}</div>
-                </div>
-                <Icon></Icon>
-              </div>
-              {renderTotalVolumenGraph(days, t)}
+              </IconButton>
             </div>
-            <div className="graphic graphic-one-repetition" onClick={() => {
-              console.log("MARK 3")
-            }}>
-              <div className="graphic-header">
-                <div className="text-section">
-                  <div className="last-value">{days && days.length > 0 ? days[0].oneRM : 0} Kg</div>
-                  <div className="graphic-title">{t("1rm")}</div>
-                </div>
-                <Icon></Icon>
-              </div>
-              {renderOneRepetitionGraph(days, t)}
-            </div>
-          </TabPanel>
-          {
-            member &&
-            <TabPanel key="tab-4" className="tab-panel chat-tab-panel" value={value} index={3} dir={theme.direction}>
-              <div className="chat-panel">
-                <Chat
-                  closePanel={false}
-                  visible={true}
-                  member={member}
-                  data={chats ? chats : []}
-                  hideHeader={true}
-                  hideExercises={true}
-                  hideInputField={false}
-                  onSendMessage={onSendMessage}
-                />
-              </div>
-            </TabPanel>
           }
         </div>
-      </div>
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{t("play_problems")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {t("no_video")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            {t("ok")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <div className="content">
+          <AppBar position="static" color="default">
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
+            >
+              <Tab icon={<InfoIcon />} {...a11yProps(0)} />
+              <Tab icon={<QueryBuilderIcon />} {...a11yProps(1)} />
+              <Tab icon={<TimelineIcon />} {...a11yProps(2)} />
+              { member && chatSupport && <Tab icon={<Badge badgeContent={unreadMessages} color="secondary"><ChatIcon /></Badge>} {...a11yProps(3)} onClick={onMarkChatMessages}/>}
+            </Tabs>
+          </AppBar>
+          <div className="tab-panels">
+            <TabPanel key="tab-1" className="tab-panel" value={value} index={0} dir={theme.direction}>
+            {
+              exercise && exercise.settings && exercise.settings.indications && exercise.settings.indications.length > 0 && (
+                <>
+                  <div className="exercise-title">{t("from_trainer")}</div>
+                  <div className="exercise-content">
+                    {exercise.settings.indications.split("||").map( (note, index) => (<div key={"trainer-note" + index}>{note.charAt(0).toUpperCase() + note.slice(1)}</div>) )}
+                  </div>
+                </>
+              )
+            }
+            <div className="exercise-title">{t("execution")}</div>
+              <div className="exercise-content">
+                {exercise && exercise.coaching_notes.map((coachingNote, index) => (
+                  <div key={"coaching-note" + index}>{coachingNote}</div>
+                ))}
+              </div>
+              <div className="exercise-title">{t("errors")}</div>
+              <div className="exercise-content">
+                {exercise && exercise.mistakes.map((coachingNote, index) => (
+                  <div key={"mistake-" + index}>{coachingNote}</div>
+                ))}
+              </div>
+            </TabPanel>
+            <TabPanel key="tab-2" className="tab-panel protocolls" value={value} index={1} dir={theme.direction}>
+              <Pullable onRefresh={refetch}>
 
-    </Panel>
+
+
+                <Sets
+                  sets={sets ? sets : []}
+                  workouts={workouts}
+                  day={new Date()}
+                  loading={loading}
+                  onCreateProtocoll={createProtocoll}
+                  onDeleteProtocoll={deleteProtocoll}
+                  onCreateAllProtocolls={createAllProtocolls}
+                  openChronometer={toggleShowChronometer}
+                />
+
+
+
+
+                <List subheader={<li />}>
+                  { loading &&
+                    <CircularProgress size={70} color="secondary"/>
+                  }
+                  { !loading &&
+                    days.map( workout => {
+                      return (
+                        <li key={`section-${workout.day}`}>
+                          <ul style={{ padding: 0 }}>
+                            <ListSubheader>{moment(new Date(workout.day)).format('dd, D. MMMM YYYY')}</ListSubheader>
+                            {workout.executions.map((execution, index) => (
+                              <ListItem
+                                className={selectedExecution==execution.id ? 'selected' : ''}
+                                key={`item-${workout.day}-${execution.id}`}
+                                onClick={() => {
+                                  setSelectedExecution(execution.id == selectedExecution ? 0 : execution.id)
+                                }}
+                              >
+                                { selectedExecution==execution.id &&
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    startIcon={<DeleteIcon />}
+                                    onClick={() => deleteProtocoll(execution.id)}
+                                  >
+                                    Delete
+                                  </Button>
+                                }
+                                <ListItemText primary={t("set") + " " + (index+1) + ": " + (execution.repetitions ? execution.repetitions : 0) + (execution.training_unit == 0 ? (' ' + t("rep")) : execution.training_unit == 1 ? (' ' + t("sec")) : (' ' + t("min"))) + " x " + execution.weight + " Kg"} />
+                              </ListItem>
+                            ))}
+                          </ul>
+                        </li>
+                      )
+                  })
+                }
+                </List>
+
+              </Pullable>
+            </TabPanel>
+            <TabPanel key="tab-3" className="tab-panel" value={value} index={2} dir={theme.direction}>
+              <div className="graphic graphic-total-weight" onClick={() => {
+                console.log("MARK 3")
+              }}>
+                <div className="graphic-header">
+                  <div className="text-section">
+                    <div className="last-value">{days && days.length > 0 ? days[0].totalWeight : 0} Kg</div>
+                    <div className="graphic-title">{t("weight_day_total")}</div>
+                  </div>
+                  <Icon></Icon>
+                </div>
+                {renderTotalVolumenGraph(days, t)}
+              </div>
+              <div className="graphic graphic-one-repetition" onClick={() => {
+                console.log("MARK 3")
+              }}>
+                <div className="graphic-header">
+                  <div className="text-section">
+                    <div className="last-value">{days && days.length > 0 ? days[0].oneRM : 0} Kg</div>
+                    <div className="graphic-title">{t("1rm")}</div>
+                  </div>
+                  <Icon></Icon>
+                </div>
+                {renderOneRepetitionGraph(days, t)}
+              </div>
+            </TabPanel>
+            <TabPanel key="tab-4" className="tab-panel chat-tab-panel" value={value} index={3} dir={theme.direction}>
+              { member && chatSupport &&
+                <div className="chat-panel">
+                  <Chat
+                    closePanel={false}
+                    visible={true}
+                    member={member}
+                    data={chats ? chats : []}
+                    hideHeader={true}
+                    hideExercises={true}
+                    hideInputField={false}
+                    onSendMessage={onSendMessage}
+                    inputFieldPlacehoder={inputFieldPlacehoder}
+
+                    onDeleteChatMessage={onDeleteChatMessage}
+                    deleteChatMessageLoading={deleteChatMessageLoading}
+                    deleteChatMessageError={deleteChatMessageError}
+                  />
+                </div>
+              }
+            </TabPanel>
+          </div>
+        </div>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("play_problems")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("no_video")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              {t("ok")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+      </Panel>
+    </ThemeProvider>
   )
 };
 

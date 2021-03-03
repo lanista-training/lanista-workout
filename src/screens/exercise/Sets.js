@@ -12,6 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import AccessAlarmsIcon from '@material-ui/icons/AccessAlarms';
 import 'date-fns';
 import {
   MuiPickersUtilsProvider,
@@ -248,10 +249,7 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
         return (new Date(key)).getDate() !== day.getDate();
       });
     }
-
-    console.log("workouts", workouts, lastDayWorkouts)
-
-    if( lastDayWorkouts && lastDayWorkouts.length > 0 ) {
+    if( lastDayWorkouts.length > 0 ) {
       lastDayWorkouts.map((set, index) => {
         if(dayWorkouts[index]) {
           const {id, weight, repetitions, training_unit} = dayWorkouts[index];
@@ -264,12 +262,21 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
           });
         } else {
           const {weight, repetitions, training_unit} = set;
-          index < sets.length && collection.push({
-            index: index,
-            weight: weight,
-            training: sets[index] ? sets[index].training : repetitions,
-            unit: sets[index] ? sets[index].unit : training_unit,
-          });
+          if( sets.length > 0 ) {
+            index < sets.length && collection.push({
+              index: index,
+              weight: weight,
+              training: sets[index] ? sets[index].training : repetitions,
+              unit: sets[index] ? sets[index].unit : training_unit,
+            });
+          } else {
+            collection.push({
+              index: index,
+              weight: weight,
+              training: repetitions,
+              unit: training_unit,
+            });
+          }
         }
       });
     } else {
@@ -307,7 +314,6 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
         });
       }
     });
-
     setDaySets(collection);
 
   }, [sets, workouts, day]);
@@ -319,7 +325,7 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
   }
 
   if( workouts && _.size(workouts) > 0 ) {
-    const lastWorkoutDay = _.find(workouts, (w) => {console.log(w); return w.length > 0});
+    const lastWorkoutDay = _.find(workouts, (w) => {return w.length > 0});
     const lastWorkout = lastWorkoutDay[lastWorkoutDay.length-1];
     defaultValues = {
       training: lastWorkout.repetitions,
@@ -332,11 +338,13 @@ export default ({sets, workouts, day, loading, onCreateProtocoll, onDeleteProtoc
     daySets[set.index] = {...set};
     setDaySets([...daySets]);
   }
-
   return (
     <Sets>
       <div className="sets-title">
         {t("today")}
+        <IconButton onClick={openChronometer}>
+          <AccessAlarmsIcon fontSize="inherit" />
+        </IconButton>
         {!showForm &&
           <Fab
             size="small"

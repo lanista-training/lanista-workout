@@ -8,7 +8,7 @@ export const StyledPanel = styled.div`
   background: white;
   display: flex;
   flex-flow: column;
-  background: rgb(220,0,78);
+  background: ${props => props.theme.colors.primary};
   overflow: hidden;
   .modal-blocker {
     height: 100vh;
@@ -23,7 +23,7 @@ export const StyledPanel = styled.div`
     z-index: 3;
   }
   .header {
-    background: rgb(220, 0, 78);
+    background: ${props => props.theme.colors.primary};
     color: white;
     position: fixed;
     width: 100vw;
@@ -161,6 +161,12 @@ export const StyledPanel = styled.div`
       .MuiAvatar-root {
         background: #4caf50!important;
       }
+    }
+    .MuiSwitch-switchBase.Mui-checked {
+      color: ${props => props.theme.colors.primary};
+    }
+    .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track {
+      background-color: ${props => props.theme.colors.primary}!important;
     }
   }
   /* Slider */
@@ -308,7 +314,7 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
 `;
 
 export const StyledCard = styled.div`

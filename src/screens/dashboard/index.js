@@ -6,6 +6,7 @@ import Dashboard from './Dashboard';
 import _ from 'lodash';
 import moment from "moment"
 import { ME, BEACON } from "../../queries";
+import {useColor} from '../../../src/hooks/Theme/useCollors';
 
 const Panel = ({
   client,
@@ -87,6 +88,8 @@ const Panel = ({
     language,
     beaconScanning,
     nfcScanning,
+    primaryColor,
+    secondaryColor,
   } = me;
 
   const[beaconId, setBeaconId] = React.useState(undefined)
@@ -321,6 +324,22 @@ const Panel = ({
     setBeaconId(beacon.major + '' + beacon.minor)
   }
 
+  //
+  // App resume event handling
+  //
+  React.useEffect(() => {
+    document.removeEventListener("resume", onResume, false);
+    document.addEventListener("resume", onResume, false);
+  }, []);
+  function onResume() {
+    setTimeout(function() {
+        refetch();
+    }, 0);
+  }
+  //
+  //
+  //
+
   return (
     <Dashboard
       doLogout={onLogout}
@@ -364,6 +383,9 @@ const Panel = ({
       openBeaconSearch={openBeaconSearch}
       setOpenBeaconSearch={setOpenBeaconSearch}
       onShowFavorites={onShowFavorites}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
 
       refetch={refetch}
     />

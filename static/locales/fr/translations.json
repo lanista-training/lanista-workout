@@ -117,7 +117,10 @@
     "play_problems": "Problème de lecture",
     "today": "Aujourd'hui",
     "set": "Séries",
-    "kg": "Kg"
+    "kg": "Kg",
+    "chat": "Chat",
+    "message": "Message",
+    "note": "Note"
   },
   "gymsearch": {
     "your_data": "Vos données",

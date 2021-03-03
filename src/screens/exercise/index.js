@@ -7,13 +7,13 @@ import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
 import { EXERCISE, PROTOCOLLS, ME, EXERCISECHATUPDATE } from "../../queries";
-import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL, ADDTOFAVORITES, DELETEFROMFAVORITES, CREATECHATMESSAGE, MARKCHATMESSAGES } from "../../mutations";
+import { CREATEPROTOCOLL, CREATEPROTOCOLLS, DELETEPROTOCOLL, ADDTOFAVORITES, DELETEFROMFAVORITES, CREATECHATMESSAGE, MARKCHATMESSAGES, DELETECHATMESSAGE } from "../../mutations";
 import { MESSAGEFEED } from "../../subscriptions";
 import Chronometer from '../../components/Chronometer';
 
 const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
 
-  let {locale} = useTranslate("exercise");
+  let {t, locale} = useTranslate("exercise");
   const { data:meData } = useQuery(ME);
   const { data, error, loading, refetch } = useQuery(EXERCISE, {
     variables: {
@@ -65,6 +65,17 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
       update(cache,  { data: { markChatMessages } }) {
         if( markChatMessages.success ) {
           refetchChat();
+        }
+      }
+    }
+  );
+
+  const [deleteChatMessage, { loading: deleteChatMessageLoading, error: deleteChatMessageError }] = useMutation(
+    DELETECHATMESSAGE,
+    {
+      update(cache,  { data: { deleteChatMessage } }) {
+        if( deleteChatMessage.id > 0 ) {
+          refetch();
         }
       }
     }
@@ -171,9 +182,6 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
                 repetitions: protocoll.repetitions,
                 __typename: "Workout",
               }));
-              console.log("WRITING DOWN QUERY")
-              console.log( "newTodayExecutions" )
-              console.log( newTodayExecutions )
               cache.writeQuery({
                 query: ME,
                 data: { me: {...me, todayExecutions: newTodayExecutions}},
@@ -364,12 +372,8 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
             if( todayExecutions ) {
               // remove the protocoll
               const protocollIndex = todayExecutions.findIndex(item => item.id == deleteProtocoll.id)
-              console.log("protocollIndex")
-              console.log(protocollIndex)
               if( protocollIndex > -1 ) {
                 newTodayExecutions.splice(protocollIndex, 1);
-                console.log("newTodayExecutions")
-                console.log(newTodayExecutions)
                 cache.writeQuery({
                   query: ME,
                   data: { me: {...me, todayExecutions: newTodayExecutions}},
@@ -391,6 +395,7 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
     createProtocoll({variables: {
       exerciseId: exerciseId,
       memberId: memberId,
+      //executionDate: moment(executionDate).format('YYYY-MM-DD HH:mm:ss'),
       executionDate: executionDate,
       training: parseInt(training),
       unit: parseInt(unit),
@@ -453,10 +458,34 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
     })
   }
 
+  const onDeleteChatMessage = (messageId) => {
+    deleteChatMessage({
+      variables: {
+        messageId: messageId,
+      }
+    });
+  }
+
   useSubscription(MESSAGEFEED, { onSubscriptionData });
 
   const {me} = meData ? meData : {};
-  console.log("me", me);
+  const {primaryColor, secondaryColor} = me ? me : {};
+
+  //
+  // App resume event handling
+  //
+  React.useEffect(() => {
+    document.removeEventListener("resume", onResume, false);
+    document.addEventListener("resume", onResume, false);
+  }, []);
+  function onResume() {
+    setTimeout(function() {
+        refetch();
+    }, 0);
+  }
+  //
+  //
+  //
 
   return (
     <Exercise
@@ -476,6 +505,14 @@ const Panel = ({exerciseId, planexerciseId, memberId, goBack, hasNorch}) => {
       onSendMessage={onSendMessage}
       onMarkChatMessages={onMarkChatMessages}
 
+      onDeleteChatMessage={onDeleteChatMessage}
+      deleteChatMessageLoading={deleteChatMessageLoading}
+      deleteChatMessageError={deleteChatMessageError}
+
+      inputFieldPlacehoder={me && me.gyms.length == 0 ? t("note") : t("message")}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

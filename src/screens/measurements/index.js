@@ -5,11 +5,13 @@ import Measurements from './Measurements';
 import Router from 'next/router';
 import _ from 'lodash';
 import moment from "moment"
-import { MEASUREMENTS } from "../../queries";
+import { MEASUREMENTS, ME } from "../../queries";
 import { SAVEWEIGHT, DELETEWEIGHT } from "../../mutations";
 
 const Panel = ({client, goBack, hasNorch}) => {
-  const { data, error, loading } = useQuery(MEASUREMENTS);
+  const { data, error, loading, refetch } = useQuery(MEASUREMENTS, {
+    fetchPolicy: 'cache-and-network',
+  });
   const [saveWeight, { loading: saveWeightLoading, error: saveWeightError }] = useMutation(
     SAVEWEIGHT,
     {
@@ -65,8 +67,25 @@ const Panel = ({client, goBack, hasNorch}) => {
     })
   }
   const {weights, calipers, valumens, futrex} = data ? data.measurements : {}
-  console.log("data")
-  console.log(data)
+
+  //
+  // App resume event handling
+  //
+  React.useEffect(() => {
+    document.removeEventListener("resume", onResume, false);
+    document.addEventListener("resume", onResume, false);
+  }, []);
+  function onResume() {
+    setTimeout(function() {
+        refetch();
+    }, 0);
+  }
+  //
+  //
+  //
+  const { data: meData } = useQuery(ME);
+  const {primaryColor, secondaryColor} = meData ? meData.me : {};
+
   return (
     <Measurements
       loading={loading}
@@ -83,6 +102,9 @@ const Panel = ({client, goBack, hasNorch}) => {
       deleteWeightLoading={deleteWeightLoading}
       deleteWeightError={deleteWeightError}
       hasNorch={hasNorch}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

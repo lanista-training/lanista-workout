@@ -7,7 +7,7 @@ export const Panel = styled.div`
   min-height: 100vh;
   display: flex;
   flex-flow: column;
-  background: rgb(220,0,78);
+  background: ${props => props.theme.colors.primary};
   .MuiLinearProgress-root {
     position: absolute;
     top: 0em;
@@ -18,7 +18,7 @@ export const Panel = styled.div`
     align-items: left;
     display: flex;
     flex-flow: column;
-    background: rgb(220, 0, 78);
+    background: ${props => props.theme.colors.primary};
     color: white;
     margin: 0 0 1.5em 0;
     position: fixed;
@@ -67,10 +67,10 @@ export const Panel = styled.div`
       }
     }
     .MuiTab-textColorPrimary.Mui-selected {
-      color: rgb(220, 0, 78);
+      color: ${props => props.theme.colors.primary};
     }
     .MuiTabs-indicator {
-      background-color: rgb(220, 0, 78);
+      background-color: ${props => props.theme.colors.primary};
     }
     ::before
     {
@@ -100,17 +100,17 @@ export const Panel = styled.div`
       font-size: 2em;
       padding: 10px;
       margin-left: -17px;
-      background: rgb(220,0,78);
+      background: ${props => props.theme.colors.primary};
       color: white;
       border-radius: 50%;
     }
     .filter-lable {
       border-style: solid;
       border-width: 3px;
-      border-color: rgb(220,0,78);
+      border-color: ${props => props.theme.colors.primary};
       padding: 2px 5px;
       color: white;
-      background: rgb(220,0,78);
+      background: ${props => props.theme.colors.primary};
       border-radius: 15px;
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
@@ -155,7 +155,7 @@ export const Panel = styled.div`
         flex: 1;
       }
       svg {
-        color: rgb(220,0,78);
+        color: ${props => props.theme.colors.primary};
       }
     }
   }
@@ -176,7 +176,7 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
   z-index: 999;
   color: white!important;
   font-size: 0.5em!important;

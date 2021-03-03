@@ -23,7 +23,9 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch, doLogout, goToLogin}) =
     gender,
     gyms,
     language,
-    connectionRequests
+    connectionRequests,
+    primaryColor,
+    secondaryColor,
   } = me;
 
   const [updateProfile, { loading: updateProfileLoading, error: updateProfileError }] = useMutation(
@@ -118,6 +120,22 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch, doLogout, goToLogin}) =
     refetch();
   }, []);
 
+  //
+  // App resume event handling
+  //
+  React.useEffect(() => {
+    document.removeEventListener("resume", onResume, false);
+    document.addEventListener("resume", onResume, false);
+  }, []);
+  function onResume() {
+    setTimeout(function() {
+        refetch();
+    }, 0);
+  }
+  //
+  //
+  //
+
   return (
     <Setup
       firstName={first_name}
@@ -140,6 +158,9 @@ const Panel = ({client, goBack, goToGymsearch, hasNorch, doLogout, goToLogin}) =
       checkForInvitations={checkForInvitations}
       version={3537}
       onDeleteAccount={deleteAccount}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

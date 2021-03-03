@@ -14,6 +14,6 @@ export const Menu = styled.div`
   bottom: 1em;
   right: 1em;
   .MuiSpeedDial-fab {
-    background-color: rgb(220,0,78)!important;
+    background-color: ${props => props.theme.colors.primary}!important;
   }
 `;

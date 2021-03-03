@@ -7,7 +7,7 @@ export const Panel = styled.div`
   min-height: 100vh;
   display: flex;
   flex-flow: column;
-  background: rgb(220,0,78);
+  background: ${props => props.theme.colors.primary};
   .MuiLinearProgress-root {
     position: absolute;
     top: 0em;
@@ -18,7 +18,7 @@ export const Panel = styled.div`
     align-items: left;
     display: flex;
     flex-flow: column;
-    background: rgb(220, 0, 78);
+    background: ${props => props.theme.colors.primary};
     color: white;
     margin: 0 0 1.5em 0;
     position: fixed;
@@ -128,5 +128,5 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
 `;

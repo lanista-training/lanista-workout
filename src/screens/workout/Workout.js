@@ -30,8 +30,15 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Skeleton from '@material-ui/lab/Skeleton';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Pullable from 'react-pullable';
-
 import { useTheme } from '@material-ui/core/styles';
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
 
 const getProgress = (protocolls, sets) => {
   console.log("getProgress")
@@ -57,9 +64,10 @@ const Workout = ({
     hasNorch,
     refetch,
     todayExecutions,
+
+    primaryColor,
+    secondaryColor,
   }) => {
-    console.log("todayExecutions")
-    console.log(todayExecutions)
   const {t} = useTranslate("workout");
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -102,140 +110,152 @@ const Workout = ({
     );
   }
   const {name, splits} = (plan ? plan : {})
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel>
-      <div className="header" style={hasNorch ? {paddingTop: "40px"} : {}}>
-        {error && <div>Sorry   :-(</div>}
-        {!error &&
-          <ExpansionPanel defaultExpanded={assignPlan !== undefined}>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel>
+        <div className="header" style={hasNorch ? {paddingTop: "40px"} : {}}>
+          {error && <div>Sorry   :-(</div>}
+          {!error &&
+            <ExpansionPanel defaultExpanded={assignPlan !== undefined}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                {!loading && name}
+                {loading && <Skeleton variant="rect" width={"100%"} height={"2em"} />}
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                {plan && plan.description && plan.description.split('||').map( (line, index) => (<div key={"description-line" + index}>{line.charAt(0).toUpperCase() + line.slice(1)}</div>)) }
+                {(plan && plan.duration > 0) && (<div className="plan-duration">{t("plan_duration")}: <span>{plan.duration} {plan.duration > 1 ? t("weeks") : t("week")}</span></div>)}
+                {plan && !showAssignButton &&
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    onClick={() => handleOpen()}
+                    startIcon={<DeleteIcon />}
+                  >
+                    {t("delete_plan")}
+                  </Button>
+                }
+                {plan && showAssignButton &&
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    onClick={() => signedIn ? assignPlan(plan.id) : onGoBack(plan.id)}
+                  >
+                    {signedIn ? t("add_plan") : t("login_to_keep_going")}
+                  </Button>
+                }
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          }
+        </div>
+        <div className="content">
+          <AppBar position="static" color="default">
+            <Tabs
+              value={currentTab}
+              onChange={handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="fullWidth"
+              aria-label="full width tabs example"
             >
-              {!loading && name}
-              {loading && <Skeleton variant="rect" width={"100%"} height={"2em"} />}
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              {plan && plan.description && plan.description.split('||').map( (line, index) => (<div key={"description-line" + index}>{line.charAt(0).toUpperCase() + line.slice(1)}</div>)) }
-              {(plan && plan.duration > 0) && (<div className="plan-duration">{t("plan_duration")}: <span>{plan.duration} {plan.duration > 1 ? t("weeks") : t("week")}</span></div>)}
-              {plan && !showAssignButton &&
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="large"
-                  onClick={() => handleOpen()}
-                  startIcon={<DeleteIcon />}
-                >
-                  {t("delete_plan")}
-                </Button>
+              {
+                splits && splits.map((split, index) => (
+                  <Tab key={"plan-split-" + index} label={split.name} {...a11yProps(index)} />
+                ))
               }
-              {plan && showAssignButton &&
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  size="large"
-                  onClick={() => signedIn ? assignPlan(plan.id) : onGoBack(plan.id)}
-                >
-                  {signedIn ? t("add_plan") : t("login_to_keep_going")}
-                </Button>
+            </Tabs>
+          </AppBar>
+          {loading &&
+            <LinearProgress style={{top: "-1em"}}/>
+          }
+          {
+            !loading && splits && splits.length > 0 &&
+            <div>
+              {
+                splits && splits.map((split, index) => (
+                  <TabPanel key={"split-panel-" + index} value={currentTab} index={index} dir={theme.direction} className="exercise-list">
+                    <Pullable onRefresh={onRefresh}>
+                      {error && <div className="error">{t("plan_not_found")}</div>}
+                      {!error && !loading && split.exercises.map(planExercise => (
+                        <Card className="plan-exercise" key={'plan-exercise-' + planExercise.exercise.id} onClick={() => showExercise(planExercise.exercise.id, planExercise.id)}>
+                          <CardActionArea>
+                            <CardMedia
+                              className={todayExecutions && todayExecutions.filter(e => e.exercise_id == planExercise.exercise.id).length >= planExercise.rounds ? "exercise-images done" : "exercise-images"}
+                              title="Contemplative Reptile"
+                            >
+                              <div
+                                className="start-image"
+                                style={{backgroundImage: "url(" + planExercise.exercise.start_image + ")"}}
+                              />
+                              <div
+                                className="end-image"
+                                style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
+                              />
+                            </CardMedia>
+                            {getProgress(todayExecutions && todayExecutions.filter(e => e.exercise_id == planExercise.exercise.id), planExercise.rounds)}
+                            <CardContent>
+                              {planExercise.exercise.name}
+                            </CardContent>
+                            <CardActions>
+                              <div><span>{planExercise.rounds}</span> {t("sets")}</div>
+                              <div><span>{planExercise.weight}</span> {t("kg")} / <span>{planExercise.repetitions}</span> {planExercise.training_unit == 0 ? t("rep") : planExercise.training_unit == 1 ? t("sec") : t("min")}</div>
+                            </CardActions>
+                          </CardActionArea>
+                        </Card>
+                      ))}
+                    </Pullable>
+                  </TabPanel>
+                ))
               }
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        }
-      </div>
-      <div className="content">
-        <AppBar position="static" color="default">
-          <Tabs
-            value={currentTab}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            {
-              splits && splits.map((split, index) => (
-                <Tab key={"plan-split-" + index} label={split.name} {...a11yProps(index)} />
-              ))
-            }
-          </Tabs>
-        </AppBar>
-        {loading &&
-          <LinearProgress style={{top: "-1em"}}/>
-        }
-        {
-          !loading && splits && splits.length > 0 &&
-          <div>
-            {
-              splits && splits.map((split, index) => (
-                <TabPanel key={"split-panel-" + index} value={currentTab} index={index} dir={theme.direction} className="exercise-list">
-                  <Pullable onRefresh={onRefresh}>
-                    {error && <div className="error">{t("plan_not_found")}</div>}
-                    {!error && !loading && split.exercises.map(planExercise => (
-                      <Card className="plan-exercise" key={'plan-exercise-' + planExercise.exercise.id} onClick={() => showExercise(planExercise.exercise.id, planExercise.id)}>
-                        <CardActionArea>
-                          <CardMedia
-                            className={todayExecutions && todayExecutions.filter(e => e.exercise_id == planExercise.exercise.id).length >= planExercise.rounds ? "exercise-images done" : "exercise-images"}
-                            title="Contemplative Reptile"
-                          >
-                            <div
-                              className="start-image"
-                              style={{backgroundImage: "url(" + planExercise.exercise.start_image + ")"}}
-                            />
-                            <div
-                              className="end-image"
-                              style={{backgroundImage: "url(" + planExercise.exercise.end_image + ")"}}
-                            />
-                          </CardMedia>
-                          {getProgress(todayExecutions && todayExecutions.filter(e => e.exercise_id == planExercise.exercise.id), planExercise.rounds)}
-                          <CardContent>
-                            {planExercise.exercise.name}
-                          </CardContent>
-                          <CardActions>
-                            <div><span>{planExercise.rounds}</span> {t("sets")}</div>
-                            <div><span>{planExercise.weight}</span> {t("kg")} / <span>{planExercise.repetitions}</span> {planExercise.training_unit == 0 ? t("rep") : planExercise.training_unit == 1 ? t("sec") : t("min")}</div>
-                          </CardActions>
-                        </CardActionArea>
-                      </Card>
-                    ))}
-                  </Pullable>
-                </TabPanel>
-              ))
-            }
-          </div>
-        }
-      </div>
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"PLAN LÖSCHEN"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {t("delete_plan_question")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            {t("back")}
-          </Button>
-          <Button onClick={() => {
-            deletePlan(plan.id)
-            handleClose()
-          }} color="primary" autoFocus>
-            {t("delete_plan")}
-          </Button>
-        </DialogActions>
-        </DialogActions>
-      </Dialog>
-    </Panel>
+            </div>
+          }
+        </div>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"PLAN LÖSCHEN"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("delete_plan_question")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              {t("back")}
+            </Button>
+            <Button onClick={() => {
+              deletePlan(plan.id)
+              handleClose()
+            }} color="primary" autoFocus>
+              {t("delete_plan")}
+            </Button>
+          </DialogActions>
+          </DialogActions>
+        </Dialog>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

@@ -26,7 +26,14 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import Slider from "react-slick";
 import {LineChart, Line, YAxis, ResponsiveContainer} from 'recharts';
-
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
 const settings = {
   dots: false,
   arrows: false,
@@ -296,6 +303,9 @@ const Measurements = ({
   deleteWeightLoading,
   deleteWeightError,
   hasNorch,
+
+  primaryColor,
+  secondaryColor,
 }) => {
 
   const {t} = useTranslate("measures");
@@ -345,185 +355,196 @@ const Measurements = ({
     toggleDrawer();
   }
 
-  console.log(selectedVolume, selectedCaliper)
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
 
   return (
-    <Panel>
-      <div className="user-info header" style={{paddingTop: hasNorch ? '30px' : ''}}>
-        <div className="header-inner-frame">
-          <div className="title">
-            {t("measures")}
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel>
+        <div className="user-info header" style={{paddingTop: hasNorch ? '30px' : ''}}>
+          <div className="header-inner-frame">
+            <div className="title">
+              {t("measures")}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="graphics-section">
-        <Slider {...settings}
-          beforeChange={(current, next) => {
-            setCurrentSlide(next)
-          }}
+        <div className="graphics-section">
+          <Slider {...settings}
+            beforeChange={(current, next) => {
+              setCurrentSlide(next)
+            }}
+          >
+            <div key={'graphic-weight'} className="graphic-wrapper">
+              <div className="graphic graphic-weight" onClick={() => {
+                console.log("MARK 1")
+              }}>
+                <div className="graphic-header">
+                  <div className="text-section">
+                    <div className="last-value">{weights && weights.length > 0 ? weights[weights.length-1].value : 0} {t("kg")}</div>
+                    <div className="graphic-title">{t("weight")}</div>
+                  </div>
+                  <div className="icon-section"/>
+                </div>
+                {renderWeightGraph(weights, t)}
+              </div>
+            </div>
+            <div key={'graphic-caliper'} className="graphic-wrapper">
+              <div className="graphic graphic-caliper" onClick={() => {
+                console.log("MARK 2")
+              }}>
+                <div className="graphic-header">
+                  <div className="text-section">
+                    <div className="last-value">{calipers && calipers.length > 0 ? calipers[calipers.length-1].body_fat : 0} %</div>
+                    <div className="graphic-title">{t("caliper")}</div>
+                  </div>
+                  <SquareFootIcon/>
+                </div>
+                {renderCalipersGraph(calipers, t)}
+              </div>
+            </div>
+            <div key={'graphic-volume'} className="graphic-wrapper">
+              <div className="graphic graphic-volume" onClick={() => {
+                console.log("MARK 3")
+              }}>
+                <div className="graphic-header">
+                  <div className="text-section">
+                    <div className="last-value">{valumens && valumens.length > 0 ? [valumens.length-1].sum : 0} mm</div>
+                    <div className="graphic-title">{t("volumens")}</div>
+                  </div>
+                  <StraightenIcon/>
+                </div>
+                {renderVolumensGraph(valumens, t)}
+              </div>
+            </div>
+            <div key={'graphic-futrex'} className="graphic-wrapper">
+              <div className="graphic graphic-futrex" onClick={() => {
+                console.log("MARK 4")
+              }}>
+                <div className="graphic-header">
+                  <div className="text-section">
+                    <div className="last-value">{futrex && futrex.length > 0 ? futrex[futrex.length-1].value : 0} %</div>
+                    <div className="graphic-title">{t("body_fat_digital")}</div>
+                  </div>
+                  <TouchAppIcon/>
+                </div>
+                {renderFutrexGraph(futrex, t)}
+              </div>
+            </div>
+          </Slider>
+        </div>
+        <div className="data-section">
+          <div className="list-wrapper">
+          { currentSlide == 0 && renderWeightList(weights, () => setShowForm(true), (record) => {
+            setSelectedWeight(record.id == selectedWeight ? 0 : record.id)
+          }, selectedWeight, deleteWeight, t)}
+          { currentSlide == 1 && renderCaliperList(calipers, t, onCaliperClick) }
+          { currentSlide == 2 && renderVolumensList(valumens, t, onVolumeClick) }
+          { currentSlide == 3 && renderFutrexList(futrex, t) }
+          </div>
+        </div>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
+        <Dialog
+          open={showForm}
+          onClose={() => setShowForm(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-          <div key={'graphic-weight'} className="graphic-wrapper">
-            <div className="graphic graphic-weight" onClick={() => {
-              console.log("MARK 1")
-            }}>
-              <div className="graphic-header">
-                <div className="text-section">
-                  <div className="last-value">{weights && weights.length > 0 ? weights[weights.length-1].value : 0} {t("kg")}</div>
-                  <div className="graphic-title">{t("weight")}</div>
-                </div>
-                <div className="icon-section"/>
+          <DialogTitle id="alert-protocoll-title">{"Gewicht eingeben"}</DialogTitle>
+          <DialogContent>
+            <>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  margin="normal"
+                  id="date-picker-dialog"
+                  label={t("day_of_measure")}
+                  format="dd/MM/yyyy"
+                  value={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                  }}
+                  className="protocoll-date"
+                  style={{width: "100%"}}
+                />
+              </MuiPickersUtilsProvider>
+              <div className="input-fields">
+                <TextField
+                  id="filled-start-adornment"
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                  }}
+                  variant="outlined"
+                  type="number"
+                  value={weight}
+                  onChange={(event) => setWeight(event.target.value)}
+                  style={{width: "100%", marginTop: "1em"}}
+                />
               </div>
-              {renderWeightGraph(weights, t)}
-            </div>
-          </div>
-          <div key={'graphic-caliper'} className="graphic-wrapper">
-            <div className="graphic graphic-caliper" onClick={() => {
-              console.log("MARK 2")
-            }}>
-              <div className="graphic-header">
-                <div className="text-section">
-                  <div className="last-value">{calipers && calipers.length > 0 ? calipers[calipers.length-1].body_fat : 0} %</div>
-                  <div className="graphic-title">{t("caliper")}</div>
-                </div>
-                <SquareFootIcon/>
-              </div>
-              {renderCalipersGraph(calipers, t)}
-            </div>
-          </div>
-          <div key={'graphic-volume'} className="graphic-wrapper">
-            <div className="graphic graphic-volume" onClick={() => {
-              console.log("MARK 3")
-            }}>
-              <div className="graphic-header">
-                <div className="text-section">
-                  <div className="last-value">{valumens && valumens.length > 0 ? [valumens.length-1].sum : 0} mm</div>
-                  <div className="graphic-title">{t("volumens")}</div>
-                </div>
-                <StraightenIcon/>
-              </div>
-              {renderVolumensGraph(valumens, t)}
-            </div>
-          </div>
-          <div key={'graphic-futrex'} className="graphic-wrapper">
-            <div className="graphic graphic-futrex" onClick={() => {
-              console.log("MARK 4")
-            }}>
-              <div className="graphic-header">
-                <div className="text-section">
-                  <div className="last-value">{futrex && futrex.length > 0 ? futrex[futrex.length-1].value : 0} %</div>
-                  <div className="graphic-title">{t("body_fat_digital")}</div>
-                </div>
-                <TouchAppIcon/>
-              </div>
-              {renderFutrexGraph(futrex, t)}
-            </div>
-          </div>
-        </Slider>
-      </div>
-      <div className="data-section">
-        <div className="list-wrapper">
-        { currentSlide == 0 && renderWeightList(weights, () => setShowForm(true), (record) => {
-          setSelectedWeight(record.id == selectedWeight ? 0 : record.id)
-        }, selectedWeight, deleteWeight, t)}
-        { currentSlide == 1 && renderCaliperList(calipers, t, onCaliperClick) }
-        { currentSlide == 2 && renderVolumensList(valumens, t, onVolumeClick) }
-        { currentSlide == 3 && renderFutrexList(futrex, t) }
-        </div>
-      </div>
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-      <Dialog
-        open={showForm}
-        onClose={() => setShowForm(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-protocoll-title">{"Gewicht eingeben"}</DialogTitle>
-        <DialogContent>
-          <>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                margin="normal"
-                id="date-picker-dialog"
-                label={t("day_of_measure")}
-                format="dd/MM/yyyy"
-                value={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                className="protocoll-date"
-                style={{width: "100%"}}
-              />
-            </MuiPickersUtilsProvider>
-            <div className="input-fields">
-              <TextField
-                id="filled-start-adornment"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
-                }}
-                variant="outlined"
-                type="number"
-                value={weight}
-                onChange={(event) => setWeight(event.target.value)}
-                style={{width: "100%", marginTop: "1em"}}
-              />
-            </div>
-          </>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setShowForm(false)} color="primary" autoFocus>
-            {t("back")}
-          </Button>
-          <Button onClick={() => {
-            if(weight == 0) {
-              setMessage(t("enter_weight"))
-            } else {
-              saveWeight(weight, selectedDate)
+            </>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowForm(false)} color="primary" autoFocus>
+              {t("back")}
+            </Button>
+            <Button onClick={() => {
+              if(weight == 0) {
+                setMessage(t("enter_weight"))
+              } else {
+                saveWeight(weight, selectedDate)
+              }
+              setShowForm(false)
+            }} color="primary" autoFocus>
+              {t("save")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={message !== null}
+          autoHideDuration={6000}
+          onClose={onCloseMessage}
+        >
+          <SnackbarContent
+            aria-describedby="client-snackbar"
+            message={
+              <span id="client-snackbar">
+                <WarningIcon />
+                {message}
+              </span>
             }
-            setShowForm(false)
-          }} color="primary" autoFocus>
-            {t("save")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={message !== null}
-        autoHideDuration={6000}
-        onClose={onCloseMessage}
-      >
-        <SnackbarContent
-          aria-describedby="client-snackbar"
-          message={
-            <span id="client-snackbar">
-              <WarningIcon />
-              {message}
-            </span>
-          }
-          action={[
-            <IconButton key="close" aria-label="close" color="inherit" onClick={onCloseMessage}>
-              <CloseIcon />
-            </IconButton>,
-          ]}
-        />
-      </Snackbar>
+            action={[
+              <IconButton key="close" aria-label="close" color="inherit" onClick={onCloseMessage}>
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
+        </Snackbar>
 
-      <StyledSwipeableDrawer
-        open={drawlerOpen}
-        anchor="bottom"
-        onClose={toggleDrawer}
-        onOpen={toggleDrawer}
-      >
-        {drawlerOpen && selectedCaliper && renderCaliper(selectedCaliper, t)}
-        {drawlerOpen && selectedVolume && renderVolume(selectedVolume, t)}
-      </StyledSwipeableDrawer>
+        <StyledSwipeableDrawer
+          open={drawlerOpen}
+          anchor="bottom"
+          onClose={toggleDrawer}
+          onOpen={toggleDrawer}
+        >
+          {drawlerOpen && selectedCaliper && renderCaliper(selectedCaliper, t)}
+          {drawlerOpen && selectedVolume && renderVolume(selectedVolume, t)}
+        </StyledSwipeableDrawer>
 
-    </Panel>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

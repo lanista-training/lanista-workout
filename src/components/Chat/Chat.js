@@ -7,6 +7,18 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import Grow from '@material-ui/core/Grow';
 
+import Menu from '@material-ui/core/Menu';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+import { useTranslate } from '../../hooks/Translation';
+
+const StyledMenu = styled(Menu)`
+  .MuiPaper-root {
+    background: transparent;
+    box-shadow: none;
+  }
+`;
 const Chat = styled.div`
   height: 100%;
   display: flex!important;
@@ -74,7 +86,7 @@ const Chat = styled.div`
     }
   }
   .send-button-icon {
-    color: rgb(220,0,78);
+    color: ${props => props.theme.colors.primary};
   }
 `;
 const Message = styled.div`
@@ -132,7 +144,7 @@ const Message = styled.div`
       position: relative;
       transform-origin: left bottom;
       animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-      background: rgb(84, 173, 245);
+      background: rgb(193 193 193);
       border-radius: 18px 18px 18px 0px;
       margin: 0px 0px 10px;
       overflow: hidden;
@@ -187,9 +199,9 @@ const Message = styled.div`
   }
 `;
 
-const SingleMessage = ({message, hideExercises}) => {
+const SingleMessage = ({message, hideExercises, onClick}) => {
   return (
-    <Message key={"message-" + message.id}>
+    <Message key={"message-" + message.id} onClick={onClick}>
       <div className={message.type !== 0 ? 'trainer' : 'member'}>
         <div className='image-container'>
           <div className="image" style={{backgroundImage: 'url("' + message.photoUrl + '")'}}/>
@@ -213,10 +225,52 @@ const SingleMessage = ({message, hideExercises}) => {
 }
 
 
-export default ({closePanel, visible, member, data, hideHeader, hideExercises, hideInputField, onSendMessage}) => {
+export default ({
+  closePanel,
+  visible,
+  member,
+  data,
+  hideHeader,
+  hideExercises,
+  hideInputField,
+  onSendMessage,
+  chatSupport,
+  inputFieldPlacehoder,
+
+  onDeleteChatMessage,
+  deleteChatMessageLoading,
+  deleteChatMessageError,
+
+  userId,
+
+}) => {
 
   const [message, setMessage] = useState('');
   const el = useRef(null);
+  const {t} = useTranslate("exercise");
+
+  //
+  // DELETE MESSAGE
+  //
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedMessage, setSelectedMessage] = React.useState(null);
+  const handleClick = (event, messageId) => {
+    console.log("handleClick", messageId)
+    setSelectedMessage(messageId);
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setSelectedMessage(null);
+    setAnchorEl(null);
+  };
+  const onClickDeleteButton = () => {
+    console.log("onClickDeleteButton", selectedMessage)
+    onDeleteChatMessage(selectedMessage);
+    handleClose();
+  }
+  //
+  //
+  //
 
   useEffect(() => {
     el.current && el.current && el.current.scrollIntoView({ block: 'end' });
@@ -238,6 +292,7 @@ export default ({closePanel, visible, member, data, hideHeader, hideExercises, h
                 <SingleMessage
                   message={message}
                   hideExercises={hideExercises}
+                  onClick={message.type == 1 ? (e) => handleClick(e, message.id) : () => false}
                 />
               </Grow>)
               :
@@ -245,6 +300,7 @@ export default ({closePanel, visible, member, data, hideHeader, hideExercises, h
               <SingleMessage
                 message={message}
                 hideExercises={hideExercises}
+                onClick={message.type == 1 ? (e) => handleClick(e, message.id) : () => false}
               /></Grow>)
             )}
         </div>
@@ -252,7 +308,7 @@ export default ({closePanel, visible, member, data, hideHeader, hideExercises, h
       {!hideInputField && (
         <TextField
           id="outlined-basic"
-          placeholder='Nachricht'
+          placeholder={inputFieldPlacehoder}
           value={message}
           onChange={(event) => setMessage(event.target.value)}
           variant="outlined"
@@ -270,6 +326,25 @@ export default ({closePanel, visible, member, data, hideHeader, hideExercises, h
           }}
         />
       )}
+      <StyledMenu
+        id="message-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Fab color="secondary" aria-label="add" onClick={() => onClickDeleteButton(message.id)}>
+          <DeleteIcon />
+        </Fab>
+      </StyledMenu>
     </Chat>
   )
 };

@@ -118,7 +118,10 @@
     "play_problems": "Playback problems",
     "today": "Today",
     "set": "Set",
-    "kg": "Kg"
+    "kg": "Kg",
+    "chat": "Chat",
+    "message": "Message",
+    "note": "Note"
   },
   "gymsearch": {
     "your_data": "Your data",

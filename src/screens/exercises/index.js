@@ -5,7 +5,18 @@ import { useQuery } from '@apollo/react-hooks';
 import Exercises from './Exercises';
 import { EXERCISES } from "../../queries"
 
-const Panel = ({goBack, hasNorch, showExercise, exercises, types, muscles, text, additions}) => {
+const Panel = ({
+  goBack,
+  hasNorch,
+  showExercise,
+  exercises,
+  types,
+  muscles,
+  text,
+  additions,
+  primaryColor,
+  secondaryColor,
+}) => {
 
   const {locale} = useTranslate("exercises");
   const { data, error, loading } = useQuery(EXERCISES, {
@@ -33,6 +44,9 @@ const Panel = ({goBack, hasNorch, showExercise, exercises, types, muscles, text,
       muscles={muscles}
       types={types}
       additions={additions}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

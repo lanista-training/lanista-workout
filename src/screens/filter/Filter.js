@@ -33,7 +33,14 @@ import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
-
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
 const a11yProps = (index) => {
   return {
     id: `full-width-tab-${index}`,
@@ -77,6 +84,10 @@ const Filter = ({
   text,
   onTextChange,
   resetText,
+
+  primaryColor,
+  secondaryColor,
+
 }) => {
 
   const {t} = useTranslate("filter");
@@ -148,93 +159,106 @@ const Filter = ({
     e.preventDefault();
     setTimeout(() => {  showExercises(); }, 1000);
   }
-
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel >
-      <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
-        <div className="title">
-          {t("exercises")}
-          <Button
-            variant="outlined"
-            endIcon={<ChevronRightIcon />}
-            size="small"
-            onClick={showExercises}
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel >
+        <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
+          <div className="title">
+            {t("exercises")}
+            <Button
+              variant="outlined"
+              endIcon={<ChevronRightIcon />}
+              size="small"
+              onClick={showExercises}
+            >
+              {total}
+            </Button>
+          </div>
+          <div className="current-filters">
+            {selectedMuscles}
+            {selectedTypes}
+            {selectedAdditions}
+            {selectedText}
+          </div>
+        </div>
+        <div className="content-wrapper" style={{marginTop: hasNorch ? '7em' : ''}}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            variant="fullWidth"
+            aria-label="full width tabs example"
           >
-            {total}
-          </Button>
-        </div>
-        <div className="current-filters">
-          {selectedMuscles}
-          {selectedTypes}
-          {selectedAdditions}
-          {selectedText}
-        </div>
-      </div>
-      <div className="content-wrapper" style={{marginTop: hasNorch ? '7em' : ''}}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="full width tabs example"
-        >
-          <Tab label={t("body_search")} {...a11yProps(0)} />
-          <Tab label={t("type_search")} {...a11yProps(1)} />
-          <Tab label={t("tools_search")} {...a11yProps(2)} />
-          <Tab label={t("text_search")} {...a11yProps(3)} />
-        </Tabs>
-        <TabPanel key="tab-1" className="tab-panel" value={value} index={0} >
-          <MuscleFilter
-            filter={muscles}
-            onSelection={onMuscleSelection}
-          />
-        </TabPanel>
-        <TabPanel key="tab-2" className="tab-panel" value={value} index={1} >
-          <div className="filters-list">
-            {typeFilters.map((filter) =>
-              <ListItem key={'filter-type-' + filter.key} button onClick={() => onTypeSelection(filter.key)}>
-                <div className="filter-lable">{filter}</div>
-                <AddIcon/>
-              </ListItem>
-            )}
-          </div>
-        </TabPanel>
-        <TabPanel key="tab-3" className="tab-panel" value={value} index={2} >
-          <div className="filters-list">
-            {additionFilters.map((filter) =>
-              <ListItem key={'filter-type-' + filter.key} button onClick={() => onAdditionSelection(filter.key)}>
-                <div className="filter-lable">{filter}</div>
-                <AddIcon/>
-              </ListItem>
-            )}
-          </div>
-        </TabPanel>
-        <TabPanel key="tab-4" className="tab-panel" value={value} index={3} >
-          <div class="search-field">
-            <Paper component="form" onSubmit={onSubmit}>
-              <InputBase
-                placeholder={t("search_exercises")}
-                inputProps={{ 'aria-label': 'searc lanista exercises' }}
-                value={text}
-                onChange={onTextChange}
-              />
-              <IconButton type="submit" aria-label="search" onClick={onSubmit}>
-                <SearchIcon />
-              </IconButton>
-            </Paper>
-            <div className="text-search-hints">
-              {text.length < 3 && t("min_3_characters")}
-              {text.length > 2 && total > 0 && t("search_results")} {text.length > 2 && total > 0 && <span>{total}</span>}
-              {text.length > 2 && total === 0 && t("no_resuts")}
+            <Tab label={t("body_search")} {...a11yProps(0)} />
+            <Tab label={t("type_search")} {...a11yProps(1)} />
+            <Tab label={t("tools_search")} {...a11yProps(2)} />
+            <Tab label={t("text_search")} {...a11yProps(3)} />
+          </Tabs>
+          <TabPanel key="tab-1" className="tab-panel" value={value} index={0} >
+            <MuscleFilter
+              filter={muscles}
+              onSelection={onMuscleSelection}
+              primaryColor={primaryColor ? primaryColor : "#d20027"}
+              secondaryColor={secondaryColor ? secondaryColor : "#f4f2f2"}
+            />
+          </TabPanel>
+          <TabPanel key="tab-2" className="tab-panel" value={value} index={1} >
+            <div className="filters-list">
+              {typeFilters.map((filter) =>
+                <ListItem key={'filter-type-' + filter.key} button onClick={() => onTypeSelection(filter.key)}>
+                  <div className="filter-lable">{filter}</div>
+                  <AddIcon/>
+                </ListItem>
+              )}
             </div>
-          </div>
-        </TabPanel>
-      </div>
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-    </Panel>
+          </TabPanel>
+          <TabPanel key="tab-3" className="tab-panel" value={value} index={2} >
+            <div className="filters-list">
+              {additionFilters.map((filter) =>
+                <ListItem key={'filter-type-' + filter.key} button onClick={() => onAdditionSelection(filter.key)}>
+                  <div className="filter-lable">{filter}</div>
+                  <AddIcon/>
+                </ListItem>
+              )}
+            </div>
+          </TabPanel>
+          <TabPanel key="tab-4" className="tab-panel" value={value} index={3} >
+            <div class="search-field">
+              <Paper component="form" onSubmit={onSubmit}>
+                <InputBase
+                  placeholder={t("search_exercises")}
+                  inputProps={{ 'aria-label': 'searc lanista exercises' }}
+                  value={text}
+                  onChange={onTextChange}
+                />
+                <IconButton type="submit" aria-label="search" onClick={onSubmit}>
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+              <div className="text-search-hints">
+                {text.length < 3 && t("min_3_characters")}
+                {text.length > 2 && total > 0 && t("search_results")} {text.length > 2 && total > 0 && <span>{total}</span>}
+                {text.length > 2 && total === 0 && t("no_resuts")}
+              </div>
+            </div>
+          </TabPanel>
+        </div>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

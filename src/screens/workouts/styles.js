@@ -8,9 +8,9 @@ export const Panel = styled.div`
   display: flex;
   flex-flow: column;
   overflow: hidden;
-  background: rgb(220,0,78);
+  background: ${props => props.theme.colors.primary};
   .header {
-    background: rgb(220,0,78);
+    background: ${props => props.theme.colors.primary};
     color: white;
     flex: 1;
     position: fixed;
@@ -35,7 +35,7 @@ export const Panel = styled.div`
   .content-wrapper {
     position: relative;
     width: 100%;
-    background: rgb(220,0,78);
+    background: ${props => props.theme.colors.primary};
     overflow: initial;
     position: relative;
     margin-top: 80px;
@@ -84,8 +84,8 @@ export const Panel = styled.div`
         flex: 1;
         width: 90%;
         margin-bottom: 1em;
-        border-color: rgb(220,0,78);
-        color: rgb(220,0,78);
+        border-color: ${props => props.theme.colors.primary};
+        color: ${props => props.theme.colors.primary};
       }
     }
     .MuiCardHeader-title {
@@ -123,7 +123,7 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
   z-index: 2;
 `;
 

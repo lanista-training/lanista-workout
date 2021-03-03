@@ -553,6 +553,8 @@ export const ME = gql`
       beaconScanning
       nfcScanning
       chatSupport
+      primaryColor
+      secondayColor
       todayExecutions {
         id
         exercise_id

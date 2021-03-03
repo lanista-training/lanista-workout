@@ -48,6 +48,25 @@ const Panel = ({client, goBack, openWorkout, hasNorch}) => {
   const applyFilter = (plans) => {
     return plans.filter( plan => plan.categories && plan.categories.indexOf(filter) > -1 )
   }
+
+  //
+  // App resume event handling
+  //
+  React.useEffect(() => {
+    document.removeEventListener("resume", onResume, false);
+    document.addEventListener("resume", onResume, false);
+  }, []);
+  function onResume() {
+    setTimeout(function() {
+        refetch();
+    }, 0);
+  }
+  //
+  //
+  //
+  const { data: meData } = useQuery(ME);
+  const {primaryColor, secondaryColor} = meData ? meData.me : {};
+
   return (
     <Workouts
       plans={filter == '*' ? workouts : applyFilter(workouts)}
@@ -63,6 +82,8 @@ const Panel = ({client, goBack, openWorkout, hasNorch}) => {
       filter={filter == '*' ? 'FILTER' : filter}
       hasNorch={hasNorch}
       refetch={refetch}
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

@@ -12,7 +12,7 @@ export const Panel = styled.div`
   .header {
     display: flex;
     padding: 1em;
-    background: rgb(220, 0, 78);
+    background: ${props => props.theme.colors.primary};
     color: white;
     font-weight: 900;
     font-size: 1.5em;
@@ -20,7 +20,7 @@ export const Panel = styled.div`
       width: 100%;
     }
     .MuiExpansionPanel-root {
-      background: rgb(220,0,78);
+      background: ${props => props.theme.colors.primary};
       box-shadow: none;
       color: white;
       .MuiButtonBase-root {
@@ -92,10 +92,10 @@ export const Panel = styled.div`
       background-color: whitesmoke;
     }
     .MuiTab-textColorPrimary.Mui-selected {
-      color: rgb(220,0,78);
+      color: ${props => props.theme.colors.primary};
     }
     .MuiTabs-indicator {
-      background-color: rgb(220,0,78);
+      background-color: ${props => props.theme.colors.primary};
     }
     .MuiCardContent-root {
       font-family: Roboto;
@@ -152,5 +152,5 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
 `;

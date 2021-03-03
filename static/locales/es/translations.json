@@ -118,7 +118,10 @@
     "play_problems": "Error de reproducción",
     "today": "Hoy",
     "set": "Serie",
-    "kg": "Kg"
+    "kg": "Kg",
+    "chat": "Chat",
+    "message": "Mensaje",
+    "note": "Nota"
   },
   "gymsearch": {
     "your_data": "Tus Datos",

@@ -43,7 +43,7 @@ const Panel = ({workoutId, goBack, showExercise, hasNorch}) => {
     }
   );
   const me = data ? data.me : {}
-  const {plans, todayExecutions} = me;
+  const {plans, todayExecutions, primaryColor, secondaryColor} = me;
 
   console.log("Searching the plan locally....")
   const plan = plans && plans.find(p => p.id == workoutId)
@@ -57,6 +57,22 @@ const Panel = ({workoutId, goBack, showExercise, hasNorch}) => {
       }
     })
   }
+
+  //
+  // App resume event handling
+  //
+  React.useEffect(() => {
+    document.removeEventListener("resume", onResume, false);
+    document.addEventListener("resume", onResume, false);
+  }, []);
+  function onResume() {
+    setTimeout(function() {
+        refetch();
+    }, 0);
+  }
+  //
+  //
+  //
 
   return (
     <Workout
@@ -73,6 +89,9 @@ const Panel = ({workoutId, goBack, showExercise, hasNorch}) => {
       hasNorch={hasNorch}
       refetch={refetch}
       todayExecutions={todayExecutions}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

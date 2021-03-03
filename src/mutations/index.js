@@ -324,3 +324,11 @@ export const MARKCHATMESSAGES = gql`
      }
   }
 `;
+
+export const DELETECHATMESSAGE = gql`
+  mutation DeleteChatMessage( $messageId: ID! ) {
+     deleteChatMessage( messageId: $messageId ) {
+         id
+     }
+  }
+`;

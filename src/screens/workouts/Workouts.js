@@ -26,6 +26,21 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import Pullable from 'react-pullable';
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
+const getSplits = (plan) => {
+  if(plan.splits) {
+    return plan.splits.length;
+  } else {
+    return plan.days;
+  }
+}
 
 const Workouts = ({
   firstName,
@@ -40,6 +55,8 @@ const Workouts = ({
   filter,
   hasNorch,
   refetch,
+  primaryColor,
+  secondaryColor,
 }) => {
   const [openFilter, setOpenFilter] = React.useState(true);
   const handleClickOpenFilter = () => {
@@ -49,134 +66,146 @@ const Workouts = ({
     setOpenFilter(false);
   };
   let {t} = useTranslate("workouts");
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel>
-      <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
-        <div className="header-inner-frame">
-          <div className="header-title">
-            {t('plans')}
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel>
+        <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
+          <div className="header-inner-frame">
+            <div className="header-title">
+              {t('plans')}
+            </div>
+            <Button
+              variant="outlined"
+              startIcon={<Icon>filter_list</Icon>}
+              size="small"
+              onClick={handleClickOpenFilter}
+            >
+              {filter}
+            </Button>
           </div>
-          <Button
-            variant="outlined"
-            startIcon={<Icon>filter_list</Icon>}
-            size="small"
-            onClick={handleClickOpenFilter}
-          >
-            {filter}
-          </Button>
         </div>
-      </div>
-      <div className="content-wrapper" style={hasNorch ? {marginTop: "110px"} : {}}>
-        <div className="content">
-          <Pullable onRefresh={refetch}>
-            {
-              plans && plans.map(plan => (
-                <StyledCard
-                  key={plan.id}
-                  onClick={(event) => {
-                    if( event.target.parentElement.classList.contains('assign-workout-button') || event.target.classList.contains('assign-workout-button')) {
-                      assignPlan(plan.id)
-                    } else {
-                      openWorkout(plan.id)
+        <div className="content-wrapper" style={hasNorch ? {marginTop: "110px"} : {}}>
+          <div className="content">
+            <Pullable onRefresh={refetch}>
+              {
+                plans && plans.map(plan => (
+                  <StyledCard
+                    key={plan.id}
+                    onClick={(event) => {
+                      if( event.target.parentElement.classList.contains('assign-workout-button') || event.target.classList.contains('assign-workout-button')) {
+                        assignPlan(plan.id)
+                      } else {
+                        openWorkout(plan.id)
+                      }
                     }
                   }
-                }
-                >
-                <CardActionArea>
-                  <Card elevation={0}>
-                    <div className="header-section">
-                      <CardHeader
-                        title={plan.name}
-                        subheader={
-                          plan.days ? plan.days + ' ' + (plan.days > 1 ? t('days_in_the_week') : t('day_in_the_week')) : 'Keine Plandauer'
-                        }
-                      />
-                      <div className="plan-image" style={{backgroundImage: 'url(' + plan.imageUrl + ')'}}/>
-                    </div>
-                    <CardContent>
-                      {plan.description}
-                    </CardContent>
-                    <CardActions>
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        color="primary" className="assign-workout-button"
-                      >
-                        {t('add_to_my_list')}
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </CardActionArea>
-              </StyledCard>
-            ))}
-          </Pullable>
+                  >
+                  <CardActionArea>
+                    <Card elevation={0}>
+                      <div className="header-section">
+                        <CardHeader
+                          title={plan.name}
+                          subheader={
+                            getSplits(plan) ? getSplits(plan) + ' ' + (getSplits(plan) > 1 ? t('days_in_the_week') : t('day_in_the_week')) : t('no_duration')
+                          }
+                        />
+                        <div className="plan-image" style={{backgroundImage: 'url(' + plan.imageUrl + ')'}}/>
+                      </div>
+                      <CardContent>
+                        {plan.description}
+                      </CardContent>
+                      <CardActions>
+                        <Button
+                          fullWidth
+                          variant="outlined"
+                          color="primary" className="assign-workout-button"
+                        >
+                          {t('add_to_my_list')}
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </CardActionArea>
+                </StyledCard>
+              ))}
+            </Pullable>
+          </div>
         </div>
-      </div>
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: "0.4em"}}/>
-      </StyledButton>
-      <Dialog onClose={handleCloseFilter} aria-labelledby="simple-dialog-title" open={openFilter}>
-        <DialogTitle id="simple-dialog-title">{t('select_category')}</DialogTitle>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: "0.4em"}}/>
+        </StyledButton>
+        <Dialog onClose={handleCloseFilter} aria-labelledby="simple-dialog-title" open={openFilter}>
+          <DialogTitle id="simple-dialog-title">{t('select_category')}</DialogTitle>
 
-        <List style={{paddingBottom: "2em"}}>
-          <ListItem autoFocus button onClick={() => {
-            onSetFilter("shaping")
-            handleCloseFilter()
-          }}>
-            <ListItemAvatar>
-              <Avatar>
-                <Icon>panorama_vertical</Icon>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={t("shaping")} />
-          </ListItem>
-          <ListItem autoFocus button onClick={() => {
-            onSetFilter("gain")
-            handleCloseFilter()
-          }}>
-            <ListItemAvatar>
-              <Avatar>
-                <Icon>fitness_center</Icon>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={t("gain")} />
-          </ListItem>
-          <ListItem autoFocus button onClick={() => {
-            onSetFilter("functional")
-            handleCloseFilter()
-          }}>
-            <ListItemAvatar>
-              <Avatar>
-                <Icon>directions_run</Icon>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={t("functional")} />
-          </ListItem>
-          <ListItem autoFocus button onClick={() => {
-            onSetFilter("mobilisation")
-            handleCloseFilter()
-          }}>
-            <ListItemAvatar>
-              <Avatar>
-                <Icon>accessibility_new</Icon>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={t("mobilization")} />
-          </ListItem>
-          <ListItem autoFocus button onClick={() => {
-            onSetFilter("*")
-            handleCloseFilter()
-          }}>
-            <ListItemAvatar>
-              <Avatar>
-                <Icon>filter_list</Icon>
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={t("all_plans")} />
-          </ListItem>
-        </List>
-      </Dialog>
-    </Panel>
+          <List style={{paddingBottom: "2em"}}>
+            <ListItem autoFocus button onClick={() => {
+              onSetFilter("shaping")
+              handleCloseFilter()
+            }}>
+              <ListItemAvatar>
+                <Avatar>
+                  <Icon>panorama_vertical</Icon>
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t("shaping")} />
+            </ListItem>
+            <ListItem autoFocus button onClick={() => {
+              onSetFilter("gain")
+              handleCloseFilter()
+            }}>
+              <ListItemAvatar>
+                <Avatar>
+                  <Icon>fitness_center</Icon>
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t("gain")} />
+            </ListItem>
+            <ListItem autoFocus button onClick={() => {
+              onSetFilter("functional")
+              handleCloseFilter()
+            }}>
+              <ListItemAvatar>
+                <Avatar>
+                  <Icon>directions_run</Icon>
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t("functional")} />
+            </ListItem>
+            <ListItem autoFocus button onClick={() => {
+              onSetFilter("mobilisation")
+              handleCloseFilter()
+            }}>
+              <ListItemAvatar>
+                <Avatar>
+                  <Icon>accessibility_new</Icon>
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t("mobilization")} />
+            </ListItem>
+            <ListItem autoFocus button onClick={() => {
+              onSetFilter("*")
+              handleCloseFilter()
+            }}>
+              <ListItemAvatar>
+                <Avatar>
+                  <Icon>filter_list</Icon>
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={t("all_plans")} />
+            </ListItem>
+          </List>
+        </Dialog>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

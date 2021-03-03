@@ -26,6 +26,23 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Pullable from 'react-pullable';
 
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
+
+const getSplits = (plan) => {
+  if(plan.splits) {
+    return plan.splits.length;
+  } else {
+    return plan.days;
+  }
+}
+
 const settings = {
   dots: false,
   arrows: false,
@@ -95,6 +112,9 @@ const Dashboard = ({
   beaconScanning,
   nfcScanning,
 
+  primaryColor,
+  secondaryColor,
+
   refetch,
 }) => {
   const {t} = useTranslate("dashboard");
@@ -102,137 +122,150 @@ const Dashboard = ({
     refetch();
   }
 
-  return (
-    <Panel modal={modal} scanning={scanning}>
-      <div className="user-info header" style={hasNorch ? {top: "30px"} : {}}>
-        <div className="header-inner-frame">
-          <div className="user-name">
-            <div className="first">{loading ? <Skeleton width="60%" /> : firstName}</div>
-            <div className="last">{loading ? <Skeleton width="50%" /> : lastName}</div>
-          </div>
-          <Button
-            variant="outlined"
-            startIcon={<AddCircleIcon />}
-            size="small"
-            onClick={openWorkouts}
-          >
-            {t('plans')}
-          </Button>
-        </div>
-        {
-          (loading || showBanners) && <div className="banners">
-            {loading && <Skeleton variant="rect" />}
-            {!loading &&
-              <Slider {...settings}>
-              {
-                banners.fallback.map((banner, i) => (
-                  <div key={'banner-' + banner.id} className={ banners && banners.banners.length == 1 ? "one-banner banner-wrapper" : "banner-wrapper" }>
-                    <div className="banner" onClick={() => {
-                      if( typeof window.cordova !== 'undefined' ) {
-                        let win = window.cordova.InAppBrowser.open(banners.banners[i].link ? banners.banners[i].link : banner.link, banners.banners[i].link && banners.banners[i].link.indexOf('mailto') > -1 ? '_system' : '_blank', 'location=yes');
-                        win.focus();
-                      } else {
-                        let win = window.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank');
-                        win.focus();
-                      }
-                    }}>
-                      <div className="banner-image" style={{
-                        backgroundImage: 'url(' + banner.imageUrl + ')'
-                      }}/>
-                      <div className="banner-image banner-fallback" style={{
-                        backgroundImage: 'url(' + banners.banners[i].imageUrl + ')'
-                      }}/>
-                    </div>
-                  </div>
-                ))
-              }
-              </Slider>
-            }
-          </div>
-        }
-      </div>
-      <div className="content-wrapper" style={{marginTop: (loading || showBanners) ? (hasNorch ? "calc(45vw + 135px)" : "calc(45vw + 115px)"): "110px"}}>
-        <div className="content">
-          <FormControlLabel
-            value="active"
-            control={
-              <Switch
-                checked={filter}
-                onChange={toggleFilter}
-                value={filter}
-              />
-            }
-            label={filter ? t('active_plans') : t('all_plans')}
-            labelPlacement="start"
-          />
-          {loading && <Skeleton variant="rect" />}
-          {!loading && plans && plans.length == 0 &&
-            <div className="empty-list-text">{t("plan_list_empty_text")}</div>
-          }
-          <Pullable onRefresh={onRefresh}>
-            {!loading && plans && plans.map(plan => (
-              <StyledCard
-                key={plan.id}
-                className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
-                onClick={() => openWorkout(plan.id)}
-              >
-                <CardActionArea>
-                  <Card>
-                    <CardHeader
-                      title={plan.name}
-                      subheader={
-                        plan.days ? plan.days + (plan.days > 1 ? (' ' + t('days_in_the_week')) : (' ' + t('day_in_the_week'))): t('no_duration')
-                      }
-                      avatar={
-                        <Avatar>
-                          {!moment(new Date(parseInt(plan.expiration_date))).isAfter() && plan.duration > 0 && <TimerOffIcon />}
-                          {(moment(new Date(parseInt(plan.expiration_date))).isAfter() || !(plan.duration > 0)) && <PlayCircleOutlineIcon />}
-                        </Avatar>
-                      }
-                    >
-                    </CardHeader>
-                    <CardContent>
-                      {plan.description}
-                    </CardContent>
-                  </Card>
-                </CardActionArea>
-              </StyledCard>
-            ))}
-          </Pullable>
-        </div>
-      </div>
-      <MenuButton
-        preventLogout={preventLogout}
-        editable={editable}
-        doLogout={doLogout}
-        goToSetup={goToSetup}
-        onGoToProtocolls={onGoToProtocolls}
-        onGoToMeasurements={onGoToMeasurements}
-        language={language}
-      />
-      <Backdrop open={openBeaconSearch} onClick={setOpenBeaconSearch} style={{zIndex: 2}}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      <ScannerButtons
-        onScannQr={onScannQr}
-        onScannNfc={onScannNfc}
-        onScannBeacon={onScannBeacon}
-        onSearchExercises={onSearchExercises}
-        scannNfcDisablen={scannNfcDisable}
-        scannQrDisablen={scannQrDisable}
-        scannBeaconDisablen={scannBeaconDisable}
-        showScannButtons={showScannButtons}
-        onShowFavorites={onShowFavorites}
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
 
-        beaconScanning={beaconScanning}
-        nfcScanning={nfcScanning}
-      />
-      <Snackbar open={snackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="success">
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Panel>
+  return (
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel modal={modal} scanning={scanning}>
+        <div className="user-info header" style={hasNorch ? {top: "30px"} : {}}>
+          <div className="header-inner-frame">
+            <div className="user-name">
+              <div className="first">{loading ? <Skeleton width="60%" /> : firstName}</div>
+              <div className="last">{loading ? <Skeleton width="50%" /> : lastName}</div>
+            </div>
+            <Button
+              variant="outlined"
+              startIcon={<AddCircleIcon />}
+              size="small"
+              onClick={openWorkouts}
+            >
+              {t('plans')}
+            </Button>
+          </div>
+          {
+            (loading || showBanners) && <div className="banners">
+              {loading && <Skeleton variant="rect" />}
+              {!loading &&
+                <Slider {...settings}>
+                {
+                  banners.fallback.map((banner, i) => (
+                    <div key={'banner-' + banner.id} className={ banners && banners.banners.length == 1 ? "one-banner banner-wrapper" : "banner-wrapper" }>
+                      <div className="banner" onClick={() => {
+                        if( typeof window.cordova !== 'undefined' ) {
+                          let win = window.cordova.InAppBrowser.open(banners.banners[i].link ? banners.banners[i].link : banner.link, banners.banners[i].link && banners.banners[i].link.indexOf('mailto') > -1 ? '_system' : '_blank', 'location=yes');
+                          win.focus();
+                        } else {
+                          let win = window.open(banners.banners[i].link ? banners.banners[i].link : banner.link, '_blank');
+                          win.focus();
+                        }
+                      }}>
+                        <div className="banner-image" style={{
+                          backgroundImage: 'url(' + banner.imageUrl + ')'
+                        }}/>
+                        <div className="banner-image banner-fallback" style={{
+                          backgroundImage: 'url(' + banners.banners[i].imageUrl + ')'
+                        }}/>
+                      </div>
+                    </div>
+                  ))
+                }
+                </Slider>
+              }
+            </div>
+          }
+        </div>
+        <div className="content-wrapper" style={{marginTop: (loading || showBanners) ? (hasNorch ? "calc(45vw + 135px)" : "calc(45vw + 115px)"): "110px"}}>
+          <div className="content">
+            <FormControlLabel
+              value="active"
+              control={
+                <Switch
+                  checked={filter}
+                  onChange={toggleFilter}
+                  value={filter}
+                />
+              }
+              label={filter ? t('active_plans') : t('all_plans')}
+              labelPlacement="start"
+            />
+            {loading && <Skeleton variant="rect" />}
+            {!loading && plans && plans.length == 0 &&
+              <div className="empty-list-text">{t("plan_list_empty_text")}</div>
+            }
+            <Pullable onRefresh={onRefresh}>
+              {!loading && plans && plans.map(plan => (
+                <StyledCard
+                  key={plan.id}
+                  className={moment(parseInt(plan.expiration_date)).isAfter() || plan.duration == 0 ? 'active' : 'expired'}
+                  onClick={() => openWorkout(plan.id)}
+                >
+                  <CardActionArea>
+                    <Card>
+                      <CardHeader
+                        title={plan.name}
+                        subheader={
+                          getSplits(plan) ? getSplits(plan) + (getSplits(plan) > 1 ? (' ' + t('days_in_the_week')) : (' ' + t('day_in_the_week'))): t('no_duration')
+                        }
+                        avatar={
+                          <Avatar>
+                            {!moment(new Date(parseInt(plan.expiration_date))).isAfter() && plan.duration > 0 && <TimerOffIcon />}
+                            {(moment(new Date(parseInt(plan.expiration_date))).isAfter() || !(plan.duration > 0)) && <PlayCircleOutlineIcon />}
+                          </Avatar>
+                        }
+                      >
+                      </CardHeader>
+                      <CardContent>
+                        {plan.description}
+                      </CardContent>
+                    </Card>
+                  </CardActionArea>
+                </StyledCard>
+              ))}
+            </Pullable>
+          </div>
+        </div>
+        <MenuButton
+          preventLogout={preventLogout}
+          editable={editable}
+          doLogout={doLogout}
+          goToSetup={goToSetup}
+          onGoToProtocolls={onGoToProtocolls}
+          onGoToMeasurements={onGoToMeasurements}
+          language={language}
+        />
+        <Backdrop open={openBeaconSearch} onClick={setOpenBeaconSearch} style={{zIndex: 2}}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <ScannerButtons
+          onScannQr={onScannQr}
+          onScannNfc={onScannNfc}
+          onScannBeacon={onScannBeacon}
+          onSearchExercises={onSearchExercises}
+          scannNfcDisablen={scannNfcDisable}
+          scannQrDisablen={scannQrDisable}
+          scannBeaconDisablen={scannBeaconDisable}
+          showScannButtons={showScannButtons}
+          onShowFavorites={onShowFavorites}
+
+          beaconScanning={beaconScanning}
+          nfcScanning={nfcScanning}
+        />
+        <Snackbar open={snackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar} severity="success">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

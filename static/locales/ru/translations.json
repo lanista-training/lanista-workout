@@ -118,7 +118,10 @@
     "play_problems": "Проблемы во включении",
     "today": "Сегодня",
     "set": "Satz",
-    "kg": "kg"
+    "kg": "kg",
+    "chat": "Chat",
+    "message": "Message",
+    "note": "Note"
   },
   "gymsearch": {
     "your_data": "Мои Данные",

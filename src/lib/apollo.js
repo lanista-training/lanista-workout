@@ -51,8 +51,9 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       //var graphqlServer = 'https://' + document.location.host + '/graphql';
 
       // App Link
-      //var graphqlServer = 'https://mobile.lanista-training.com/graphql';
-      var graphqlServer = (typeof document !== 'undefined') ? (document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql') : 'https://mobile.lanista-training.com/graphql';
+      var graphqlServer = 'https://mobile.lanista-training.com/graphql';
+      //var graphqlServer = (typeof document !== 'undefined') ? (document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql') : 'https://mobile.lanista-training.com/graphql';
+      //var graphqlServer = 'https://pmbnjde5yh.execute-api.eu-central-1.amazonaws.com/dev/graphql';
 
       // Local Test Link
       //var graphqlServer = 'http://localhost:4000/graphql';
@@ -67,8 +68,9 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       const token = cookie.get('token');
       console.log("TOKEN", token);
       const wsClient = new SubscriptionClient(
-        //"ws://localhost:3001",
-        document.location.origin.indexOf('localhost') > -1 ? "ws://localhost:3001" : "wss://jq3eu6hd5h.execute-api.eu-central-1.amazonaws.com/prod",
+        //"wss://4okkq8fmea.execute-api.eu-central-1.amazonaws.com/dev",
+        //document.location.origin.indexOf('localhost') > -1 ? "ws://localhost:3001" : "wss://jq3eu6hd5h.execute-api.eu-central-1.amazonaws.com/prod",
+        "wss://jq3eu6hd5h.execute-api.eu-central-1.amazonaws.com/prod",
         {
           connectionParams: {
             authToken: `Bearer ${token}`,
@@ -82,8 +84,6 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       const wsLink = errorLink.concat(new WebSocketLink(wsClient));
       const link = split(
         ({ query }) => {
-          console.log("QUERY")
-          console.log(query)
           const { kind, operation } = getMainDefinition(query);
           return kind === 'OperationDefinition' && operation === 'subscription';
         },

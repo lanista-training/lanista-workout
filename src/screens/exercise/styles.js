@@ -59,10 +59,10 @@ export const Panel = styled.div`
       background-color: whitesmoke;
     }
     .MuiTab-textColorPrimary.Mui-selected {
-      color: rgb(220,0,78);
+      color: ${props => props.theme.colors.primary};
     }
     .MuiTabs-indicator {
-      background-color: rgb(220,0,78);
+      background-color: ${props => props.theme.colors.primary};
     }
   }
   .start-position {
@@ -147,7 +147,7 @@ export const Panel = styled.div`
     padding-bottom: 4em;
   }
   .graphic{
-    background: rgb(206, 41, 51);
+    background: ${props => props.theme.colors.primary};
     height: 90vw;
     margin: 0 1.5em;
     border-radius: 20px;
@@ -349,11 +349,11 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
   z-index: 999;
 `;
 export const Sets = styled.div`
-  background: rgb(206,41,51);
+  background: ${props => props.theme.colors.primary};
   padding: 1em;
   border-radius: 20px;
   box-shadow: 0px 6px 6px -3px rgba(0,0,0,0.2), 0px 10px 14px 1px rgba(0,0,0,0.14), 0px 4px 18px 3px rgba(0,0,0,0.12);
@@ -415,7 +415,7 @@ export const Sets = styled.div`
     margin-top: 2em;
     button {
       padding: 0;
-      color: rgb(220,0,78)!important;
+      color: ${props => props.theme.colors.primary}!important;
       svg {
         font-size: 1.5em;
       }
@@ -438,7 +438,7 @@ export const Sets = styled.div`
     justify-content: space-between;
     button {
       box-shadow: none;
-      background: rgb(206,41,51);
+      background: ${props => props.theme.colors.primary};
       border: 1px solid white;
       color: white;
     }
@@ -455,11 +455,11 @@ export const Sets = styled.div`
     float: right;
     margin-top: 0.4em;
     box-shadow: none;
-    background: rgb(206,41,51);
+    background: ${props => props.theme.colors.primary};
     border: 1px solid white;
     color: white;
     :hover {
-      background: rgb(206,41,51)!important;
+      background: ${props => props.theme.colors.primary}!important;
     }
   }
 `;
@@ -581,7 +581,7 @@ export const StyledInputNumber = styled(InputNumber)`
     border: 0;
     padding: 0;
     transition: all .3s;
-    background-color: rgb(206,41,51);
+    background-color: ${props => props.theme.colors.primary};
     color: white!important;
     font-size: 0.85em;
     -moz-user-select: none;

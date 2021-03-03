@@ -1,7 +1,12 @@
 import * as React from "react";
 import styled from 'styled-components';
 
-export default ({filter, onSelection}) => {
+export default ({
+  filter,
+  onSelection,
+  primaryColor,
+  secondaryColor,
+}) => {
 
   const {
     shoulder,
@@ -17,20 +22,20 @@ export default ({filter, onSelection}) => {
     backfemoral,
     lowerleg,
   } = filter;
-
+console.log("primaryColor", primaryColor)
   const filterStyles = {
-    shoulder: shoulder ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    biceps: biceps ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    triceps: triceps ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    forearm: forearm ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    chest: chest ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    upperback: upperback ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    lowerback: lowerback ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    abs: abs ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    hip: hip ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    frontfemoral: frontfemoral ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    backfemoral: backfemoral ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-    lowerleg: lowerleg ? {"fill":"rgb(220,0,78)","fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    shoulder: shoulder ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    biceps: biceps ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    triceps: triceps ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    forearm: forearm ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    chest: chest ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    upperback: upperback ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    lowerback: lowerback ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    abs: abs ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    hip: hip ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    frontfemoral: frontfemoral ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    backfemoral: backfemoral ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    lowerleg: lowerleg ? {"fill":primaryColor,"fillRule":"nonzero"} : {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
   };
 
   return (

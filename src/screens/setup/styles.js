@@ -8,10 +8,10 @@ export const Panel = styled.div`
   background: white;
   display: flex;
   flex-flow: column;
-  background: rgb(220,0,78);
+  background: ${props => props.theme.colors.primary};
   overflow: hidden;
   .header {
-    background: rgb(220, 0, 78);
+    background: ${props => props.theme.colors.primary};
     color: white;
     position: fixed;
     width: 100vw;
@@ -111,7 +111,7 @@ export const Panel = styled.div`
         }
       }
       .logout-button {
-        background-color: rgb(220,0,78);
+        background-color: ${props => props.theme.colors.primary};
         margin-top: 2em;
         color: white!important;
         width: 100%;
@@ -179,7 +179,7 @@ export const StyledButton = styled(Fab)`
   left: 50%;
   z-index: 3;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
 `;
 
 export const StyledCard = styled.div`

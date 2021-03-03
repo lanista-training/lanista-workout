@@ -20,7 +20,14 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { FixedSizeList as List } from 'react-window';
 import {useWindowDimensions} from '../../hooks';
-
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
 const Exercises = ({
   onGoBack,
   hasNorch,
@@ -28,6 +35,8 @@ const Exercises = ({
   loading,
   exercises,
   total,
+  primaryColor,
+  secondaryColor,
 }) => {
 
   const {t} = useTranslate("favorites");
@@ -80,43 +89,55 @@ const Exercises = ({
     />
   ));
 
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel paddingTop={PADDING_SIZE} >
-      {
-        loading &&
-        <LinearProgress />
-      }
-      <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
-        <div className="title">
-          {t("exercises")}
-          <div className="total">
-            {total}
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel paddingTop={PADDING_SIZE} >
+        {
+          loading &&
+          <LinearProgress />
+        }
+        <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
+          <div className="title">
+            {t("exercises")}
+            <div className="total">
+              {total}
+            </div>
           </div>
         </div>
-      </div>
-      {!loading && exercises && exercises.length == 0 &&
-        <div className="content-wrapper" style={{marginTop: marginTop + "em"}}>
-          <div >
-            <div className="empty-list-text">{t("empty_list")}</div>
+        {!loading && exercises && exercises.length == 0 &&
+          <div className="content-wrapper" style={{marginTop: marginTop + "em"}}>
+            <div >
+              <div className="empty-list-text">{t("empty_list")}</div>
+            </div>
           </div>
-        </div>
-      }
-      {!loading && exercises.length > 0 &&
-        <FixedSizeList
-          height={height - marginTop + 16}
-          itemSize={270}
-          itemCount={20000}
-          innerElementType={innerElementType}
-          className="virtual-list-wrapper"
-        >
-          {renderRow}
-        </FixedSizeList>
-      }
+        }
+        {!loading && exercises.length > 0 &&
+          <FixedSizeList
+            height={height - marginTop + 16}
+            itemSize={270}
+            itemCount={20000}
+            innerElementType={innerElementType}
+            className="virtual-list-wrapper"
+          >
+            {renderRow}
+          </FixedSizeList>
+        }
 
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-    </Panel>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

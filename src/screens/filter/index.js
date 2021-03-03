@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import Filter from './Filter';
 import Exercises from '../exercises/Exercises';
-import { EXERCISES } from "../../queries";
+import { EXERCISES, ME } from "../../queries";
 
 const musclesDefault = {
   shoulder: false,
@@ -184,6 +184,9 @@ const Panel = ({goBack, hasNorch, showExercise}) => {
     }
   }, [text]);
 
+  const { data: meData } = useQuery(ME);
+  const {primaryColor, secondaryColor} = meData ? meData.me : {};
+
   return currentScreen ? (
     <Filter
       onGoBack={goBack}
@@ -204,6 +207,9 @@ const Panel = ({goBack, hasNorch, showExercise}) => {
       text={text}
       onTextChange={onTextChange}
       resetText={resetText}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
   :
@@ -226,6 +232,9 @@ const Panel = ({goBack, hasNorch, showExercise}) => {
       onMuscleSelection={onMuscleSelection}
       onTypeSelection={onTypeSelection}
       onAdditionSelection={onAdditionSelection}
+
+      primaryColor={primaryColor}
+      secondaryColor={secondaryColor}
     />
   )
 }

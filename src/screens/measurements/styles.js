@@ -41,22 +41,22 @@ export const Panel = styled.div`
     .graphic-wrapper {
       padding: 0 1em;
       .graphic-weight {
-        background: rgb(206, 41, 51);
+        background: ${props => props.theme.colors.primary};
       }
       .graphic-caliper {
-        background: rgb(206, 41, 51);
+        background: ${props => props.theme.colors.primary};
         .MuiSvgIcon-root {
           font-size: 4em;
         }
       }
       .graphic-volume {
-        background: rgb(206, 41, 51);
+        background: ${props => props.theme.colors.primary};
         .MuiSvgIcon-root {
           font-size: 4em;
         }
       }
       .graphic-futrex {
-        background: rgb(206, 41, 51);
+        background: ${props => props.theme.colors.primary};
         .MuiSvgIcon-root {
           font-size: 4em;
         }
@@ -110,7 +110,7 @@ export const Panel = styled.div`
       .MuiButtonBase-root {
         font-size: 2em;
         svg {
-          color: rgb(206,41,51);
+          color: ${props => props.theme.colors.primary};
         }
       }
     }
@@ -125,6 +125,9 @@ export const Panel = styled.div`
       line-height: 2em;
       .MuiButtonBase-root {
         margin-right: 1em;
+      }
+      .MuiButton-containedSecondary {
+        background-color: ${props => props.theme.colors.primary};
       }
     }
     .list-record {
@@ -288,7 +291,7 @@ export const StyledButton = styled(Fab)`
   bottom: 10px;
   left: 50%;
   margin-left: -28px!important;
-  background-color: rgb(220,0,78)!important;
+  background-color: ${props => props.theme.colors.primary}!important;
 `;
 
 export const StyledCaliper = styled.div`

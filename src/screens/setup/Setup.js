@@ -30,6 +30,15 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import SyncIcon from '@material-ui/icons/Sync';
 
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
+
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
@@ -58,6 +67,9 @@ const Setup = ({
   checkForInvitations,
   version,
   onDeleteAccount,
+
+  primaryColor,
+  secondaryColor,
 }) => {
 
   const [firstNameInput, setFirstNameInput] = React.useState(firstName);
@@ -123,324 +135,339 @@ const Setup = ({
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel>
-      <div className="content-wrapper" style={{marginTop: hasNorch ? "110px" : "80px"}}>
-        <div className="content">
-          <div className="form-section">
-            <TextField
-              label={t('first_name')}
-              margin="normal"
-              variant="outlined"
-              value={firstNameInput}
-              onChange={event => setFirstNameInput(event.target.value)}
-              fullWidth
-            />
-            <TextField
-              label={t('last_name')}
-              margin="normal"
-              variant="outlined"
-              value={lastNameInput}
-              onChange={event => setLastNameInput(event.target.value)}
-              fullWidth
-            />
-            <TextField
-              label={t('email')}
-              margin="normal"
-              variant="outlined"
-              value={emailInput}
-              disabled={true}
-              onChange={event => setEmailInput(event.target.value)}
-              fullWidth
-            />
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                disableToolbar
-                variant="inline"
-                inputVariant="outlined"
-                format="dd/MM/yyyy"
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel>
+        <div className="content-wrapper" style={{marginTop: hasNorch ? "110px" : "80px"}}>
+          <div className="content">
+            <div className="form-section">
+              <TextField
+                label={t('first_name')}
                 margin="normal"
-                id="date-picker-inline"
-                label={t('birthday')}
-                value={birthdayInput}
-                onChange={(date) => setBirthdayInput(date)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                className="date-picker"
+                variant="outlined"
+                value={firstNameInput}
+                onChange={event => setFirstNameInput(event.target.value)}
+                fullWidth
               />
-            </MuiPickersUtilsProvider>
-            <FormControl variant="outlined" className="gender-field">
-              <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-                {t('gender')}
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                defaultValue={genderInput}
-                onChange={event => {
-                  setGenderInput(event.target.value);
-                }}
-                labelWidth={labelWidth}
-              >
-                <MenuItem value="">
-                  <em></em>
-                </MenuItem>
-                <MenuItem value={1}>{t("male")}</MenuItem>
-                <MenuItem value={0}>{t("female")}</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl variant="outlined" className="gender-field">
-              <InputLabel ref={inputLabel2} id="demo-simple-select-outlined-label">
-                {t('language')}
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                defaultValue={languageInput}
-                onChange={event => {
-                  setLanguageInput(event.target.value);
-                }}
-                labelWidth={labelWidth}
-              >
-                <MenuItem value={'DE'}>{"Deutsch"}</MenuItem>
-                <MenuItem value={'EN'}>{"English"}</MenuItem>
-                <MenuItem value={'ES'}>{"Español"}</MenuItem>
-                <MenuItem value={'FR'}>{"Français"}</MenuItem>
-                <MenuItem value={'PT'}>{"Português"}</MenuItem>
-                <MenuItem value={'RU'}>{"Pусский"}</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              className="logout-button"
-              variant="contained"
-              color="secondary"
-              startIcon={<Icon>exit_to_app</Icon>}
-              disabled={!dataChanged}
-              onClick={() => {
-                onSaveData(firstNameInput, lastNameInput, emailInput, birthdayInput, genderInput, languageInput)
-              }}
-            >
-              {t('save')}
-            </Button>
-          </div>
-
-
-          <div className="setup-section">
-            <div className="setup-title">
-              {t('your_gym_trainer')}
-            </div>
-            <div className="gyms-list-wrapper">
-              <GridList>
-                {gyms && gyms.map(gym => (
-                  <div className="gym-item" key={gym.name}>
-                    <GridListTile>
-                      <div className="gym-image" style={{backgroundImage: "url(" + gym.imageUrl + ")"}}/>
-                      <div className="gym-name">{gym.name}</div>
-                      <Button variant="contained" color="primary" onClick={() => {
-                        setSelectedGym(gym.id)
-                        setDialogOpen(true)
-                      }}>
-                        {t('disconnect')}
-                      </Button>
-                    </GridListTile>
-                  </div>
-                ))}
-              </GridList>
-              {gyms && gyms.length == 0 && (
-                <Button
-                  className="logout-button"
-                  variant="contained"
-                  color="secondary"
-                  endIcon={<Icon>search</Icon>}
-                  onClick={goToGymsearch}
+              <TextField
+                label={t('last_name')}
+                margin="normal"
+                variant="outlined"
+                value={lastNameInput}
+                onChange={event => setLastNameInput(event.target.value)}
+                fullWidth
+              />
+              <TextField
+                label={t('email')}
+                margin="normal"
+                variant="outlined"
+                value={emailInput}
+                disabled={true}
+                onChange={event => setEmailInput(event.target.value)}
+                fullWidth
+              />
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  disableFuture
+                  openTo="year"
+                  autoOk={true}
+                  disableToolbar
+                  variant="inline"
+                  inputVariant="outlined"
+                  format="dd/MM/yyyy"
+                  margin="normal"
+                  id="date-picker-inline"
+                  label={t('birthday')}
+                  value={birthdayInput}
+                  onChange={(date) => setBirthdayInput(date)}
+                  KeyboardButtonProps={{
+                    'aria-label': 'change date',
+                  }}
+                  className="date-picker"
+                />
+              </MuiPickersUtilsProvider>
+              <FormControl variant="outlined" className="gender-field">
+                <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
+                  {t('gender')}
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  defaultValue={genderInput}
+                  onChange={event => {
+                    setGenderInput(event.target.value);
+                  }}
+                  labelWidth={labelWidth}
                 >
-                  {t('search')}
-                </Button>
-              )}
+                  <MenuItem value="">
+                    <em></em>
+                  </MenuItem>
+                  <MenuItem value={1}>{t("male")}</MenuItem>
+                  <MenuItem value={0}>{t("female")}</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl variant="outlined" className="gender-field">
+                <InputLabel ref={inputLabel2} id="demo-simple-select-outlined-label">
+                  {t('language')}
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  defaultValue={languageInput}
+                  onChange={event => {
+                    setLanguageInput(event.target.value);
+                  }}
+                  labelWidth={labelWidth}
+                >
+                  <MenuItem value={'DE'}>{"Deutsch"}</MenuItem>
+                  <MenuItem value={'EN'}>{"English"}</MenuItem>
+                  <MenuItem value={'ES'}>{"Español"}</MenuItem>
+                  <MenuItem value={'FR'}>{"Français"}</MenuItem>
+                  <MenuItem value={'PT'}>{"Português"}</MenuItem>
+                  <MenuItem value={'RU'}>{"Pусский"}</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+                className="logout-button"
+                variant="contained"
+                color="secondary"
+                startIcon={<Icon>exit_to_app</Icon>}
+                disabled={!dataChanged}
+                onClick={() => {
+                  onSaveData(firstNameInput, lastNameInput, emailInput, birthdayInput, genderInput, languageInput)
+                }}
+              >
+                {t('save')}
+              </Button>
             </div>
-          </div>
 
-          {gyms && gyms.length == 0 && (
+
             <div className="setup-section">
               <div className="setup-title">
-                {t('invitations')}
+                {t('your_gym_trainer')}
               </div>
-              <div className="invitations-list">
-                {connectionRequests && connectionRequests.map(request => (
-                  <Card className="invitations-root">
-                    <div className="invitations-details">
-                      <CardContent className="invitations-content">
-                        <Typography component="h6" variant="h6">
-                          {request.from.first_name + ' ' + request.from.last_name}
-                        </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                          {t("invitation_message")}
-                        </Typography>
-                      </CardContent>
-                      <div className="invitations-controls">
-                        <Button
-                          variant="contained"
-                          size="small"
-                          disableElevation
-                          onClick={() => {
-                            setSelectedRequest(request.id);
-                            setConnectedDialogOpen(true);
-                          }}
-                        >
-                          {t("invitation_connect")}
+              <div className="gyms-list-wrapper">
+                <GridList>
+                  {gyms && gyms.map(gym => (
+                    <div className="gym-item" key={gym.name}>
+                      <GridListTile>
+                        <div className="gym-image" style={{backgroundImage: "url(" + gym.imageUrl + ")"}}/>
+                        <div className="gym-name">{gym.name}</div>
+                        <Button variant="contained" color="primary" onClick={() => {
+                          setSelectedGym(gym.id)
+                          setDialogOpen(true)
+                        }}>
+                          {t('disconnect')}
                         </Button>
-                        <Button
-                          variant="contained"
-                          size="small"
-                          disableElevation
-                          style={{ marginLeft: "2em" }}
-                          onClick={() => rejectRequest(request.id)}
-                        >
-                          {t("invitation_refuse")}
-                        </Button>
-                      </div>
+                      </GridListTile>
                     </div>
-                    <CardMedia
-                      className="invitations-cover"
-                      image={request.from.photoUrl}
-                      title={request.from.first_name + ' ' + request.from.last_name}
-                    />
-                  </Card>
-                ))}
+                  ))}
+                </GridList>
+                {gyms && gyms.length == 0 && (
+                  <Button
+                    className="logout-button"
+                    variant="contained"
+                    color="secondary"
+                    endIcon={<Icon>search</Icon>}
+                    onClick={goToGymsearch}
+                  >
+                    {t('search')}
+                  </Button>
+                )}
               </div>
+            </div>
+
+            {gyms && gyms.length == 0 && (
+              <div className="setup-section">
+                <div className="setup-title">
+                  {t('invitations')}
+                </div>
+                <div className="invitations-list">
+                  {connectionRequests && connectionRequests.map(request => (
+                    <Card className="invitations-root">
+                      <div className="invitations-details">
+                        <CardContent className="invitations-content">
+                          <Typography component="h6" variant="h6">
+                            {request.from.first_name + ' ' + request.from.last_name}
+                          </Typography>
+                          <Typography variant="subtitle1" color="textSecondary">
+                            {t("invitation_message")}
+                          </Typography>
+                        </CardContent>
+                        <div className="invitations-controls">
+                          <Button
+                            variant="contained"
+                            size="small"
+                            disableElevation
+                            onClick={() => {
+                              setSelectedRequest(request.id);
+                              setConnectedDialogOpen(true);
+                            }}
+                          >
+                            {t("invitation_connect")}
+                          </Button>
+                          <Button
+                            variant="contained"
+                            size="small"
+                            disableElevation
+                            style={{ marginLeft: "2em" }}
+                            onClick={() => rejectRequest(request.id)}
+                          >
+                            {t("invitation_refuse")}
+                          </Button>
+                        </div>
+                      </div>
+                      <CardMedia
+                        className="invitations-cover"
+                        image={request.from.photoUrl}
+                        title={request.from.first_name + ' ' + request.from.last_name}
+                      />
+                    </Card>
+                  ))}
+                </div>
+              <Button
+                className="logout-button"
+                variant="contained"
+                color="secondary"
+                endIcon={<SyncIcon/>}
+                onClick={checkForInvitations}
+              >
+                {t('check_for_invitations')}
+              </Button>
+            </div>
+            )}
+
             <Button
               className="logout-button"
               variant="contained"
               color="secondary"
-              endIcon={<SyncIcon/>}
-              onClick={checkForInvitations}
+              endIcon={<ContactSupportIcon/>}
+              onClick={goToSupoort}
+              style={{marginTop: "4em"}}
             >
-              {t('check_for_invitations')}
+              {t('support')}
             </Button>
-          </div>
-          )}
 
-          <Button
-            className="logout-button"
-            variant="contained"
-            color="secondary"
-            endIcon={<ContactSupportIcon/>}
-            onClick={goToSupoort}
-            style={{marginTop: "4em"}}
-          >
-            {t('support')}
-          </Button>
+            <Button
+              className="logout-button"
+              variant="contained"
+              color="secondary"
+              endIcon={<HighlightOffIcon/>}
+              onClick={toggleDeleteAccountDialogOpen}
+              style={{marginTop: "4em"}}
+            >
+              {t('delete_account')}
+            </Button>
 
-          <Button
-            className="logout-button"
-            variant="contained"
-            color="secondary"
-            endIcon={<HighlightOffIcon/>}
-            onClick={toggleDeleteAccountDialogOpen}
-            style={{marginTop: "4em"}}
-          >
-            {t('delete_account')}
-          </Button>
-
-          <div className="version-section">
-            Version {version}
+            <div className="version-section">
+              Version {version}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="header" style={{paddingTop: hasNorch ? "30px" : ""}}>
-        <div className="header-inner-frame">
-          <div className="title">
-            {t('your_data')}
+        <div className="header" style={{paddingTop: hasNorch ? "30px" : ""}}>
+          <div className="header-inner-frame">
+            <div className="title">
+              {t('your_data')}
+            </div>
           </div>
         </div>
-      </div>
 
-      {connectedDialogOpen &&
+        {connectedDialogOpen &&
+          <Dialog
+            open={connectedDialogOpen}
+            onClose={handleConnectedDialogClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Verbinden</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {t('connect_hint')}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleConnectedDialogClose} color="primary" autoFocus>
+                {t('back')}
+              </Button>
+              <Button onClick={() => {
+                acceptRequest(selectedRequest);
+                handleConnectedDialogClose();
+                setSelectedRequest(null);
+              }} color="primary" autoFocus>
+                {t("connect")}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        }
+
+        {dialogOpen &&
+          <Dialog
+            open={dialogOpen}
+            onClose={handleDialogClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{t("cut_connection")}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {t("cut_connection_text")}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleDialogClose} color="primary" autoFocus>
+                {t("back")}
+              </Button>
+              <Button onClick={() => {
+                unlinkGym(selectedGym);
+                handleDialogClose();
+              }} color="primary" autoFocus>
+                {t("disconnect")}
+              </Button>
+            </DialogActions>
+          </Dialog>
+        }
+
         <Dialog
-          open={connectedDialogOpen}
-          onClose={handleConnectedDialogClose}
+          open={deleteAccountDialogOpen}
+          onClose={toggleDeleteAccountDialogOpen}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Verbinden</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{t("delete_account_title")}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {t('connect_hint')}
+              {t("delete_account_message")}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleConnectedDialogClose} color="primary" autoFocus>
-              {t('back')}
-            </Button>
-            <Button onClick={() => {
-              acceptRequest(selectedRequest);
-              handleConnectedDialogClose();
-              setSelectedRequest(null);
-            }} color="primary" autoFocus>
-              {t("connect")}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      }
-
-      {dialogOpen &&
-        <Dialog
-          open={dialogOpen}
-          onClose={handleDialogClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{t("cut_connection")}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              {t("cut_connection_text")}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose} color="primary" autoFocus>
+            <Button onClick={toggleDeleteAccountDialogOpen} color="primary" autoFocus>
               {t("back")}
             </Button>
             <Button onClick={() => {
-              unlinkGym(selectedGym);
-              handleDialogClose();
+              console.log("DELETE ACCOUNT");
+              onDeleteAccount();
             }} color="primary" autoFocus>
-              {t("disconnect")}
+              {t("delete")}
             </Button>
           </DialogActions>
         </Dialog>
-      }
 
-      <Dialog
-        open={deleteAccountDialogOpen}
-        onClose={toggleDeleteAccountDialogOpen}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{t("delete_account_title")}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {t("delete_account_message")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={toggleDeleteAccountDialogOpen} color="primary" autoFocus>
-            {t("back")}
-          </Button>
-          <Button onClick={() => {
-            console.log("DELETE ACCOUNT");
-            onDeleteAccount();
-          }} color="primary" autoFocus>
-            {t("delete")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
 
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-
-    </Panel>
+      </Panel>
+    </ThemeProvider>
   )
 };
 

@@ -4,14 +4,14 @@ import nextCookie from 'next-cookies'
 import cookie from 'js-cookie'
 
 export const login = async ({ token }) => {
-  cookie.set('token', token, { expires: 1 })
+  cookie.set('token', token, { expires: 365 })
   if( token ) {
     Router.push('/');
   }
 }
 
 export const signup = async ({ token }) => {
-  cookie.set('token', token, { expires: 1 })
+  cookie.set('token', token, { expires: 365 })
   Router.push('/')
 }
 

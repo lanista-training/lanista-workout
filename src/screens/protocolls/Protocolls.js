@@ -13,7 +13,14 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
+//
+// Theming imports
+//
+import {ThemeProvider } from 'styled-components';
+import defaultTheme from '../../themes/default';
+//
+//
+//
 const ProtocollDay = ({executionDay, showExercise, t}) => {
   const [expanded, setExpanded] = React.useState(false);
 
@@ -71,43 +78,57 @@ const Protocolls = ({
   onGoBack,
   showExercise,
   hasNorch,
+  primaryColor,
+  secondaryColor,
 }) => {
   const {t} = useTranslate("protocolls");
+  //
+  // Theming variables
+  //
+  const colors = {
+    primary: primaryColor ? primaryColor : "#d20027",
+    secondary: secondaryColor ? secondaryColor : "#f4f2f2",
+  };
+  //
+  //
+  //
   return (
-    <Panel >
-      {
-        loading &&
-        <LinearProgress />
-      }
-      <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
-        <div className="title">
-          {t("protocolls")}
-        </div>
-      </div>
-      <div className="content-wrapper" style={{marginTop: hasNorch ? '7em' : ''}}>
-        <div className="list-wrapper">
-          { !loading && protocolls && protocolls.length == 0 &&
-            <div className="empty-list-text">{t("empty_list")}</div>
-          }
-          <div>
-          {
-            !loading &&
-            protocolls.map( executionDay => (
-              <ProtocollDay
-                key={'protocoll-day-' + executionDay.day}
-                executionDay={executionDay}
-                showExercise={showExercise}
-                t={t}
-              />
-            ))
-          }
+    <ThemeProvider theme={{...defaultTheme, colors: colors}}>
+      <Panel >
+        {
+          loading &&
+          <LinearProgress />
+        }
+        <div className="header" style={hasNorch ? {paddingTop: "30px"} : {}}>
+          <div className="title">
+            {t("protocolls")}
           </div>
         </div>
-      </div>
-      <StyledButton color="primary" onClick={onGoBack}>
-        <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
-      </StyledButton>
-    </Panel>
+        <div className="content-wrapper" style={{marginTop: hasNorch ? '7em' : ''}}>
+          <div className="list-wrapper">
+            { !loading && protocolls && protocolls.length == 0 &&
+              <div className="empty-list-text">{t("empty_list")}</div>
+            }
+            <div>
+            {
+              !loading &&
+              protocolls.map( executionDay => (
+                <ProtocollDay
+                  key={'protocoll-day-' + executionDay.day}
+                  executionDay={executionDay}
+                  showExercise={showExercise}
+                  t={t}
+                />
+              ))
+            }
+            </div>
+          </div>
+        </div>
+        <StyledButton color="primary" onClick={onGoBack}>
+          <ArrowBackIosIcon style={{marginLeft: '0.4em'}}/>
+        </StyledButton>
+      </Panel>
+    </ThemeProvider>
   )
 };
 
